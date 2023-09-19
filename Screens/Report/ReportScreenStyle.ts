@@ -3,13 +3,13 @@ import styled from "styled-components/native";
 export const Container = styled.View`
   background-color: #fff;
   padding: 20px;
-  margin-top: 8px;
+  margin-top: 5px;
   border-radius: 8px;
   flex: 1;
 `;
 
 export const TimeDate = styled.Text`
-  font-weight: lighter;
+  font-weight: 300;
   font-size: 20px;
   color: #fff;
 `;
@@ -32,7 +32,7 @@ export const InfoText = styled.Text`
   color: #000;
 `;
 export const ItemContainer = styled.View`
-  margin-bottom: 20px;
+  margin-bottom: 5px;
   background-color: #2f4f4f;
   padding: 20px;
   margin-top: 8px;

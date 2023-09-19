@@ -17,7 +17,7 @@ const ReportScreen: React.FC = () => {
 
     queryFn: async () => {
       const response = await axios.get(
-        "http://192.168.100.10:4000/inventoryapp/itemlist"
+        "http://192.168.1.30:4000/inventoryapp/itemlist"
       );
 
       return response.data;

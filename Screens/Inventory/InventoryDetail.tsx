@@ -27,9 +27,14 @@ import {
   ButtonContainer,
   Buttons,
   Texts,
+  PickerContainer,
 } from "./InventoryDetailStyle";
 import axios from "axios";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import { Picker } from "@react-native-picker/picker";
+import { useInventory } from "../Context/InventoryContent";
+
 type Items = {
   _id: string;
   name: string;
@@ -51,6 +56,8 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
   // console.log("Item ID", inventory._id);
   const navigation = useNavigation();
   // State variables to hold edited data and edit mode
+  const { setInventories } = useInventory();
+
   const [editedInventory, setEditedInventory] = useState<Items>(inventory);
   const [editMode, setEditMode] = useState(false);
   const [editableField, setEditableField] = useState<string | null>(null);
@@ -86,13 +93,14 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
 
     try {
       const response = await axios.put(
-        `http://192.168.100.10:4000/inventoryapp/itemlist/${editedInventory._id}`,
+        `http://192.168.1.30:4000/inventoryapp/itemlist/${editedInventory._id}`,
         editedInventory
       );
       // console.log(editedInventory);
 
       if (response.status === 200) {
         queryClient.invalidateQueries(["Items"]);
+
         Alert.alert("Success", "Inventory item updated successfully");
         setEditMode(false);
         setEditableField(null);
@@ -105,6 +113,55 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
       Alert.alert("Error", "Something went wrong");
     }
     navigation.goBack();
+  };
+
+  const classificationOptions = [
+    "School Supplies",
+    "Hardware",
+    "Accessories",
+    "Balls",
+  ];
+
+  const deleteInventory = async () => {
+    try {
+      const response = await axios.delete(
+        `http://192.168.1.30:4000/inventoryapp/itemlist/${editedInventory.name}`
+      );
+
+      if (response.status === 200) {
+        queryClient.invalidateQueries(["Items"]);
+        Alert.alert("Success", "Inventory item deleted successfully");
+        navigation.goBack();
+      } else {
+        Alert.alert("Error", response.data.message || "Something went wrong");
+      }
+    } catch (error) {
+      console.error("Error deleting inventory item:", error);
+      Alert.alert("Error", "Something went wrong");
+    }
+  };
+  const mutation = useMutation(deleteInventory);
+
+  const displayDeleteAlert = () => {
+    Alert.alert(
+      "Delete an item",
+      "This action will delete your item in your inventory!",
+      [
+        {
+          text: "No Thanks",
+          onPress: () => console.log("no thanks"),
+        },
+
+        {
+          text: "Delete",
+
+          onPress: () => mutation.mutate(),
+        },
+      ],
+      {
+        cancelable: true,
+      }
+    );
   };
 
   useEffect(() => {}, []);
@@ -197,13 +254,24 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
         </DescContainer>
         <ClassificationContainer>
           <Classification>Classification:</Classification>
+
           {editMode ? (
-            <TextInputs
-              value={editedInventory.classification}
-              onChangeText={(value) =>
-                handleInputChange("classification", value)
-              }
-            />
+            <PickerContainer>
+              <Picker
+                selectedValue={editedInventory.classification}
+                onValueChange={(value) =>
+                  handleInputChange("classification", value)
+                }
+                style={{
+                  color: "#fff",
+                }}
+              >
+                <Picker.Item label="Select Classification" value={null} />
+                {classificationOptions.map((option, index) => (
+                  <Picker.Item key={index} label={option} value={option} />
+                ))}
+              </Picker>
+            </PickerContainer>
           ) : (
             <Classification
               onPress={() => {
@@ -217,9 +285,14 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
 
         <ButtonContainer>
           {!editMode ? (
-            <Buttons onPress={() => setEditMode(true)}>
-              <EditTexts>Edit Items</EditTexts>
-            </Buttons>
+            <>
+              <Buttons onPress={() => setEditMode(true)}>
+                <EditTexts>Edit Item</EditTexts>
+              </Buttons>
+              <Buttons onPress={() => displayDeleteAlert()}>
+                <EditTexts>Delete Item</EditTexts>
+              </Buttons>
+            </>
           ) : (
             <>
               <Buttons onPress={handleSave}>
@@ -234,7 +307,7 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
       </Container>
 
       <InfoContainer>
-        <Texts> {inventory.name} Logs</Texts>
+        <Texts>logs</Texts>
       </InfoContainer>
     </>
   );

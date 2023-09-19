@@ -15,6 +15,9 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import InventoryDetail from "./Screens/Inventory/InventoryDetail";
 import ReportScreen from "./Screens/Report/ReportScreen";
 import ScantoSearch from "./Screens/QRScanner/SearchQR";
+import ScanToAdd from "./Screens/QRScanner/AddQR";
+import ShipItems from "./Screens/ShipItems/ShipItems";
+import ShipItemDetails from "./Screens/ShipItems/ShipItemDetails";
 const Stack = createNativeStackNavigator();
 import {
   AntDesign,
@@ -25,7 +28,7 @@ const Tab = createBottomTabNavigator();
 const queryClient = new QueryClient();
 
 const RenderDetaiScreen = (props: any) => <InventoryDetail {...props} />;
-
+const RenderShipScreen = (props: any) => <ShipItemDetails {...props} />;
 function StackNav() {
   return (
     <Stack.Navigator initialRouteName="Main">
@@ -129,6 +132,60 @@ function StackNav() {
           },
         }}
       />
+
+      <Stack.Screen
+        name="ScanToAdd"
+        component={ScanToAdd}
+        options={{
+          title: "Scan to Add Item",
+          headerBackVisible: true,
+          headerTitleAlign: "center",
+          headerShown: true,
+          headerTitleStyle: {
+            fontWeight: "bold",
+            color: "white",
+          },
+          headerStyle: {
+            backgroundColor: "#016a70",
+          },
+        }}
+      />
+
+      <Stack.Screen
+        name="ShipItem"
+        component={ShipItems}
+        options={{
+          title: "Ship Items Dashboard",
+          headerBackVisible: true,
+          headerTitleAlign: "center",
+          headerShown: true,
+          headerTitleStyle: {
+            fontWeight: "bold",
+            color: "white",
+          },
+          headerStyle: {
+            backgroundColor: "#016a70",
+          },
+        }}
+      />
+
+      <Stack.Screen
+        name="ShipItemDetails"
+        component={RenderShipScreen}
+        options={{
+          title: "Ship Item",
+          headerBackVisible: true,
+          headerTitleAlign: "center",
+          headerShown: true,
+          headerTitleStyle: {
+            fontWeight: "bold",
+            color: "white",
+          },
+          headerStyle: {
+            backgroundColor: "#016a70",
+          },
+        }}
+      />
     </Stack.Navigator>
   );
 }
@@ -140,13 +197,7 @@ function Home() {
         name="Menu"
         component={HomeScreen}
         options={{
-          headerStyle: {
-            backgroundColor: "#016a70",
-          },
-          headerTintColor: "#fff",
-          headerTitleStyle: {
-            fontWeight: "bold",
-          },
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <AntDesign name="home" color={color} size={size} />
           ),

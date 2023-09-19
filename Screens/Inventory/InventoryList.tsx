@@ -14,7 +14,8 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Picker } from "@react-native-picker/picker";
-import { AntDesign } from "@expo/vector-icons";
+import { useGetItems } from "../../services/Items";
+
 const InventoryList = ({}) => {
   const navigation = useNavigation<any>();
   const { inventories, setInventories, masterInventory } = useInventory();
@@ -80,28 +81,19 @@ const InventoryList = ({}) => {
       setSearch(text);
     }
   };
-  const { isLoading, error, data, refetch } = useQuery({
-    queryKey: ["Items"],
-    queryFn: async () => {
-      const response = await axios.get(
-        "http://1192.168.100.10:4000/inventoryapp/itemlist"
-      );
-      return response.data;
-    },
 
-    staleTime: 5000, // 5 seconds in milliseconds
-  });
+  const GetItemData = useGetItems();
 
   React.useEffect(() => {
-    if (data && !isLoading) {
-      setInventories(data);
-      setMasterDataSource(data);
-      refetch();
+    if (GetItemData.data && !GetItemData.isLoading) {
+      setInventories(GetItemData.data);
+      setMasterDataSource(GetItemData.data);
+      GetItemData.refetch();
     }
-  }, [isLoading, data, refetch]);
+  }, [GetItemData.isLoading, GetItemData.data, GetItemData.refetch]);
 
-  if (isLoading) return <Text> Loading data</Text>;
-  if (error) return <Text> Error data</Text>;
+  if (GetItemData.isLoading) return <Text> Loading data</Text>;
+  if (GetItemData.error) return <Text> Error data</Text>;
   //<AntDesign name="search1" size={40} color="black" style={{ left: 8 }} />
 
   return (
@@ -149,9 +141,8 @@ const InventoryList = ({}) => {
 };
 
 const Container = styled.View`
-  background-color: #fff;
+  background-color: #b9eddd;
   padding: 20px;
-  margin-left: 8px;
   border-radius: 8px;
   flex: 1;
 `;

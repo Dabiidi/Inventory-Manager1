@@ -44,41 +44,40 @@ const ScantoSearch = () => {
     setScanned(true);
     setText(data);
 
-    const [Name] = data.split(",");
+    const checkItemExistence = async (itemName: string) => {
+      try {
+        const response = await fetch(
+          `http://192.168.1.30:4000/inventoryapp/itemlist/${itemName}`
+        );
 
+        if (response.ok) {
+          const data = await response.json();
+          console.log("The data", data);
+          return data;
+        } else {
+          // Handle error response
+          console.error("Error checking item existence");
+          return false;
+        }
+      } catch (error) {
+        // Handle connection errors
+        console.error("Error:", error);
+        return false;
+      }
+    };
+
+    const [Name] = data.split(",");
     // Check the database for the item using the item's name
     const itemExists = await checkItemExistence(Name);
 
-    if (itemExists) {
-      console.log("ITEMS HERE", itemExists);
-
+    if (itemExists.name && itemExists) {
       // Fetch and display item data from the database
-      alert("Item Found!");
+      alert(`Item ${itemExists.name} Found!`);
       setItemData(itemExists);
     } else {
-      setItemData("Item not found in the database");
-    }
-  };
+      Alert.alert("ITEM NOT FOUND", `Item ${data} doesn't exist.`);
 
-  const checkItemExistence = async (itemName: string) => {
-    try {
-      const response = await fetch(
-        `http://192.168.100.10:4000/inventoryapp/itemlist/${itemName}`
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log("The data", data);
-        return data;
-      } else {
-        // Handle error response
-        console.error("Error checking item existence");
-        return false;
-      }
-    } catch (error) {
-      // Handle connection errors
-      console.error("Error:", error);
-      return false;
+      setItemData(null);
     }
   };
 
@@ -111,7 +110,9 @@ const ScantoSearch = () => {
           <OutputData>Item Quantity: {itemData?.quantity}</OutputData>
           <OutputData>Item Total: {itemData?.price}</OutputData>
           <OutputData>Item Description: {itemData?.desc}</OutputData>
-
+          <OutputData>
+            Item Classification: {itemData?.classification}
+          </OutputData>
           <Button
             title={"Scan again?"}
             onPress={() => scanFalse()}

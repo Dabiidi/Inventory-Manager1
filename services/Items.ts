@@ -3,10 +3,10 @@ import axios from "axios";
 
 export const useGetItems = () => {
   return useQuery({
-    queryKey: ["Items+ id"],
+    queryKey: ["Items"],
     queryFn: async () => {
       const response = await axios.get(
-        "http://192.168.100.10:4000/inventoryapp/itemlist"
+        "http://192.168.1.30:4000/inventoryapp/itemlist"
       );
       return response.data;
     },
@@ -14,3 +14,5 @@ export const useGetItems = () => {
     staleTime: 5000, // 5 seconds in milliseconds
   });
 };
+
+export const AddItem = () => {};

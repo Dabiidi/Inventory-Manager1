@@ -86,15 +86,11 @@ const LoginScreen: React.FC<LandingScreenProps> = ({ navigation }) => {
         });
         console.log(values.email, values.password);
         const response = await axios.post(
-          "http://192.168.100.10:4000/inventoryapp/userlogs",
+          "http://192.168.1.30:4000/inventoryapp/userlogs",
           { name: values.email, pass: values.password }
         ); //own ip (android)
         //10.0.2.2
-
-        console.log("error", response);
-      } catch (error: any) {
-        console.log("error", error.message);
-      }
+      } catch (error: any) {}
     }
   };
 

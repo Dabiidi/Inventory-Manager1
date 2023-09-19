@@ -13,12 +13,18 @@ import {
   TextBody,
   ItemLogo,
   ReportButton,
-  ItemLogoQR,
+  InfoContainer,
   ReportLogo,
   DashboardCon,
+  ShipButton,
+  ButtonShip,
+  Top,
+  TopText,
 } from "./HomeStyle";
 
 import { useInventory } from "../Context/InventoryContent";
+import { Octicons } from "@expo/vector-icons";
+import { useGetItems } from "../../services/Items";
 
 type DashboardScreenRouteParams = {
   email: string;
@@ -27,12 +33,11 @@ type DashboardScreenRouteParams = {
 const HomeScreen: React.FC = () => {
   const navigation = useNavigation<any>();
 
-  // const route =
   const { inventories } = useInventory();
 
-  //   useRoute<RouteProp<Record<string, DashboardScreenRouteParams>, string>>();
-  // const { email } = route.params;
-
+  const route =
+    useRoute<RouteProp<Record<string, DashboardScreenRouteParams>, string>>();
+  const { email } = route.params;
   const [currentDateTime, setCurrentDateTime] = React.useState(new Date());
   const navigateToAdd = () => {
     console.log("Click");
@@ -41,6 +46,11 @@ const HomeScreen: React.FC = () => {
   const navigateToReport = () => {
     console.log("Click");
     navigation.navigate("Report Screen");
+  };
+
+  const navigateToShip = () => {
+    console.log("Click");
+    navigation.navigate("ShipItem");
   };
 
   const countItemsByClassification = () => {
@@ -70,10 +80,13 @@ const HomeScreen: React.FC = () => {
 
   return (
     <Container>
+      <Top>
+        <TopText>Menu</TopText>
+      </Top>
       <Header>
         <Greetings>
           <GreetingsText>
-            <Texts>Hello User</Texts>
+            <Texts>Email:{email} </Texts>
             <Texts>
               {currentDateTime.toLocaleDateString()} |{" "}
               {currentDateTime.toLocaleTimeString()}
@@ -85,16 +98,20 @@ const HomeScreen: React.FC = () => {
 
         <Logo source={require("../../Images/Profile.png")}></Logo>
       </Header>
-      <TextBody>Inventory Dashboard</TextBody>
-      <Body>
+      <InfoContainer>
+        <TextBody>Inventory Summary (in Quantity)</TextBody>
+
+        <Texts>Numbers of Items(Classifications):</Texts>
         <DashboardCon>
           {sortedClassifications.map((classification) => (
             <Texts key={classification}>
-              {classification}: {classificationCounts[classification]} items
+              {classification}: {classificationCounts[classification]} item/s
             </Texts>
           ))}
         </DashboardCon>
+      </InfoContainer>
 
+      <Body>
         <AddButton onPress={navigateToAdd}>
           <ItemLogo source={require("../../Images/AddItem.png")}></ItemLogo>
 
@@ -108,6 +125,11 @@ const HomeScreen: React.FC = () => {
 
           <ButtonText>Reports</ButtonText>
         </ReportButton>
+
+        <ShipButton onPress={navigateToShip}>
+          <Octicons name="package-dependents" size={60} color="black" />
+          <ButtonShip>Ship Item</ButtonShip>
+        </ShipButton>
       </Body>
     </Container>
   );

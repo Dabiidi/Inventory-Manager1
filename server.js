@@ -103,7 +103,6 @@ app.post("/inventoryapp/itemlist", async (req, res) => {
     desc,
     classification,
   });
-  console.log("Items", newInventoryItem);
   try {
     await newInventoryItem.save();
     res.status(201).json({ message: "Inventory item saved successfully" });
@@ -118,7 +117,6 @@ app.put("/inventoryapp/itemlist/:id", async (req, res) => {
   const { id } = req.params;
   const { name, quantity, price, desc, classification } = req.body;
 
-  console.log(req.body);
   try {
     const updatedItem = await InventoryItem.findByIdAndUpdate(
       id,
@@ -127,7 +125,6 @@ app.put("/inventoryapp/itemlist/:id", async (req, res) => {
       // This ensures that the updated item is returned
     );
 
-    console.log(updatedItem);
     if (updatedItem) {
       res.status(200).json({ message: "Inventory item updated successfully" });
     } else {
@@ -152,7 +149,6 @@ app.delete("/inventoryapp/itemlist/:itemName", async (req, res) => {
 });
 
 app.get("/inventoryapp/itemlist", async (req, res) => {
-  console.log(req?.query);
   try {
     let inventoryItemSchema = [];
     const query = {};
@@ -211,43 +207,6 @@ app.get("/inventoryapp/itemlist/:param", async (req, res) => {
     res.status(500).json({ message: "Error checking item existence" });
   }
 });
-
-// app.get("/inventoryapp/itemlist", async (req, res) => {
-//   // Search
-//   console.log(req.query);
-//   // const { id, name, action } = req;
-
-//   // console.log(query);
-//   // console.log(req.params);
-//   try {
-//     const existingItem = await InventoryItem.findOne({ _id: id }); // ID Saerch
-//     if (existingItem) {
-//       const { id, name, quantity, price, desc } = existingItem;
-
-//       res.status(200).json({ id, name, quantity, price, desc });
-//     } else {
-//       res.status(200).json({ exists: false });
-//     }
-//   } catch (error) {
-//     res.status(500).json({ message: "Error checking item existence" });
-//   }
-// });
-
-// app.get("/inventoryapp/itemlist/:itemName", async (req, res) => {
-//   // Search
-//   const { itemName } = req.params;
-//   console.log(req.params);
-//   try {
-//     const existingItem = await InventoryItem.findOne({ name: itemName }); // ID Saerch
-//     if (existingItem) {
-//       res.status(200).json({ exists: true });
-//     } else {
-//       res.status(200).json({ exists: false });
-//     }
-//   } catch (error) {
-//     res.status(500).json({ message: "Error checking item existence" });
-//   }
-// });
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

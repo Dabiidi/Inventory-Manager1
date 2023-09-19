@@ -1,7 +1,8 @@
-import { View, Text } from "react-native";
+import { View, Text, ActivityIndicator } from "react-native";
 import React, { useState } from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
+import { useGetItems } from "../../services/Items";
 
 interface Item {
   name: string;
@@ -35,30 +36,35 @@ const InventoryContent: React.FC<InventoryProviderProp> = ({ children }) => {
   const [masterInventory, setMasterInventory] = useState<Item[]>([]);
   const [inventoryCount, setInventoryCount] = useState<Item[]>([]);
 
-  const { isLoading, error, data, refetch, isRefetching } = useQuery({
-    queryKey: ["Items"],
+  const GetItemData = useGetItems();
 
-    queryFn: async () => {
-      const response = await axios.get(
-        "http://192.168.100.10:4000/inventoryapp/itemlist"
-      );
-
-      return response.data;
-    },
-  });
   // console.log("ItemList", inventories);
-  console.log({ isRefetching });
+  console.log(GetItemData.isRefetching);
   React.useEffect(() => {
-    if (data && !isLoading) {
-      setInventories(data);
-      setMasterInventory(data);
+    if (GetItemData.data && !GetItemData.isLoading) {
+      setInventories(GetItemData.data);
+      setMasterInventory(GetItemData.data);
     }
-    refetch();
-  }, [isLoading, data, refetch]);
+    GetItemData.refetch();
+  }, [GetItemData.isLoading, GetItemData.data, GetItemData.refetch]);
 
-  if (isLoading) return <Text>Loading...</Text>;
-  if (error) return <Text> Error gathering data.</Text>;
-  const findInventory = () => data;
+  if (GetItemData.isLoading)
+    return (
+      <>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+          }}
+        >
+          <ActivityIndicator size="large" color="#00ff00" />
+          <Text style={{ textAlign: "center" }}>Loading...</Text>
+        </View>
+      </>
+    );
+
+  if (GetItemData.error) return <Text> Error gathering data.</Text>;
+  const findInventory = () => GetItemData.data;
 
   return (
     <InventoryContext.Provider

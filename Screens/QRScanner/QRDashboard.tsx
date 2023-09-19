@@ -15,20 +15,23 @@ const QRDashboard = () => {
   const ScanToSearch = () => {
     navigation.navigate("ScanSearch");
   };
+
+  const ScanToAdd = () => {
+    navigation.navigate("ScanToAdd");
+  };
+
   return (
     <Container>
-      <ButtonAdd onPress={ScanToSearch}>
-        <ButtonTexts>
-          <MaterialCommunityIcons name="cube-scan" size={24} color="black" />
-          Scan to ADD Item
-        </ButtonTexts>
+      <ButtonAdd onPress={ScanToAdd}>
+        <MaterialCommunityIcons name="cube-scan" size={100} color="black" />
+
+        <ButtonTexts>Scan to ADD</ButtonTexts>
       </ButtonAdd>
 
-      <ButtonScan>
-        <ButtonTexts>
-          <MaterialCommunityIcons name="magnify-scan" size={24} color="black" />
-          Scan to Search Item
-        </ButtonTexts>
+      <ButtonScan onPress={ScanToSearch}>
+        <MaterialCommunityIcons name="magnify-scan" size={100} color="black" />
+
+        <ButtonTexts>Scan to Search</ButtonTexts>
       </ButtonScan>
     </Container>
   );

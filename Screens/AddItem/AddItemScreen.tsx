@@ -30,7 +30,7 @@ const AddItemScreen = () => {
     try {
       // Use axios to make the API request
       const response = await axios.get(
-        `http://192.168.100.10:4000/inventoryapp/itemlist/${itemName}`
+        `http://192.168.1.30:4000/inventoryapp/itemlist/${itemName}`
       );
 
       return response.data;
@@ -44,7 +44,7 @@ const AddItemScreen = () => {
   const createInventoryItem = async (data: any) => {
     try {
       const response = await axios.post(
-        "http://192.168.100.10:4000/inventoryapp/itemlist",
+        "http://192.168.1.30:4000/inventoryapp/itemlist",
         data
       );
       return response.data;
