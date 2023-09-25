@@ -8,6 +8,7 @@ import {
   Container,
   OutputData,
 } from "./SearchStyle";
+import { UseCheckItemExistance } from "../../services/Items";
 
 interface Items {
   name: string;
@@ -34,6 +35,9 @@ const ScantoSearch = () => {
     askForCameraPermission();
   }, []);
 
+  const { isLoading: loadingCheck, mutateAsync: loadingAsync } =
+    UseCheckItemExistance();
+
   const handleBarCodeScanned = async ({
     type,
     data,
@@ -44,31 +48,9 @@ const ScantoSearch = () => {
     setScanned(true);
     setText(data);
 
-    const checkItemExistence = async (itemName: string) => {
-      try {
-        const response = await fetch(
-          `http://192.168.1.30:4000/inventoryapp/itemlist/${itemName}`
-        );
-
-        if (response.ok) {
-          const data = await response.json();
-          console.log("The data", data);
-          return data;
-        } else {
-          // Handle error response
-          console.error("Error checking item existence");
-          return false;
-        }
-      } catch (error) {
-        // Handle connection errors
-        console.error("Error:", error);
-        return false;
-      }
-    };
-
     const [Name] = data.split(",");
     // Check the database for the item using the item's name
-    const itemExists = await checkItemExistence(Name);
+    const itemExists = await loadingAsync(Name);
 
     if (itemExists.name && itemExists) {
       // Fetch and display item data from the database

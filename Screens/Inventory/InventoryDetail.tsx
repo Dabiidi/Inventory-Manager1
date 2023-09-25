@@ -29,12 +29,16 @@ import {
   Texts,
   PickerContainer,
 } from "./InventoryDetailStyle";
-import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import debounce from "lodash/debounce";
 
 import { Picker } from "@react-native-picker/picker";
-import { useInventory } from "../Context/InventoryContent";
 
+import {
+  useDeleteInventory,
+  useUpdateInventory,
+  saveLogs,
+} from "../../services/Items";
 type Items = {
   _id: string;
   name: string;
@@ -42,6 +46,7 @@ type Items = {
   price: number;
   desc: string;
   classification: string;
+  [key: string]: string | number;
 };
 type InventoryDetailRouteParamList = {
   "Inventory Detail": {
@@ -56,30 +61,58 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
   // console.log("Item ID", inventory._id);
   const navigation = useNavigation();
   // State variables to hold edited data and edit mode
-  const { setInventories } = useInventory();
 
-  const [editedInventory, setEditedInventory] = useState<Items>(inventory);
+  const [editedInventory, setEditedInventory] = useState<Items>(
+    inventory as Items
+  );
   const [editMode, setEditMode] = useState(false);
+  const [originalInventory, setOriginalInventory] = useState<Items>(inventory);
+
   const [editableField, setEditableField] = useState<string | null>(null);
+  const [changesMade, setChangesMade] = useState<string>();
 
   const queryClient = useQueryClient();
 
-  // Function to handle changes in the form inputs
-  const handleInputChange = (fieldName: string, value: any) => {
+  const { isLoading: loadingLogs, mutateAsync: mutateLogs } = saveLogs();
+
+  const handleInputChange = async (fieldName: string, value: any) => {
+    if (editedInventory[fieldName] !== value) {
+      const changeDescription = `Changed ${fieldName} from "${editedInventory[fieldName]}" to "${value}"`;
+      setChangesMade(changeDescription);
+    }
+
+    if (
+      fieldName !== "name" &&
+      fieldName !== "desc" &&
+      (value === "" || value === null || isNaN(Number(value)))
+    ) {
+      // Set a default value (e.g., 0) when the input is empty, null, or not a number
+      value = 0;
+    }
+
     setEditedInventory({
       ...editedInventory,
       [fieldName]: value,
     });
   };
 
-  const CancelMode = async () => {
+  const CancelMode = () => {
+    if (originalInventory) {
+      setEditedInventory({ ...originalInventory });
+    }
+
     setEditMode(false);
     setEditableField(null);
   };
 
-  // Function to save the edited data to the database
+  const {
+    isLoading: loadingUpdate,
+    mutateAsync: mutateUpdate,
+    data,
+    isSuccess,
+  } = useUpdateInventory();
+
   const handleSave = async () => {
-    // console.log("Item ID", editedInventory._id);
     if (
       !editedInventory.name ||
       !editedInventory.quantity ||
@@ -91,22 +124,22 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
       return;
     }
 
-    try {
-      const response = await axios.put(
-        `http://192.168.1.30:4000/inventoryapp/itemlist/${editedInventory._id}`,
-        editedInventory
-      );
-      // console.log(editedInventory);
+    const payload = { id: editedInventory._id, data: editedInventory };
+    const updateResult = await mutateUpdate(payload);
 
-      if (response.status === 200) {
+    try {
+      if (updateResult.status === 200) {
+        await mutateLogs({
+          itemName: editedInventory.name,
+          action: changesMade,
+        });
         queryClient.invalidateQueries(["Items"]);
 
-        Alert.alert("Success", "Inventory item updated successfully");
+        Alert.alert("Success", "Inventry item updated successfully");
         setEditMode(false);
         setEditableField(null);
       } else {
-        // Handle server errors or validation errors and show an appropriate error message
-        Alert.alert("Error", response.data.message || "Something went wrong");
+        Alert.alert("Error", data?.data.message || "Something went wrong");
       }
     } catch (error) {
       console.error("Error updating inventory item:", error);
@@ -122,25 +155,10 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
     "Balls",
   ];
 
-  const deleteInventory = async () => {
-    try {
-      const response = await axios.delete(
-        `http://192.168.1.30:4000/inventoryapp/itemlist/${editedInventory.name}`
-      );
-
-      if (response.status === 200) {
-        queryClient.invalidateQueries(["Items"]);
-        Alert.alert("Success", "Inventory item deleted successfully");
-        navigation.goBack();
-      } else {
-        Alert.alert("Error", response.data.message || "Something went wrong");
-      }
-    } catch (error) {
-      console.error("Error deleting inventory item:", error);
-      Alert.alert("Error", "Something went wrong");
-    }
-  };
-  const mutation = useMutation(deleteInventory);
+  const { mutateAsync } = useDeleteInventory(
+    editedInventory._id,
+    editedInventory.name
+  );
 
   const displayDeleteAlert = () => {
     Alert.alert(
@@ -155,7 +173,7 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
         {
           text: "Delete",
 
-          onPress: () => mutation.mutate(),
+          onPress: () => mutateAsync(),
         },
       ],
       {
@@ -166,29 +184,11 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
 
   useEffect(() => {}, []);
 
-  console.log(editMode);
   return (
     <>
       <Container>
         <NameContainer>
-          <Name>Item Name:</Name>
-          {editMode ? (
-            <TextInputs
-              editable
-              value={editedInventory.name}
-              onChangeText={(value) => handleInputChange("name", value)}
-            ></TextInputs>
-          ) : (
-            <Name
-              onPress={() => {
-                console.log(editMode);
-
-                if (editMode) setEditableField("name");
-              }}
-            >
-              {editedInventory.name}
-            </Name>
-          )}
+          <Name>Item Name: {editedInventory.name}</Name>
         </NameContainer>
 
         <QuantityContainer>
@@ -208,7 +208,6 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
                 console.log(editMode);
               }}
             >
-              {" "}
               {editedInventory.quantity}
             </Total>
           )}

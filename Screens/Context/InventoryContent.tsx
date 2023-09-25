@@ -4,7 +4,7 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { useGetItems } from "../../services/Items";
 
-interface Item {
+export interface Item {
   name: string;
   quantity: number;
   price: number;
@@ -17,6 +17,7 @@ interface ItemContextType {
   setInventories: React.Dispatch<React.SetStateAction<Item[]>>;
   findInventory: () => void;
   masterInventory: Item[];
+  inventoryCount: Item[];
 }
 
 const initialContext: ItemContextType = {
@@ -24,6 +25,7 @@ const initialContext: ItemContextType = {
   setInventories: () => {},
   findInventory: () => {},
   masterInventory: [],
+  inventoryCount: [],
 };
 
 interface InventoryProviderProp {
@@ -38,27 +40,27 @@ const InventoryContent: React.FC<InventoryProviderProp> = ({ children }) => {
 
   const GetItemData = useGetItems();
 
-  // console.log("ItemList", inventories);
-  console.log(GetItemData.isRefetching);
   React.useEffect(() => {
     if (GetItemData.data && !GetItemData.isLoading) {
       setInventories(GetItemData.data);
       setMasterInventory(GetItemData.data);
+      setInventoryCount(GetItemData.data);
     }
     GetItemData.refetch();
   }, [GetItemData.isLoading, GetItemData.data, GetItemData.refetch]);
 
-  if (GetItemData.isLoading)
+  if (GetItemData.isLoading && GetItemData.isRefetching)
     return (
       <>
         <View
           style={{
             flex: 1,
             justifyContent: "center",
+            alignItems: "center",
           }}
         >
           <ActivityIndicator size="large" color="#00ff00" />
-          <Text style={{ textAlign: "center" }}>Loading...</Text>
+          <Text style={{ textAlign: "center" }}> Loading...</Text>
         </View>
       </>
     );
@@ -68,7 +70,13 @@ const InventoryContent: React.FC<InventoryProviderProp> = ({ children }) => {
 
   return (
     <InventoryContext.Provider
-      value={{ inventories, setInventories, findInventory, masterInventory }}
+      value={{
+        inventories,
+        inventoryCount,
+        setInventories,
+        findInventory,
+        masterInventory,
+      }}
     >
       {children}
     </InventoryContext.Provider>

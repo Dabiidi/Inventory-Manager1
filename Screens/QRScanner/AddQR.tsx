@@ -16,7 +16,7 @@ import {
   HeaderInformation,
   HeaderContainer,
 } from "./AddQRStyle";
-import { useMutation } from "@tanstack/react-query";
+import { UseAddItem, UseCheckItemExistance } from "../../services/Items";
 
 const AddQR = () => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
@@ -27,32 +27,6 @@ const AddQR = () => {
   const [price, setPrice] = useState<number>(0);
   const [desc, setDesc] = useState<string>("");
   const [classification, setClassification] = useState<string>("");
-
-  const checkItemExistence = async (itemName: string) => {
-    try {
-      const response = await axios.get(
-        `http://192.168.1.30:4000/inventoryapp/itemlist/${itemName}`
-      );
-
-      return response.data;
-    } catch (error) {
-      // Handle errors
-      console.error("Error:", error);
-      throw error;
-    }
-  };
-  const createInventoryItem = async (data: any) => {
-    try {
-      const response = await axios.post(
-        "http://192.168.1.30:4000/inventoryapp/itemlist",
-        data
-      );
-      return response.data;
-    } catch (error) {
-      // console.log("Error", error);
-    }
-  };
-  const { mutate: addInventoryItem } = useMutation(createInventoryItem);
 
   const handleBarCodeScanned = ({
     type,
@@ -87,21 +61,26 @@ const AddQR = () => {
     setClassification("");
   };
 
+  const { isLoading: loadingCheck, mutateAsync: loadingAsync } =
+    UseCheckItemExistance();
+
+  const { isLoading, mutateAsync } = UseAddItem();
+
   const handleSave = async () => {
     if (!name || !quantity || !price || !desc || !classification) {
       Alert.alert("Error", "Please fill in all fields before submitting");
       return;
     }
     const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
-    const nameExists = await checkItemExistence(capitalizedName);
+    const nameExists = await loadingAsync(capitalizedName);
     console.log("NameExistLog", nameExists);
-    if (nameExists.name === name) {
+    if (nameExists.exists !== false) {
       // Check for existence and if exists is true
       Alert.alert("Error", `Item ${capitalizedName} already exists.`);
       return;
     }
     try {
-      const result = await addInventoryItem({
+      await mutateAsync({
         name: capitalizedName,
         quantity,
         price,

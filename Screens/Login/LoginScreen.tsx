@@ -1,4 +1,9 @@
-import { KeyboardAvoidingView, ScrollView, Text } from "react-native";
+import {
+  ImageBackground,
+  KeyboardAvoidingView,
+  ScrollView,
+  Text,
+} from "react-native";
 import React, { useState } from "react";
 import {
   EmailInput,
@@ -8,12 +13,16 @@ import {
   LoginButton,
   ButtonText,
   LoginContainer,
-  Footer,
+  Container,
+  TitleText,
+  IntroHeader,
   PasswordContainer,
-  InnerContainer,
+  Header,
+  TextContainer,
 } from "./LoginStyle";
 import axios from "axios";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { getUserAcc } from "../../services/Items";
 
 interface LoginForms {
   // defining the emal and password datatype
@@ -71,35 +80,62 @@ const LoginScreen: React.FC<LandingScreenProps> = ({ navigation }) => {
     setErrors({ ...errors, [name]: undefined });
   };
 
+  const { data } = getUserAcc();
   const handleSubmit = async () => {
+    // Validate email and password inputs
     const emailError = validateEmail(values.email);
     const passwordError = validatePassword(values.password);
 
     if (emailError || passwordError) {
+      // Display validation errors if there are any
       setErrors({ email: emailError, password: passwordError });
     } else {
       try {
-        console.log("Test button", { email: values.email });
-        navigation.navigate("Home", {
-          screen: "Menu",
-          params: { email: values.email },
-        });
-        console.log(values.email, values.password);
-        const response = await axios.post(
-          "http://192.168.1.30:4000/inventoryapp/userlogs",
-          { name: values.email, pass: values.password }
-        ); //own ip (android)
-        //10.0.2.2
-      } catch (error: any) {}
+        // Retrieve user account based on the entered email
+
+        if (data[0].name) {
+          // Check if the entered password matches the user's password
+          if (values.password === data[0].pass) {
+            // Navigate to the "Home" screen with email as a parameter
+            navigation.navigate("Home", {
+              screen: "Menu",
+              params: { email: values.email },
+            });
+          } else {
+            // Display an error if the password is incorrect
+            setErrors({ password: "Incorrect password" });
+          }
+        } else {
+          // Display an error if the user is not found
+          setErrors({ email: "User not found" });
+        }
+      } catch (error) {
+        // Handle errors that occur during the login process
+        console.error("Error during login:", error);
+      }
     }
   };
 
   return (
     <>
-      <LoginContainer>
-        <InnerContainer>
+      <Container>
+        <Header>
+          <ImageBackground
+            source={require("../../Images/header.png")}
+            resizeMode="cover"
+            style={{ flex: 1, position: "relative" }}
+            blurRadius={1}
+          ></ImageBackground>
+        </Header>
+        <IntroHeader>
           <Logo source={require("../../Images/Logo1.png")} />
-          <Title>Inventory Manager</Title>
+          <TextContainer>
+            <Title>Scanventory</Title>
+            <TitleText>Empowering Your Inventory Management</TitleText>
+          </TextContainer>
+        </IntroHeader>
+
+        <LoginContainer>
           <EmailInput
             value={values.email}
             onChangeText={(value) => handleChange("email", value)}
@@ -131,10 +167,9 @@ const LoginScreen: React.FC<LandingScreenProps> = ({ navigation }) => {
           <LoginButton onPress={handleSubmit}>
             <ButtonText>Login</ButtonText>
           </LoginButton>
-
-          <Footer></Footer>
-        </InnerContainer>
-      </LoginContainer>
+          <Text style={{ textAlign: "center" }}> Forgot Password?</Text>
+        </LoginContainer>
+      </Container>
     </>
   );
 };

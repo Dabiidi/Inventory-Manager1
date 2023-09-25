@@ -16,6 +16,11 @@ import { useNavigation } from "@react-navigation/native";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { Picker } from "@react-native-picker/picker";
+import {
+  UseAddItem,
+  UseCheckItemExistance,
+  saveLogs,
+} from "../../services/Items";
 
 const AddItemScreen = () => {
   const [name, setName] = React.useState<string>("");
@@ -26,34 +31,14 @@ const AddItemScreen = () => {
   const [classification, setClassification] = React.useState<string | null>(
     null
   );
-  const checkItemExistence = async (itemName: string) => {
-    try {
-      // Use axios to make the API request
-      const response = await axios.get(
-        `http://192.168.1.30:4000/inventoryapp/itemlist/${itemName}`
-      );
 
-      return response.data;
-    } catch (error) {
-      // Handle errors
-      console.error("Error:", error);
-      throw error;
-    }
-  };
+  const { isLoading: loadingCheck, mutateAsync: loadingAsync } =
+    UseCheckItemExistance();
 
-  const createInventoryItem = async (data: any) => {
-    try {
-      const response = await axios.post(
-        "http://192.168.1.30:4000/inventoryapp/itemlist",
-        data
-      );
-      return response.data;
-    } catch (error) {
-      // console.log("Error", error);
-    }
-  };
-  //Use Mutations
-  const { mutate: addInventoryItem } = useMutation(createInventoryItem);
+  const [changesMade, setChangesMade] = React.useState<string>();
+
+  const { isLoading, mutateAsync } = UseAddItem();
+  const { isLoading: loadingLogs, mutateAsync: mutateLogs } = saveLogs();
 
   const handleSubmit = async () => {
     if (!name || !quantity || !price || !desc || !classification) {
@@ -61,19 +46,25 @@ const AddItemScreen = () => {
       return;
     }
     const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
-    const nameExists = await checkItemExistence(capitalizedName);
-    if (nameExists.name == name) {
+    const nameExists = await loadingAsync(capitalizedName);
+
+    if (nameExists.exists !== false) {
       Alert.alert("Error", `Item ${name} is already Exists.`);
       return;
     }
     try {
       // Call the mutation function when the "Submit" button is pressed
-      const result = await addInventoryItem({
-        name,
+      await mutateAsync({
+        name: capitalizedName,
         quantity,
         price,
         desc,
         classification,
+      });
+
+      await mutateLogs({
+        itemName: name,
+        action: `Added ${name} to the inventory.`,
       });
 
       Alert.alert(`Inventory Item name ${name} added successfully.`);
@@ -81,6 +72,7 @@ const AddItemScreen = () => {
       setQuantity(0);
       setPrice(0);
       setDesc("");
+
       navigation.navigate("Home");
     } catch (error: any) {
       Alert.alert("Error", error.message || "An error occurred");
@@ -108,24 +100,28 @@ const AddItemScreen = () => {
         <Body>
           <Input
             placeholder="Item Name"
+            placeholderTextColor={"white"}
             autoCapitalize="words"
             onChangeText={(text) => setName(text)}
             value={name}
           />
           <Input
             placeholder="Quantity"
+            placeholderTextColor={"white"}
             onChangeText={(text) => setQuantity(parseInt(text))}
             value={quantity ? quantity.toString() : ""}
             keyboardType="numeric"
           />
           <Input
             placeholder="Price"
+            placeholderTextColor={"white"}
             onChangeText={(text) => setPrice(parseFloat(text))}
             value={price ? price.toString() : ""}
             keyboardType="numeric"
           />
           <Input
             placeholder="Description"
+            placeholderTextColor={"white"}
             autoCapitalize="words"
             onChangeText={(text) => setDesc(text)}
             value={desc}
@@ -135,6 +131,9 @@ const AddItemScreen = () => {
           <Picker
             selectedValue={classification}
             onValueChange={(itemValue) => setClassification(itemValue)}
+            style={{
+              color: "#fff",
+            }}
           >
             <Picker.Item label="Select Classification" value={null} />
             {classificationOptions.map((option, index) => (

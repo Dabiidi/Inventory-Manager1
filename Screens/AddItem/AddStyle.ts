@@ -2,7 +2,7 @@ import styled from "styled-components/native";
 
 export const Container = styled.View`
   flex: 1;
-  background-color: #0ea293;
+  background-color: #419197;
   justify-content: center;
 `;
 export const Header = styled.View`
@@ -21,7 +21,7 @@ export const Logo = styled.Image`
 `;
 export const Body = styled.View`
   width: 100%;
-  background-color: #0ea293;
+  background-color: #419197;
   align-items: center;
   border-top-right-radius: 100px;
 `;
@@ -34,7 +34,8 @@ export const Input = styled.TextInput`
   border-bottom-width: 2px;
   border-bottom-color: black;
   font-size: 15px;
-  color: black;
+  color: #fff;
+  
   width: 80%;
   margin-top: 20px;
 `;
@@ -63,5 +64,5 @@ export const PickerContainer = styled.View`
   margin-left: 20px;
   padding: 5px;
   justify-content: center;
-  flex: 1;  
+  flex: 1;
 `;

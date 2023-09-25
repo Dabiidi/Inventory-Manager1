@@ -1,46 +1,60 @@
 import { KeyboardAvoidingView, TextInput } from "react-native";
 import { styled } from "styled-components/native";
 
-export const Header = styled.View`
-  background-color: #b9eddd;
-  border-bottom-right-radius: 100px;
-`;
-export const LoginContainer = styled.View`
+export const Container = styled.View`
+  background-color: #419197;
   flex: 1;
-  background-color: #b9eddd;
   justify-content: center;
+`;
+export const Header = styled.View`
+  background-color: #419197;
+  height: 20%;
+  flex: 1;
 `;
 
-export const Logo = styled.Image`
-  margin-top: 100px;
+export const LoginContainer = styled.View`
+  padding-top: 40px;
+  background-color: #fff;
   justify-content: center;
-  align-items: center;
+  padding-bottom: 30px;
+`;
+
+export const IntroHeader = styled.View`
+  padding-top: 40px;
+  border-top-right-radius: 40px;
+  border-top-left-radius: 40px;
+  background-color: #fff;
+  flex-direction: row;
+  justify-content: center;
+`;
+export const Logo = styled.Image`
   width: 100px;
   height: 100px;
-
-  margin-left: auto;
-  margin-right: auto;
 `;
+
+export const TextContainer = styled.View`
+  margin-left: 13px;
+  margin-top: 5px;
+`;
+
 export const Title = styled.Text`
+  margin-top: 10px;
   font-size: 30px;
   font-weight: bold;
-  text-align: center;
-  justify-content: center;
 `;
 
-export const InputContainer = styled.View`
-  border-top-left-radius: 100px;
-  background-color: #87cbb9;
-  height: 70%;
-  margin-top: 5%;
+export const TitleText = styled.Text`
+  font-size: 12px;
+  font-weight: 500;
 `;
+
 export const EmailInput = styled(TextInput).attrs({
   placeholder: "Email",
 })`
   background-color: white;
   height: 50px;
+  border-width: 1px;
   width: 90%;
-  margin-top: 50px;
   margin-left: 18px;
   border-radius: 30px;
   margin-bottom: 10px;
@@ -59,10 +73,8 @@ export const PassInput = styled(TextInput).attrs({
 export const PasswordContainer = styled.View`
   flex-direction: row;
   align-items: center;
-  justify-content: center;
-  border: 1px solid #ccc;
 
-  border-radius: 0px;
+  border-width: 1px;
   margin-left: 18px;
   border-radius: 30px;
   width: 90%;
@@ -85,13 +97,3 @@ export const ButtonText = styled.Text`
   font-weight: 400;
   color: #fff;
 `;
-
-export const Footer = styled.View`
-  background-color: #b9eddd;
-  height: 20%;
-`;
-
-export const InnerContainer = styled.View`
-
-
-`

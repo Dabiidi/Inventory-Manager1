@@ -2,73 +2,140 @@ import styled from "styled-components/native";
 
 export const Container = styled.View`
   flex: 1;
-  background-color: #b9eddd;
+  background-color: #419197;
 `;
-export const Top = styled.View`
-  flex-direction: row;
-  height: 7%;
-  background-color: #016a70;
-`;
-export const TopText = styled.Text`
-  font-size: 20px;
-  font-weight: bold;
-  color: #b9eddd;
-  justify-content: center;
-  margin-top: 15px;
-  margin-left: 17px;
-`;
+export const Logo = styled.Image`
+  width: 100px;
+  height: 100px;
 
+  border-radius: 50px;
+`;
 export const Header = styled.View`
   flex-direction: row;
-  align-content: center;
-  justify-content: space-between;
+
+  background-color: #419197;
+  padding-top: 50px;
   padding: 10px;
-  background-color: #b9eddd;
-  border-bottom: black;
+  align-self: center;
+`;
+export const HeaderTexts = styled.View`
+  flex-direction: column;
+  padding-left: 25px;
+  padding-top: 10px;
+`;
+export const TopText = styled.Text`
+  font-size: 15px;
+  font-weight: bold;
+  color: #fff;
+`;
+
+export const SalesText = styled.Text`
+  font-size: 20px;
+  font-weight: bold;
+  color: #ffffff;
+`;
+
+export const InfoContainer = styled.View`
+  border-top-right-radius: 50px;
+  border-top-left-radius: 50px;
+  height: 35%;
+  flex-direction: column;
+  background-color: #fff;
+`;
+
+export const Top = styled.View`
+  padding-top: 20px;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin-bottom: 10px;
 `;
 
 export const Texts = styled.Text`
   font-size: 20px;
   font-weight: 400;
 `;
-export const TextBody = styled.Text`
-  font-size: 20px;
-  font-weight: 400;
-  text-align: center;
-  background-color: #016a70;
-  color: #ffffff;
+export const TextWrapper1 = styled.TouchableOpacity`
+  background-color: #419197;
+  height: 85px;
+  width: 150px;
+  border-radius: 10px;
 `;
-export const Logo = styled.Image`
-  width: 100px;
-  height: 100px;
-  padding: 30px;
-  border-radius: 50px;
+export const TextWrapper2 = styled.TouchableOpacity`
+  background-color: #419197;
+  height: 85px;
+  width: 150px;
+  border-radius: 10px;
+`;
+export const TextBody = styled.Text`
+  font-size: 15px;
+  text-align: center;
+  padding-top: 10px;
+  font-weight: 500;
+  color: #000;
+`;
+export const TextWrappper3 = styled.TouchableOpacity`
+margin-top: 10px;
+  background-color: #419197;
+  justify-content: center;
+  align-self: center;
+  flex-direction: column;
+  border-radius: 10px;
+  height: 85px;
+  width: 200px;
 `;
 
-export const GreetingsText = styled.View``;
+export const TextBodyShip = styled.Text`
+  font-size: 15px;
+  align-self: center;
+
+  text-align: center;
+  font-weight: 500;
+  color: #000;
+`;
+
+export const TextCountShip = styled.Text`
+  font-size: 20px;
+  align-self: center;
+
+  text-align: center;
+  font-weight: 700;
+  color: #fff;
+`;
+export const TextCount = styled.Text`
+  font-size: 20px;
+  text-align: center;
+  font-weight: 700;
+  color: #fff;
+  padding-top: 10px;
+`;
+export const AvailableCount = styled.Text`
+  font-size: 20px;
+  text-align: center;
+  font-weight: 700;
+
+  padding-top: 10px;
+  color: #fff;
+`;
+
+export const Greetings = styled.Text`
+  text-align: center;
+  font-size: 20px;
+  font-weight: 700;
+`;
 
 export const DashboardCon = styled.View`
   justify-content: center;
   margin-bottom: 50px;
 `;
-export const Greetings = styled.Text``;
-
-export const InfoContainer = styled.View`
-  height: 20%;
-  margin-bottom: 50px;
-  background-color: #b9eddd;
-`;
 
 export const Body = styled.View`
-  background-color: #b9eddd;
-
-  padding: 20px;
+  background-color: #fff;
 `;
 export const ReportButton = styled.TouchableOpacity`
   background-color: #016a70;
   height: 20%;
   width: 90%;
-  border-radius: 30px;
+
   margin-bottom: 10px;
   flex-direction: row;
   align-items: center;
@@ -80,7 +147,6 @@ export const AddButton = styled.TouchableOpacity`
   background-color: #016a70;
   height: 20%;
   width: 90%;
-  border-radius: 30px;
   margin-bottom: 10px;
   flex-direction: row;
   align-items: center;
@@ -127,7 +193,7 @@ export const ShipButton = styled.TouchableOpacity`
   background-color: #016a70;
   height: 20%;
   width: 90%;
-  border-radius: 30px;
+
   margin-bottom: 10px;
   flex-direction: row;
   align-items: center;

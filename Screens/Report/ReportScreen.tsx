@@ -11,22 +11,12 @@ import {
   Name,
   Header,
 } from "./ReportScreenStyle";
+import { useGetLogs } from "../../services/Items";
 const ReportScreen: React.FC = () => {
-  const { isLoading, error, data } = useQuery({
-    queryKey: ["Items"],
-
-    queryFn: async () => {
-      const response = await axios.get(
-        "http://192.168.1.30:4000/inventoryapp/itemlist"
-      );
-
-      return response.data;
-    },
-  });
+  const { isLoading, error, data } = useGetLogs();
 
   const formatDate = (timestamp: string) => {
     try {
-      // Parse the timestamp using Moment.js and format it
       const formattedDate = moment(timestamp).format("MMMM DD, YYYY, hh:mm A");
       return formattedDate;
     } catch (error) {
@@ -34,13 +24,11 @@ const ReportScreen: React.FC = () => {
       return "Invalid Timestamp";
     }
   };
+
+  if (isLoading) return <Text> Loading Data...</Text>;
   if (error) {
     return <Text>Error loading data</Text>;
   }
-
-  //  <Name>{`Quantity: ${item.quantity}`}</Name>
-  //           <Name>{`Price: ${item.price}`}</Name>
-  //           <Name>{`Description: ${item.desc}`}</Name>
 
   return (
     <Container>
@@ -48,17 +36,15 @@ const ReportScreen: React.FC = () => {
         data={data}
         renderItem={({ item }) => (
           <ItemContainer>
-            <TimeDate>{`Item added from inventory at: ${formatDate(
-              item.createdAt
-            )}`}</TimeDate>
+            <TimeDate>{`${formatDate(item.createdAt)} ${
+              item.action
+            }.`}</TimeDate>
 
-            <Name>{`Item Name: ${item.name}`} </Name>
-
-            <Name>{`Classification: ${item.classification}`}</Name>
+            <Name>{`Item Name: ${item.itemName}`} </Name>
           </ItemContainer>
         )}
         scrollEnabled
-        keyExtractor={(item) => item.name}
+        keyExtractor={(item) => item.itemName}
       />
     </Container>
   );

@@ -6,13 +6,8 @@ import InventoryComponent from "../Inventory/Inventory";
 import { useNavigation } from "@react-navigation/native";
 
 import { useInventory } from "../Context/InventoryContent";
-import {
-  PickerContainer,
-  SearchContainer,
-  SearchInput,
-} from "./InventoryStyle";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import { PickerContainer, SearchInput } from "./InventoryStyle";
+
 import { Picker } from "@react-native-picker/picker";
 import { useGetItems } from "../../services/Items";
 

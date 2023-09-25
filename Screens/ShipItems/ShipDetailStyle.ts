@@ -1,32 +1,47 @@
 import styled from "styled-components/native";
 
 export const Container = styled.View`
-  padding: 16px;
+  background-color: #fff;
+  flex: 1;
+`;
+export const TextHeader = styled.Text`
+  font-size: 30px;
+  color: #000;
+  text-align: center;
+  font-weight: 600;
+`;
+export const ItemHeader = styled.View`
+  margin-top: 10px;
+  padding: 20px;
+  width: 90%;
   background-color: #2f4f4f;
-  border-radius: 8px;
-  margin: 8px;
+  align-self: center;
+
+  align-content: center;
+`;
+export const MapContainer = styled.View``;
+
+export const LocContainer = styled.View`
+  flex-direction: column;
 `;
 
-export const MapContainer = styled.View``;
-export const NameContainer = styled.View`
-  height: 30px;
-  background-color: #2f4f4f;
-  flex-direction: row;
-`;
-export const BottomSheetContainer = styled.View`
-  flex: 1;
-  align-items: center;
-`;
-export const BottomSheetContent = styled.View`
-  flex: 1;
-  width: 100%;
-  align-items: center;
-`;
-export const Text3 = styled.Text`
-  font-size: 12px;
+export const LocationText = styled.Text`
+  font-size: 15px;
   text-align: left;
-  color: white;
+  font-weight: 400;
+  color: #000;
   text-align: center;
+`;
+export const LocateText = styled.Text`
+  font-size: 15px;
+  text-align: left;
+  font-weight: 700;
+  color: #000;
+  text-align: center;
+`;
+
+export const ShippingContainer = styled.View`
+  align-items: center;
 `;
 
 export const Name = styled.Text`
@@ -34,54 +49,41 @@ export const Name = styled.Text`
   font-weight: bold;
   color: #fff;
 `;
-
 export const Quantity = styled.Text`
   font-size: 16px;
-
   color: #fff;
 `;
-
 export const Price = styled.Text`
   font-size: 16px;
-
   color: #fff;
 `;
-
 export const Desc = styled.Text`
   font-size: 16px;
-
   color: #fff;
 `;
-
 export const Classification = styled.Text`
   font-size: 16px;
   color: #fff;
 `;
-
+export const QuantityText = styled.TextInput`
+  border-width: 1px;
+  width: 90%;
+  border-color: #000;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 5px;
+`;
 export const ButtonText = styled.Text`
-  font-size: 23px;
+  font-size: 20px;
   font-weight: 400;
   color: #fff;
+  text-align: center;
 `;
-
-export const QuantityContainer = styled.View`
-  height: 30px;
-  background-color: #2f4f4f;
-  flex-direction: row;
-`;
-export const PriceContainer = styled.View`
-  height: 30px;
-  background-color: #2f4f4f;
-  flex-direction: row;
-`;
-export const DescContainer = styled.View`
-  height: 30px;
-  background-color: #2f4f4f;
-  flex-direction: row;
-`;
-
-export const ClassificationContainer = styled.View`
-  height: 30px;
-  background-color: #2f4f4f;
-  flex-direction: row;
+export const ShipButton = styled.TouchableOpacity`
+  margin-top: 10px;
+  width: 90%;
+  background-color: #016a70;
+  height: 40px;
+  justify-content: center;
+  border-radius: 20px;
 `;

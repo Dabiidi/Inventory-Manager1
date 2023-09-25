@@ -24,6 +24,8 @@ import {
   MaterialIcons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
+import OutofStockItems from "./Screens/ShipItems/OutofStockItems";
+import ShipLogs from "./Screens/ShipItems/ShipLogs";
 const Tab = createBottomTabNavigator();
 const queryClient = new QueryClient();
 
@@ -35,12 +37,6 @@ function StackNav() {
       <Stack.Screen
         name="Login"
         component={LoginScreen}
-        options={{ headerShown: false }}
-      />
-
-      <Stack.Screen
-        name="Home"
-        component={Home}
         options={{ headerShown: false }}
       />
 
@@ -186,6 +182,47 @@ function StackNav() {
           },
         }}
       />
+
+      <Stack.Screen
+        name="OutOfStock"
+        component={OutofStockItems}
+        options={{
+          title: "Unavailable Items",
+          headerBackVisible: true,
+          headerTitleAlign: "center",
+          headerShown: true,
+          headerTitleStyle: {
+            fontWeight: "bold",
+            color: "white",
+          },
+          headerStyle: {
+            backgroundColor: "#016a70",
+          },
+        }}
+      />
+      <Stack.Screen
+        name="ShipLogs"
+        component={ShipLogs}
+        options={{
+          title: "Item Shipping Logs",
+          headerBackVisible: true,
+          headerTitleAlign: "center",
+          headerShown: true,
+          headerTitleStyle: {
+            fontWeight: "bold",
+            color: "white",
+          },
+          headerStyle: {
+            backgroundColor: "#016a70",
+          },
+        }}
+      />
+
+      <Stack.Screen
+        name="Home"
+        component={Home}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 }
@@ -197,7 +234,14 @@ function Home() {
         name="Menu"
         component={HomeScreen}
         options={{
-          headerShown: false,
+          title: "Dashboard",
+          headerStyle: {
+            backgroundColor: "#016a70",
+          },
+          headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
           tabBarIcon: ({ color, size }) => (
             <AntDesign name="home" color={color} size={size} />
           ),

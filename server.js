@@ -65,6 +65,7 @@ app.post("/inventoryapp/userlogs", async (req, res) => {
     res.status(500).json({ message: "Error saving user" });
   }
 });
+
 const inventoryItemSchema = new mongoose.Schema(
   {
     // ITEM LIST INVENTORY SCHEMA
@@ -105,6 +106,7 @@ app.post("/inventoryapp/itemlist", async (req, res) => {
   });
   try {
     await newInventoryItem.save();
+    console.log(newInventoryItem);
     res.status(201).json({ message: "Inventory item saved successfully" });
   } catch (error) {
     console.error("Error saving inventory item:", error);
@@ -137,11 +139,11 @@ app.put("/inventoryapp/itemlist/:id", async (req, res) => {
 });
 
 // API endpoint to delete an inventory item
-app.delete("/inventoryapp/itemlist/:itemName", async (req, res) => {
-  const { itemName } = req.params;
+app.delete("/inventoryapp/itemlist/:id", async (req, res) => {
+  const { id } = req.params;
 
   try {
-    await InventoryItem.deleteOne({ name: itemName });
+    await InventoryItem.deleteOne({ _id: id });
     res.status(200).json({ message: "Inventory item deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: "Error deleting inventory item" });
@@ -195,7 +197,6 @@ app.get("/inventoryapp/itemlist/:param", async (req, res) => {
     } else {
       // Search by name
       const existingItems = await InventoryItem.findOne({ name: param });
-      console.log(existingItems);
       if (existingItems) {
         res.status(200).json(existingItems);
       } else {
@@ -205,6 +206,145 @@ app.get("/inventoryapp/itemlist/:param", async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Error checking item existence" });
+  }
+});
+
+const ShipItemSchema = new mongoose.Schema({
+  // Ship-list INVENTORY SCHEMA
+  itemId: {
+    type: String,
+    required: true,
+  },
+  name: {
+    type: String,
+    required: true,
+  },
+  quantityToShip: {
+    type: Number,
+    required: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
+  total: {
+    type: Number,
+    required: true,
+  },
+  destination: {
+    type: String,
+    required: true,
+  },
+});
+const ShipItem = mongoose.model("ShipItem", ShipItemSchema);
+
+app.post("/inventoryapp/ship-items", async (req, res) => {
+  const { itemId, itemName, quantityToShip, destination } = req.body;
+  let total = 0; // Initialize total with 0
+
+  try {
+    const inventoryItem = await InventoryItem.findById(itemId);
+
+    if (!inventoryItem) {
+      return res.status(404).json({ message: "Inventory item not found" });
+    }
+
+    if (inventoryItem.quantity < quantityToShip) {
+      return res
+        .status(400)
+        .json({ message: "Not enough items in stock to ship" });
+    }
+
+    inventoryItem.quantity -= quantityToShip;
+    total = quantityToShip * inventoryItem.price; // Calculate the total based on item price
+
+    await inventoryItem.save();
+
+    // Create a new ShipItem document using the model
+    const shipItem = new ShipItem({
+      itemId,
+      name: itemName, // Use "name" instead of "itemName" if that's the field name in the schema
+      quantityToShip,
+      price: inventoryItem.price, // Use the price from the inventoryItem
+      total,
+      destination,
+    });
+
+    await shipItem.save();
+
+    console.log("Item saved successfully", inventoryItem);
+
+    res.status(200).json({
+      message: "Items shipped successfully",
+      shippedQuantity: quantityToShip,
+      destination,
+      total, // Include the total in the response
+    });
+  } catch (error) {
+    console.error("Error shipping items:", error);
+    res.status(500).json({ message: "Error shipping items" });
+  }
+});
+
+// Define a GET endpoint to retrieve ship items
+app.get("/inventoryapp/ship-items", async (req, res) => {
+  try {
+    // Use your ShipItem model to fetch ship items from the database
+    const shipItems = await ShipItem.find(); // This assumes you have a ShipItem model
+
+    // Return the ship items as a JSON response
+    res.status(200).json(shipItems);
+  } catch (error) {
+    console.error("Error fetching ship items:", error);
+    res.status(500).json({ message: "Error fetching ship items" });
+  }
+});
+const itemLogSchema = new mongoose.Schema(
+  {
+    itemName: {
+      type: String,
+      required: true,
+    },
+    action: {
+      type: String,
+      required: true,
+    },
+    timestamp: {
+      type: Date,
+      default: Date.now,
+    },
+  },
+  { timestamps: true }
+);
+
+const ItemLog = mongoose.model("itemlog", itemLogSchema);
+
+// Create an item log
+app.post("/inventoryapp/itemlogs", async (req, res) => {
+  const { itemName, action } = req.body;
+
+  const newItemLog = new ItemLog({
+    itemName,
+    action,
+  });
+  console.log("Item Logs", newItemLog);
+  try {
+    await newItemLog.save();
+    res.status(201).json({ message: "Item log saved successfully" });
+  } catch (error) {
+    console.error("Error saving item log:", error);
+    res.status(500).json({ message: "Error saving item log" });
+  }
+});
+
+// Get item logs for a specific item
+app.get("/inventoryapp/itemlogs/", async (req, res) => {
+  try {
+    const itemLogs = await ItemLog.find().sort({ timestamp: "desc" });
+    res.status(200).json(itemLogs);
+  } catch (error) {
+    console.error("Error fetching item logs:", error);
+    res.status(500).json({ message: "Error fetching item logs" });
   }
 });
 

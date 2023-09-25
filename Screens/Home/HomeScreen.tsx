@@ -1,4 +1,5 @@
 import React from "react";
+import { Text, View } from "react-native";
 import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
 import {
   Body,
@@ -7,7 +8,6 @@ import {
   Header,
   Texts,
   Logo,
-  GreetingsText,
   AddButton,
   ButtonText,
   TextBody,
@@ -20,25 +20,58 @@ import {
   ButtonShip,
   Top,
   TopText,
+  TextWrapper1,
+  TextWrapper2,
+  HeaderTexts,
+  TextCount,
+  AvailableCount,
+  TextWrappper3,
+  TextBodyShip,
+  TextCountShip,
+  SalesText,
 } from "./HomeStyle";
 
 import { useInventory } from "../Context/InventoryContent";
 import { Octicons } from "@expo/vector-icons";
-import { useGetItems } from "../../services/Items";
+import { useGetItems, useGetShipping } from "../../services/Items";
+import { ImageBackground } from "react-native";
+import ShipLogs from "../ShipItems/ShipLogs";
 
 type DashboardScreenRouteParams = {
   email: string;
 };
 
+interface ShipItem {
+  total: number;
+  // Add other properties as needed
+}
+
 const HomeScreen: React.FC = () => {
   const navigation = useNavigation<any>();
-
-  const { inventories } = useInventory();
+  const [noStock, useNoStock] = React.useState(0);
+  const [haveStock, useHaveStock] = React.useState(0);
+  const { inventoryCount } = useInventory();
+  const [inventSales, setTotalSales] = React.useState(0);
 
   const route =
     useRoute<RouteProp<Record<string, DashboardScreenRouteParams>, string>>();
   const { email } = route.params;
-  const [currentDateTime, setCurrentDateTime] = React.useState(new Date());
+
+  const filterInventory = (inventory: any) => {
+    return useNoStock(inventory.filter((inv: any) => inv.quantity === 0));
+  };
+  React.useEffect(() => {
+    const filteredInventoryNoStock = inventoryCount.filter(
+      (inv) => inv.quantity === 0
+    );
+    useNoStock(filteredInventoryNoStock.length);
+
+    const filteredInventoryhaveStock = inventoryCount.filter(
+      (inv) => inv.quantity > 0
+    );
+    useHaveStock(filteredInventoryhaveStock.length);
+  }, [inventoryCount]);
+
   const navigateToAdd = () => {
     console.log("Click");
     navigation.navigate("AddInventory");
@@ -53,10 +86,18 @@ const HomeScreen: React.FC = () => {
     navigation.navigate("ShipItem");
   };
 
+  const NavigateToLogs = () => {
+    navigation.navigate("OutOfStock");
+  };
+
+  const NavigateToStock = () => {
+    navigation.navigate("ShipLogs");
+  };
+
   const countItemsByClassification = () => {
     const classificationCounts: Record<string, number> = {};
 
-    inventories.forEach((item) => {
+    inventoryCount.forEach((item) => {
       const { classification } = item;
       if (classificationCounts[classification]) {
         classificationCounts[classification]++;
@@ -68,70 +109,103 @@ const HomeScreen: React.FC = () => {
     return classificationCounts;
   };
 
+  const { data, isLoading, isError, refetch } = useGetShipping();
+
+  // Check if shipItems is undefined or null
+  if (isLoading) {
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
+  if (isError || data === undefined || data === null) {
+    return (
+      <View>
+        <Text>Error fetching ship items</Text>
+      </View>
+    );
+  }
+
+  const totalSales = data.reduce(
+    (total: number, item: ShipItem) => total + item.total,
+    0
+  );
+
   const classificationCounts = countItemsByClassification();
   const sortedClassifications = Object.keys(classificationCounts).sort();
 
-  React.useEffect(() => {
-    const intervalId = setInterval(() => {
-      setCurrentDateTime(new Date());
-    }, 1000);
-    return () => clearInterval(intervalId);
-  }, []);
+  // React.useEffect(() => {
+  //   if (shipItems && !shipItems.isLoading) {
+  //     const totalSales = shipItems.reduce(
+  //       (total: any, item: any) => total + item.total,
+  //       0
+  //     );
+  //     setTotalSales(totalSales);
+  //   }
+  // }, [shipItems.isLoading, shipItems]);
 
+  //   <DashboardCon>
+  //   {sortedClassifications.map((classification) => (
+  //     <Texts key={classification}>
+  //       {classification}: {classificationCounts[classification]} item/s
+  //     </Texts>
+  //   ))}
+  // </DashboardCon>
   return (
-    <Container>
-      <Top>
-        <TopText>Menu</TopText>
-      </Top>
-      <Header>
-        <Greetings>
-          <GreetingsText>
-            <Texts>Email:{email} </Texts>
-            <Texts>
-              {currentDateTime.toLocaleDateString()} |{" "}
-              {currentDateTime.toLocaleTimeString()}
-            </Texts>
+    <>
+      <Container>
+        <Header>
+          <Logo source={require("../../Images/Profile.png")}></Logo>
+          <HeaderTexts>
+            <TopText>Hello!</TopText>
+            <TopText>{email}</TopText>
+            <SalesText>Total Sales: ₱{totalSales.toFixed(2)}</SalesText>
+          </HeaderTexts>
+        </Header>
+        <InfoContainer>
+          <Greetings>Summary</Greetings>
+          <Top>
+            <TextWrapper1 onPress={NavigateToLogs}>
+              <TextCount>{noStock}</TextCount>
 
-            <Texts>Inventory Count: {inventories.length}</Texts>
-          </GreetingsText>
-        </Greetings>
+              <TextBody>Unavailable Item/s</TextBody>
+            </TextWrapper1>
 
-        <Logo source={require("../../Images/Profile.png")}></Logo>
-      </Header>
-      <InfoContainer>
-        <TextBody>Inventory Summary (in Quantity)</TextBody>
+            <TextWrapper2 onPress={navigateToShip}>
+              <AvailableCount>{haveStock}</AvailableCount>
+              <TextBody>Available Item/s </TextBody>
+            </TextWrapper2>
+          </Top>
+          <TextWrappper3 onPress={NavigateToStock}>
+            <TextCountShip>{haveStock}</TextCountShip>
+            <TextBodyShip>Shipped Item/s</TextBodyShip>
+          </TextWrappper3>
+        </InfoContainer>
 
-        <Texts>Numbers of Items(Classifications):</Texts>
-        <DashboardCon>
-          {sortedClassifications.map((classification) => (
-            <Texts key={classification}>
-              {classification}: {classificationCounts[classification]} item/s
-            </Texts>
-          ))}
-        </DashboardCon>
-      </InfoContainer>
+        <Body>
+          <AddButton onPress={navigateToAdd}>
+            <ItemLogo source={require("../../Images/AddItem.png")}></ItemLogo>
 
-      <Body>
-        <AddButton onPress={navigateToAdd}>
-          <ItemLogo source={require("../../Images/AddItem.png")}></ItemLogo>
+            <ButtonText>Add Item</ButtonText>
+          </AddButton>
 
-          <ButtonText>Add Item</ButtonText>
-        </AddButton>
+          <ReportButton onPress={navigateToReport}>
+            <ReportLogo
+              source={require("../../Images/ReportLogo.png")}
+            ></ReportLogo>
 
-        <ReportButton onPress={navigateToReport}>
-          <ReportLogo
-            source={require("../../Images/ReportLogo.png")}
-          ></ReportLogo>
+            <ButtonText>Reports</ButtonText>
+          </ReportButton>
 
-          <ButtonText>Reports</ButtonText>
-        </ReportButton>
-
-        <ShipButton onPress={navigateToShip}>
-          <Octicons name="package-dependents" size={60} color="black" />
-          <ButtonShip>Ship Item</ButtonShip>
-        </ShipButton>
-      </Body>
-    </Container>
+          <ShipButton onPress={navigateToShip}>
+            <Octicons name="package-dependents" size={60} color="black" />
+            <ButtonShip>Ship Item</ButtonShip>
+          </ShipButton>
+        </Body>
+      </Container>
+    </>
   );
 };
 
