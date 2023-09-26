@@ -12,7 +12,7 @@ import {
   GreetingsText,
   HeaderLogo,
 } from "./ProfileStyle";
-import { getUserAcc } from "../../services/Items";
+import { getUserAcc } from "../../services/userAPI";
 
 interface User {
   name: string;

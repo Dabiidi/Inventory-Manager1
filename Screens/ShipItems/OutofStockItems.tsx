@@ -1,6 +1,5 @@
 import React from "react";
 import { View, Text, FlatList } from "react-native";
-import { useGetShipping } from "../../services/Items"; // Make sure to import your hook
 import styled from "styled-components/native";
 import { useInventory } from "../Context/InventoryContent";
 
@@ -35,6 +34,9 @@ const Container = styled.View`
   padding: 20px;
   margin-top: 8px;
   border-radius: 8px;
+  flex: 1;
+  width: 90%;
+  align-self: center;
 `;
 
 const Name = styled.Text`

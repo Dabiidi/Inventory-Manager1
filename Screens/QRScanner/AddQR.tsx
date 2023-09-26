@@ -16,7 +16,7 @@ import {
   HeaderInformation,
   HeaderContainer,
 } from "./AddQRStyle";
-import { UseAddItem, UseCheckItemExistance } from "../../services/Items";
+import { UseAddItem, UseCheckItemExistance } from "../../services/ItemsAPI";
 
 const AddQR = () => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);

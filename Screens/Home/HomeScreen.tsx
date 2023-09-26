@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
 import {
   Body,
@@ -33,9 +33,11 @@ import {
 
 import { useInventory } from "../Context/InventoryContent";
 import { Octicons } from "@expo/vector-icons";
-import { useGetItems, useGetShipping } from "../../services/Items";
+import { useGetItems } from "../../services/ItemsAPI";
+
 import { ImageBackground } from "react-native";
 import ShipLogs from "../ShipItems/ShipLogs";
+import { useGetShipping } from "../../services/shippingAPI";
 
 type DashboardScreenRouteParams = {
   email: string;
@@ -133,28 +135,8 @@ const HomeScreen: React.FC = () => {
     0
   );
 
-  const classificationCounts = countItemsByClassification();
-  const sortedClassifications = Object.keys(classificationCounts).sort();
-
-  // React.useEffect(() => {
-  //   if (shipItems && !shipItems.isLoading) {
-  //     const totalSales = shipItems.reduce(
-  //       (total: any, item: any) => total + item.total,
-  //       0
-  //     );
-  //     setTotalSales(totalSales);
-  //   }
-  // }, [shipItems.isLoading, shipItems]);
-
-  //   <DashboardCon>
-  //   {sortedClassifications.map((classification) => (
-  //     <Texts key={classification}>
-  //       {classification}: {classificationCounts[classification]} item/s
-  //     </Texts>
-  //   ))}
-  // </DashboardCon>
   return (
-    <>
+    <ScrollView contentContainerStyle={{ flex: 1 }}>
       <Container>
         <Header>
           <Logo source={require("../../Images/Profile.png")}></Logo>
@@ -205,7 +187,7 @@ const HomeScreen: React.FC = () => {
           </ShipButton>
         </Body>
       </Container>
-    </>
+    </ScrollView>
   );
 };
 

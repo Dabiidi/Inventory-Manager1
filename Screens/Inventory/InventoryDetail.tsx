@@ -5,6 +5,7 @@ import {
   Button,
   TouchableOpacity,
   Alert,
+  ImageBackground,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { RouteProp, useNavigation } from "@react-navigation/native";
@@ -28,6 +29,7 @@ import {
   Buttons,
   Texts,
   PickerContainer,
+  ButtonDelete,
 } from "./InventoryDetailStyle";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import debounce from "lodash/debounce";
@@ -38,7 +40,7 @@ import {
   useDeleteInventory,
   useUpdateInventory,
   saveLogs,
-} from "../../services/Items";
+} from "../../services/ItemsAPI";
 type Items = {
   _id: string;
   name: string;
@@ -60,7 +62,6 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
   const { inventory } = route.params;
   // console.log("Item ID", inventory._id);
   const navigation = useNavigation();
-  // State variables to hold edited data and edit mode
 
   const [editedInventory, setEditedInventory] = useState<Items>(
     inventory as Items
@@ -86,7 +87,6 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
       fieldName !== "desc" &&
       (value === "" || value === null || isNaN(Number(value)))
     ) {
-      // Set a default value (e.g., 0) when the input is empty, null, or not a number
       value = 0;
     }
 
@@ -113,6 +113,7 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
   } = useUpdateInventory();
 
   const handleSave = async () => {
+    console.log("Clicked");
     if (
       !editedInventory.name ||
       !editedInventory.quantity ||
@@ -124,28 +125,42 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
       return;
     }
 
-    const payload = { id: editedInventory._id, data: editedInventory };
-    const updateResult = await mutateUpdate(payload);
+    const dataChanged =
+      editedInventory.name !== originalInventory.name ||
+      editedInventory.quantity !== originalInventory.quantity ||
+      editedInventory.price !== originalInventory.price ||
+      editedInventory.desc !== originalInventory.desc ||
+      editedInventory.classification !== originalInventory.classification;
 
-    try {
-      if (updateResult.status === 200) {
-        await mutateLogs({
-          itemName: editedInventory.name,
-          action: changesMade,
-        });
-        queryClient.invalidateQueries(["Items"]);
+    if (dataChanged) {
+      const payload = { id: editedInventory._id, data: editedInventory };
 
-        Alert.alert("Success", "Inventry item updated successfully");
-        setEditMode(false);
-        setEditableField(null);
-      } else {
-        Alert.alert("Error", data?.data.message || "Something went wrong");
+      try {
+        const updateResult = await mutateUpdate(payload);
+
+        if (updateResult.status === 200) {
+          await mutateLogs({
+            itemName: editedInventory.name,
+            action: changesMade,
+          });
+          queryClient.invalidateQueries(["Items"]);
+
+          Alert.alert("Success", "Inventry item updated successfully");
+          setEditMode(false);
+          setEditableField(null);
+        } else {
+          Alert.alert("Error", data?.data.message || "Something went wrong");
+        }
+      } catch (error) {
+        console.error("Error updating inventory item:", error);
+        Alert.alert("Error", "Something went wrong");
       }
-    } catch (error) {
-      console.error("Error updating inventory item:", error);
-      Alert.alert("Error", "Something went wrong");
+      navigation.goBack();
+    } else {
+      Alert.alert("No Changes", "No changes were made.");
+      CancelMode();
+      return;
     }
-    navigation.goBack();
   };
 
   const classificationOptions = [
@@ -166,10 +181,9 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
       "This action will delete your item in your inventory!",
       [
         {
-          text: "No Thanks",
+          text: "No",
           onPress: () => console.log("no thanks"),
         },
-
         {
           text: "Delete",
 
@@ -182,132 +196,135 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
     );
   };
 
-  useEffect(() => {}, []);
-
   return (
     <>
-      <Container>
-        <NameContainer>
-          <Name>Item Name: {editedInventory.name}</Name>
-        </NameContainer>
+      <ImageBackground
+        source={require("../../Images/header.png")}
+        resizeMode="cover"
+        style={{ flex: 1, position: "relative" }}
+        blurRadius={1}
+      >
+        <Container>
+          <NameContainer>
+            <Name>Item Name: {editedInventory.name}</Name>
+          </NameContainer>
 
-        <QuantityContainer>
-          <Total>Quantity: </Total>
-          {editMode ? (
-            <TextInputs
-              value={editedInventory.quantity.toString()}
-              onChangeText={(value) =>
-                handleInputChange("quantity", parseInt(value))
-              }
-              keyboardType="numeric"
-            />
-          ) : (
-            <Total
-              onPress={() => {
-                if (editMode) setEditableField("quantity");
-                console.log(editMode);
-              }}
-            >
-              {editedInventory.quantity}
-            </Total>
-          )}
-        </QuantityContainer>
-
-        <PriceContainer>
-          <Price>Price: </Price>
-          {editMode ? (
-            <TextInputs
-              value={editedInventory.price.toString()}
-              onChangeText={(value) =>
-                handleInputChange("price", parseFloat(value))
-              }
-              keyboardType="numeric"
-            />
-          ) : (
-            <Price
-              onPress={() => {
-                if (editMode) setEditableField("price");
-              }}
-            >
-              {editedInventory.price}
-            </Price>
-          )}
-        </PriceContainer>
-
-        <DescContainer>
-          <Desc>Description:</Desc>
-          {editMode ? (
-            <TextInputs
-              value={editedInventory.desc}
-              onChangeText={(value) => handleInputChange("desc", value)}
-            />
-          ) : (
-            <Desc
-              onPress={() => {
-                if (editMode) setEditableField("desc");
-              }}
-            >
-              {editedInventory.desc}
-            </Desc>
-          )}
-        </DescContainer>
-        <ClassificationContainer>
-          <Classification>Classification:</Classification>
-
-          {editMode ? (
-            <PickerContainer>
-              <Picker
-                selectedValue={editedInventory.classification}
-                onValueChange={(value) =>
-                  handleInputChange("classification", value)
+          <QuantityContainer>
+            <Total>Quantity: </Total>
+            {editMode ? (
+              <TextInputs
+                value={editedInventory.quantity.toString()}
+                onChangeText={(value) =>
+                  handleInputChange("quantity", parseInt(value))
                 }
-                style={{
-                  color: "#fff",
+                keyboardType="numeric"
+              />
+            ) : (
+              <Total
+                onPress={() => {
+                  if (editMode) setEditableField("quantity");
+                  console.log(editMode);
                 }}
               >
-                <Picker.Item label="Select Classification" value={null} />
-                {classificationOptions.map((option, index) => (
-                  <Picker.Item key={index} label={option} value={option} />
-                ))}
-              </Picker>
-            </PickerContainer>
-          ) : (
-            <Classification
-              onPress={() => {
-                if (editMode) setEditableField("classification");
-              }}
-            >
-              {editedInventory.classification}
-            </Classification>
-          )}
-        </ClassificationContainer>
+                {editedInventory.quantity}
+              </Total>
+            )}
+          </QuantityContainer>
 
-        <ButtonContainer>
-          {!editMode ? (
-            <>
-              <Buttons onPress={() => setEditMode(true)}>
-                <EditTexts>Edit Item</EditTexts>
-              </Buttons>
-              <Buttons onPress={() => displayDeleteAlert()}>
-                <EditTexts>Delete Item</EditTexts>
-              </Buttons>
-            </>
-          ) : (
-            <>
-              <Buttons onPress={handleSave}>
-                <EditTexts>Save</EditTexts>
-              </Buttons>
-              <Buttons onPress={CancelMode}>
-                <CancelButton>Cancel</CancelButton>
-              </Buttons>
-            </>
-          )}
-        </ButtonContainer>
-      </Container>
+          <PriceContainer>
+            <Price>Price: </Price>
+            {editMode ? (
+              <TextInputs
+                value={editedInventory.price.toString()}
+                onChangeText={(value) =>
+                  handleInputChange("price", parseFloat(value))
+                }
+                keyboardType="numeric"
+              />
+            ) : (
+              <Price
+                onPress={() => {
+                  if (editMode) setEditableField("price");
+                }}
+              >
+                {editedInventory.price}
+              </Price>
+            )}
+          </PriceContainer>
 
-      <InfoContainer>
-        <Texts>logs</Texts>
-      </InfoContainer>
+          <DescContainer>
+            <Desc>Description:</Desc>
+            {editMode ? (
+              <TextInputs
+                value={editedInventory.desc}
+                onChangeText={(value) => handleInputChange("desc", value)}
+              />
+            ) : (
+              <Desc
+                onPress={() => {
+                  if (editMode) setEditableField("desc");
+                }}
+              >
+                {editedInventory.desc}
+              </Desc>
+            )}
+          </DescContainer>
+          <ClassificationContainer>
+            <Classification>Classification:</Classification>
+
+            {editMode ? (
+              <PickerContainer>
+                <Picker
+                  selectedValue={editedInventory.classification}
+                  onValueChange={(value) =>
+                    handleInputChange("classification", value)
+                  }
+                  style={{
+                    color: "#fff",
+                  }}
+                >
+                  <Picker.Item label="Select Classification" value={null} />
+                  {classificationOptions.map((option, index) => (
+                    <Picker.Item key={index} label={option} value={option} />
+                  ))}
+                </Picker>
+              </PickerContainer>
+            ) : (
+              <Classification
+                onPress={() => {
+                  if (editMode) setEditableField("classification");
+                }}
+              >
+                {editedInventory.classification}
+              </Classification>
+            )}
+          </ClassificationContainer>
+
+          <ButtonContainer>
+            {!editMode ? (
+              <>
+                <Buttons onPress={() => setEditMode(true)}>
+                  <EditTexts>Edit Item</EditTexts>
+                </Buttons>
+                <ButtonDelete onPress={() => displayDeleteAlert()}>
+                  <EditTexts>Delete Item</EditTexts>
+                </ButtonDelete>
+              </>
+            ) : (
+              <>
+                <Buttons onPress={handleSave}>
+                  <EditTexts>Save</EditTexts>
+                </Buttons>
+                <ButtonDelete onPress={CancelMode}>
+                  <CancelButton>Cancel</CancelButton>
+                </ButtonDelete>
+              </>
+            )}
+          </ButtonContainer>
+        </Container>
+
+        <InfoContainer></InfoContainer>
+      </ImageBackground>
     </>
   );
 };

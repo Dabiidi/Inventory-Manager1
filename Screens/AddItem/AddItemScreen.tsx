@@ -14,13 +14,12 @@ import {
 } from "../AddItem/AddStyle";
 import { useNavigation } from "@react-navigation/native";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import axios from "axios";
 import { Picker } from "@react-native-picker/picker";
 import {
   UseAddItem,
   UseCheckItemExistance,
   saveLogs,
-} from "../../services/Items";
+} from "../../services/ItemsAPI";
 
 const AddItemScreen = () => {
   const [name, setName] = React.useState<string>("");

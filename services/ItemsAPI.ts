@@ -4,24 +4,6 @@ import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import { Alert } from "react-native";
 
-export const getUserAcc = () => {
-  return useQuery({
-    queryKey: ["Users"], // Use the email as part of the query key
-    queryFn: async () => {
-      try {
-        const response = await axios.get(
-          "http://192.168.1.30:4000/inventoryapp/userlogs"
-        );
-
-        const userData = response.data;
-
-        return userData;
-      } catch (error) {
-        throw error;
-      }
-    },
-  });
-};
 export const useGetItems = () => {
   return useQuery({
     queryKey: ["Items"],
@@ -47,19 +29,6 @@ export const useGetLogs = () => {
     },
     refetchInterval: 5000, // 5 seconds in milliseconds (adjust as needed)
     staleTime: 5000, // 5 seconds in milliseconds
-  });
-};
-
-export const useGetShipping = () => {
-  return useQuery({
-    queryKey: ["ShipItems"],
-    queryFn: async () => {
-      const response = await axios.get(
-        "http://192.168.1.30:4000/inventoryapp/ship-items"
-      );
-      return response.data;
-    },
-    refetchInterval: 5000,
   });
 };
 
@@ -90,7 +59,6 @@ export const useUpdateInventory = () => {
       `http://192.168.1.30:4000/inventoryapp/itemlist/${data.id}`,
       data.data
     );
-    console.log("Item Updated.", response);
 
     return response;
   };

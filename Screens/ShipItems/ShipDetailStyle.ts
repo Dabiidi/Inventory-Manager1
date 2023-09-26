@@ -23,6 +23,7 @@ export const MapContainer = styled.View``;
 
 export const LocContainer = styled.View`
   flex-direction: column;
+  background-color: #ffffff;
 `;
 
 export const LocationText = styled.Text`

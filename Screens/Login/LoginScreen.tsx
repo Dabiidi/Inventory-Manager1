@@ -1,40 +1,36 @@
+import React from "react";
+import { useForm, Controller } from "react-hook-form";
 import {
-  ImageBackground,
-  KeyboardAvoidingView,
-  ScrollView,
   Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+  StyleSheet,
+  ImageBackground,
 } from "react-native";
-import React, { useState } from "react";
 import {
+  ButtonText,
+  Container,
   EmailInput,
-  Title,
+  Header,
+  IntroHeader,
+  LoginButton,
+  LoginContainer,
   Logo,
   PassInput,
-  LoginButton,
-  ButtonText,
-  LoginContainer,
-  Container,
-  TitleText,
-  IntroHeader,
   PasswordContainer,
-  Header,
+  StyledErrorText,
   TextContainer,
+  Title,
+  TitleText,
 } from "./LoginStyle";
-import axios from "axios";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { getUserAcc } from "../../services/Items";
+import { getUserAcc } from "../../services/userAPI";
 
-interface LoginForms {
-  // defining the emal and password datatype
+interface FormData {
   email: string;
   password: string;
 }
-interface loginFormsError {
-  // Checking errors
-  email?: string;
-  password?: string;
-}
-
 interface LoginformProps {
   navigate: (screen: string, params?: object) => void;
 }
@@ -42,77 +38,35 @@ interface LandingScreenProps {
   navigation: LoginformProps;
 }
 
-const LoginScreen: React.FC<LandingScreenProps> = ({ navigation }) => {
-  const { navigate } = navigation;
+const LoginForm: React.FC<LandingScreenProps> = ({ navigation }) => {
+  const { control, handleSubmit, formState } = useForm<FormData>();
 
-  const [values, setValues] = useState<LoginForms>({
-    email: "",
-    password: "",
-  });
-  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = React.useState<string | null>(null);
+
+  const [showPassword, setShowPassword] = React.useState(false);
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
-  const [errors, setErrors] = useState<loginFormsError>({});
+  const { data: account } = getUserAcc();
 
-  const validateEmail = (email: string) => {
-    // Check email validation
-    const emailRegex = /\S+@\S+\.\S+/; //Regix method
-    if (!emailRegex.test(email)) {
-      //test all the users input and check if it followed the regex method
-      return "Invalid email address";
-    }
-    return undefined;
-  };
+  const onSubmit = (data: FormData) => {
+    const user = account.find((user: any) => user.name === data.email);
 
-  const validatePassword = (password: string) => {
-    // Check password validation
-    if (password.length < 6) {
-      //Password must be more than 6 characters
-      return "Password must be at least 6 characters";
-    }
-    return undefined;
-  };
-
-  const handleChange = (name: keyof LoginForms, value: string) => {
-    setValues({ ...values, [name]: value });
-    setErrors({ ...errors, [name]: undefined });
-  };
-
-  const { data } = getUserAcc();
-  const handleSubmit = async () => {
-    // Validate email and password inputs
-    const emailError = validateEmail(values.email);
-    const passwordError = validatePassword(values.password);
-
-    if (emailError || passwordError) {
-      // Display validation errors if there are any
-      setErrors({ email: emailError, password: passwordError });
-    } else {
-      try {
-        // Retrieve user account based on the entered email
-
-        if (data[0].name) {
-          // Check if the entered password matches the user's password
-          if (values.password === data[0].pass) {
-            // Navigate to the "Home" screen with email as a parameter
-            navigation.navigate("Home", {
-              screen: "Menu",
-              params: { email: values.email },
-            });
-          } else {
-            // Display an error if the password is incorrect
-            setErrors({ password: "Incorrect password" });
-          }
-        } else {
-          // Display an error if the user is not found
-          setErrors({ email: "User not found" });
-        }
-      } catch (error) {
-        // Handle errors that occur during the login process
-        console.error("Error during login:", error);
+    console.log("users", user);
+    if (user) {
+      if (user.pass === data.password) {
+        console.log("name", user.name);
+        navigation.navigate("Home", {
+          screen: "Menu",
+          params: { email: user.name },
+        });
+        setError(null); // Clear the error if login is successful
+      } else {
+        setError("Incorrect password");
       }
+    } else {
+      setError("Incorrect Email or Password.");
     }
   };
 
@@ -134,37 +88,59 @@ const LoginScreen: React.FC<LandingScreenProps> = ({ navigation }) => {
             <TitleText>Empowering Your Inventory Management</TitleText>
           </TextContainer>
         </IntroHeader>
-
         <LoginContainer>
-          <EmailInput
-            value={values.email}
-            onChangeText={(value) => handleChange("email", value)}
-          ></EmailInput>
-          {errors.email && (
-            <Text style={{ color: "red", textAlign: "center" }}>
-              {errors.email}
-            </Text>
-          )}
-          <PasswordContainer>
-            <PassInput
-              value={values.password}
-              secureTextEntry={!showPassword}
-              onChangeText={(value) => handleChange("password", value)}
-            />
-            <MaterialCommunityIcons
-              name={showPassword ? "eye-off" : "eye"}
-              size={24}
-              color="#aaa"
-              onPress={toggleShowPassword}
-              style={{ marginRight: 10 }}
-            />
-          </PasswordContainer>
-          {errors.password && (
-            <Text style={{ color: "red", textAlign: "center" }}>
-              {errors.password}
-            </Text>
-          )}
-          <LoginButton onPress={handleSubmit}>
+          <Controller
+            control={control}
+            render={({ field, fieldState }) => (
+              <>
+                <EmailInput
+                  isError={fieldState.invalid}
+                  placeholder="Email"
+                  value={field.value}
+                  onChangeText={field.onChange}
+                  onBlur={field.onBlur}
+                />
+              </>
+            )}
+            name="email"
+            rules={{
+              required: "Email is required",
+              pattern: /\S+@\S+\.\S+/,
+            }}
+            defaultValue=""
+          />
+          <Controller
+            control={control}
+            render={({ field, fieldState }) => (
+              <>
+                <PasswordContainer isError={fieldState.invalid}>
+                  <PassInput
+                    isError={fieldState.invalid}
+                    placeholder="Password"
+                    secureTextEntry={!showPassword}
+                    value={field.value}
+                    onChangeText={field.onChange}
+                    onBlur={field.onBlur}
+                  />
+                  <MaterialCommunityIcons
+                    name={showPassword ? "eye-off" : "eye"}
+                    size={24}
+                    color="#aaa"
+                    onPress={toggleShowPassword}
+                    style={{ marginRight: 10 }}
+                  />
+                </PasswordContainer>
+                {fieldState.invalid && (
+                  <StyledErrorText>Invalid Credentials.</StyledErrorText>
+                )}
+                {error && <StyledErrorText>{error}</StyledErrorText>}
+              </>
+            )}
+            name="password"
+            rules={{ required: "Password is required", minLength: 6 }}
+            defaultValue=""
+          />
+          <LoginButton onPress={handleSubmit(onSubmit)}>
             <ButtonText>Login</ButtonText>
           </LoginButton>
           <Text style={{ textAlign: "center" }}> Forgot Password?</Text>
@@ -174,4 +150,4 @@ const LoginScreen: React.FC<LandingScreenProps> = ({ navigation }) => {
   );
 };
 
-export default LoginScreen;
+export default LoginForm;

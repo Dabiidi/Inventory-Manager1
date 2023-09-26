@@ -348,6 +348,19 @@ app.get("/inventoryapp/itemlogs/", async (req, res) => {
   }
 });
 
+
+app.delete("/inventoryapp/ship-items", async (req, res) => {
+  try {
+    await ShipItem.deleteMany({});
+    res.status(200).json({ message: "All shipping logs deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting all shipping logs:", error);
+    res.status(500).json({ message: "Error deleting shipping logs" });
+  }
+});
+
+
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

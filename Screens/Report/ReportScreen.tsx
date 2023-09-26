@@ -11,7 +11,7 @@ import {
   Name,
   Header,
 } from "./ReportScreenStyle";
-import { useGetLogs } from "../../services/Items";
+import { useGetLogs } from "../../services/ItemsAPI";
 const ReportScreen: React.FC = () => {
   const { isLoading, error, data } = useGetLogs();
 

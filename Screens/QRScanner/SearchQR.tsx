@@ -8,7 +8,7 @@ import {
   Container,
   OutputData,
 } from "./SearchStyle";
-import { UseCheckItemExistance } from "../../services/Items";
+import { UseCheckItemExistance } from "../../services/ItemsAPI";
 
 interface Items {
   name: string;

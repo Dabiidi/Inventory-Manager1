@@ -2,7 +2,7 @@ import { View, Text, ActivityIndicator } from "react-native";
 import React, { useState } from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import { useGetItems } from "../../services/Items";
+import { useGetItems } from "../../services/ItemsAPI";
 
 export interface Item {
   name: string;

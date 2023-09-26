@@ -48,40 +48,6 @@ export const TitleText = styled.Text`
   font-weight: 500;
 `;
 
-export const EmailInput = styled(TextInput).attrs({
-  placeholder: "Email",
-})`
-  background-color: white;
-  height: 50px;
-  border-width: 1px;
-  width: 90%;
-  margin-left: 18px;
-  border-radius: 30px;
-  margin-bottom: 10px;
-  padding: 10px;
-`;
-
-export const PassInput = styled(TextInput).attrs({
-  placeholder: "Password",
-})`
-  height: 50px;
-
-  padding: 8px;
-  flex: 1;
-`;
-
-export const PasswordContainer = styled.View`
-  flex-direction: row;
-  align-items: center;
-
-  border-width: 1px;
-  margin-left: 18px;
-  border-radius: 30px;
-  width: 90%;
-  margin-bottom: 10px;
-  background-color: white;
-`;
-
 export const LoginButton = styled.TouchableOpacity`
   background-color: #016a70;
   height: 60px;
@@ -96,4 +62,39 @@ export const ButtonText = styled.Text`
   font-size: 23px;
   font-weight: 400;
   color: #fff;
+`;
+export const EmailInput = styled.TextInput<{ isError: boolean }>`
+  background-color: white;
+  height: 50px;
+  border-width: 1px;
+  width: 90%;
+  margin-left: 18px;
+  border-radius: 30px;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-color: ${({ isError }) => (isError ? "red" : "gray")};
+`;
+export const StyledErrorText = styled.Text`
+  color: red;
+  margin-bottom: 10px;
+  text-align: center;
+`;
+
+export const PassInput = styled.TextInput<{ isError: boolean }>`
+  height: 50px;
+  padding: 8px;
+  flex: 1;
+  border-color: ${({ isError }) => (isError ? "red" : "gray")};
+`;
+
+export const PasswordContainer = styled.View<{ isError: boolean }>`
+  flex-direction: row;
+  align-items: center;
+  border-color: ${({ isError }) => (isError ? "red" : "gray")};
+  border-width: 1px;
+  margin-left: 18px;
+  border-radius: 30px;
+  width: 90%;
+  margin-bottom: 10px;
+  background-color: white;
 `;

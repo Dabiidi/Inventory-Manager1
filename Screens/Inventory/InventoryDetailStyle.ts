@@ -121,6 +121,13 @@ export const InfoContainer = styled.Text`
   height: 40px;
   text-align: center;
 `;
+export const ButtonDelete = styled.TouchableOpacity`
+  background-color: #ad0000;
+  border-radius: 50px;
+  width: 50px;
+  flex: 1;
+  align-items: center;
+`;
 
 export const Texts = styled.Text`
   color: #fff;

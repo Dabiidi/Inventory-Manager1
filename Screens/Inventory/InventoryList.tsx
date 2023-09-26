@@ -9,7 +9,7 @@ import { useInventory } from "../Context/InventoryContent";
 import { PickerContainer, SearchInput } from "./InventoryStyle";
 
 import { Picker } from "@react-native-picker/picker";
-import { useGetItems } from "../../services/Items";
+import { useGetItems } from "../../services/ItemsAPI";
 
 const InventoryList = ({}) => {
   const navigation = useNavigation<any>();

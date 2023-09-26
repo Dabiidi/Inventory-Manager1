@@ -7,6 +7,8 @@ import {
   TextInput,
   Alert,
   Modal,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import MapView, { Marker } from "react-native-maps";
@@ -104,6 +106,10 @@ const ShipItemDetails: React.FC<{
   };
 
   const shipItem = async () => {
+    if (!selectedPlaceName && !quantityToShip === null) {
+      Alert.alert("Error", "Please fill in all fields before submitting");
+      return;
+    }
     try {
       const response = await fetch(
         "http://192.168.1.30:4000/inventoryapp/ship-items",
@@ -138,23 +144,25 @@ const ShipItemDetails: React.FC<{
 
   const submitItem = async () => {
     const quantitySelected = parseInt(quantityToShip, 10);
-    console.log(quantitySelected);
-    if (!selectedPlaceName && !quantityToShip === null) {
-      Alert.alert("Error", "Please fill in all fields before submitting");
-      return;
-    } else if (
-      quantityToShip === "0" ||
-      quantitySelected > inventory.quantity
-    ) {
-      Alert.alert("Error", "Selected quantity is not allowed.");
-      return;
+
+    if (quantityToShip === "" || selectedPlaceName === "") {
+      Alert.alert(
+        "Error",
+        "Please fill in the destination or quantity before submitting."
+      );
+    } else if (quantitySelected === 0) {
+      Alert.alert("Error", "Selected quantity cannot be zero.");
+    } else if (quantitySelected > inventory.quantity) {
+      Alert.alert(
+        "Error",
+        "Selected quantity is greater than available quantity."
+      );
     } else {
-      const totalAmount = parseInt(quantityToShip, 10) * inventory.price;
+      const totalAmount = quantitySelected * inventory.price;
       setTotal(totalAmount);
       setIsModalVisible(true);
     }
   };
-
   const handleMapTap = async (e: any) => {
     const tappedLocation = e.nativeEvent.coordinate;
     setSelectedLocation(tappedLocation);
@@ -216,38 +224,45 @@ const ShipItemDetails: React.FC<{
             <Marker coordinate={currentLocation} title="My Location" />
           </MapView>
         </MapContainer>
-        <LocContainer>
-          <LocationText>User Location </LocationText>
-          <LocateText>{currentAddress}</LocateText>
-          <LocationText>Selected Destination</LocationText>
-          <LocateText>{selectedPlaceName}</LocateText>
-        </LocContainer>
+        <KeyboardAvoidingView
+          behavior="position"
+          keyboardVerticalOffset={Platform.OS === "ios" ? 0 : -50}
+          style={styles.quantityContainer}
+        >
+          <LocContainer>
+            <LocationText>User Location </LocationText>
+            <LocateText>{currentAddress}</LocateText>
+            <LocationText>Selected Destination</LocationText>
+            <LocateText>{selectedPlaceName}</LocateText>
+          </LocContainer>
 
-        <ItemHeader>
-          <Name>Item Name:{inventory.name}</Name>
+          <ItemHeader>
+            <Name>Item Name:{inventory.name}</Name>
 
-          <Quantity>Quantity:{inventory.quantity}</Quantity>
+            <Quantity>Quantity:{inventory.quantity}</Quantity>
 
-          <Price>Price: ₱{inventory.price}</Price>
+            <Price>Price: ₱{inventory.price}</Price>
 
-          <Desc>Description:{inventory.desc}</Desc>
+            <Desc>Description:{inventory.desc}</Desc>
 
-          <Classification>
-            Classification:{inventory.classification}
-          </Classification>
-        </ItemHeader>
+            <Classification>
+              Classification:{inventory.classification}
+            </Classification>
+          </ItemHeader>
 
-        <ShippingContainer>
-          <QuantityText
-            placeholder="Enter quantity to ship"
-            keyboardType="numeric"
-            onChangeText={(text) => setQuantityToShip(text)}
-          />
+          <ShippingContainer>
+            <QuantityText
+              placeholder="Enter quantity to ship"
+              keyboardType="numeric"
+              onChangeText={(text) => setQuantityToShip(text)}
+            />
 
-          <ShipButton onPress={submitItem}>
-            <ButtonText>Ship Item</ButtonText>
-          </ShipButton>
-        </ShippingContainer>
+            <ShipButton onPress={submitItem}>
+              <ButtonText>Ship Item</ButtonText>
+            </ShipButton>
+          </ShippingContainer>
+        </KeyboardAvoidingView>
+
         <CustomModal
           visible={isModalVisible}
           ItemName={inventory.name}
@@ -263,21 +278,14 @@ const ShipItemDetails: React.FC<{
 };
 
 const styles = StyleSheet.create({
-  infoContainer: {
-    alignItems: "center",
-  },
   map: {
     height: 300,
     width: "100%",
   },
-
-  input: {
-    width: 200,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
+  quantityContainer: {
+    flex: 1,
+    justifyContent: "center",
+    paddingHorizontal: 10,
   },
 });
 

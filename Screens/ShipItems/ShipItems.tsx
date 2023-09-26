@@ -3,7 +3,13 @@ import React from "react";
 import { useInventory } from "../Context/InventoryContent";
 import InventoryComponent from "../Inventory/Inventory";
 import { useNavigation } from "@react-navigation/native";
-import { ButtonLogs, ButtonText, Texts, Container, BodyContainer } from "./ShipItemStyle";
+import {
+  ButtonLogs,
+  ButtonText,
+  Texts,
+  Container,
+  BodyContainer,
+} from "./ShipItemStyle";
 const ShipItems = () => {
   const navigation = useNavigation<any>();
   const { inventories, setInventories } = useInventory();
