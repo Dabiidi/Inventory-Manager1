@@ -52,7 +52,6 @@ const ShipItemDetails: React.FC<{
 }> = ({ route }) => {
   const navigation = useNavigation<any>();
   const [total, setTotal] = React.useState(0);
-
   const { inventory } = route.params;
   const [currentAddress, setCurrentAddress] = useState("");
 
