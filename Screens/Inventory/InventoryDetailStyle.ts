@@ -4,7 +4,9 @@ export const Container = styled.View`
   padding: 16px;
   background-color: #2f4f4f;
   border-radius: 8px;
-  margin: 8px;
+  margin-top: 50%;
+  margin-left: 5%;
+  margin-right: 5%;
 `;
 
 export const PickerContainer = styled.View`

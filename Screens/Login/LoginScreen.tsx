@@ -1,13 +1,6 @@
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
-import {
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-  StyleSheet,
-  ImageBackground,
-} from "react-native";
+import { Text, ImageBackground } from "react-native";
 import {
   ButtonText,
   Container,
@@ -61,9 +54,8 @@ const LoginForm: React.FC<LandingScreenProps> = ({ navigation }) => {
           screen: "Menu",
           params: { email: user.name },
         });
-        setError(null); // Clear the error if login is successful
       } else {
-        setError("Incorrect password");
+        setError("Incorrect Email or Password.");
       }
     } else {
       setError("Incorrect Email or Password.");
@@ -100,15 +92,24 @@ const LoginForm: React.FC<LandingScreenProps> = ({ navigation }) => {
                   onChangeText={field.onChange}
                   onBlur={field.onBlur}
                 />
+                {fieldState.invalid && (
+                  <StyledErrorText>
+                    {fieldState.error ? fieldState.error.message : ""}
+                  </StyledErrorText>
+                )}
               </>
             )}
             name="email"
             rules={{
               required: "Email is required",
-              pattern: /\S+@\S+\.\S+/,
+              pattern: {
+                value: /\S+@\S+\.\S+/,
+                message: "Invalid email format",
+              },
             }}
             defaultValue=""
           />
+
           <Controller
             control={control}
             render={({ field, fieldState }) => (
@@ -131,7 +132,9 @@ const LoginForm: React.FC<LandingScreenProps> = ({ navigation }) => {
                   />
                 </PasswordContainer>
                 {fieldState.invalid && (
-                  <StyledErrorText>Invalid Credentials.</StyledErrorText>
+                  <StyledErrorText>
+                    {fieldState.error ? fieldState.error.message : ""}
+                  </StyledErrorText>
                 )}
                 {error && <StyledErrorText>{error}</StyledErrorText>}
               </>

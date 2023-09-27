@@ -322,8 +322,6 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
             )}
           </ButtonContainer>
         </Container>
-
-        <InfoContainer></InfoContainer>
       </ImageBackground>
     </>
   );

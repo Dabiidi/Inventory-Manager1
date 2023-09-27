@@ -56,7 +56,7 @@ const ShipItemDetails: React.FC<{
   const { inventory } = route.params;
   const [currentAddress, setCurrentAddress] = useState("");
 
-  const [quantityToShip, setQuantityToShip] = useState("");
+  const [quantityToShip, setQuantityToShip] = React.useState<number>(0);
 
   const [mapRegion, setMapRegion] = useState({
     latitude: 0,
@@ -121,7 +121,7 @@ const ShipItemDetails: React.FC<{
           body: JSON.stringify({
             itemId: inventory._id,
             itemName: inventory.name,
-            quantityToShip: parseInt(quantityToShip, 10),
+            quantityToShip: quantityToShip,
             destination: selectedPlaceName,
           }),
         }
@@ -143,9 +143,9 @@ const ShipItemDetails: React.FC<{
   };
 
   const submitItem = async () => {
-    const quantitySelected = parseInt(quantityToShip, 10);
+    const quantitySelected = quantityToShip;
 
-    if (quantityToShip === "" || selectedPlaceName === "") {
+    if (quantityToShip === 0 || selectedPlaceName === "") {
       Alert.alert(
         "Error",
         "Please fill in the destination or quantity before submitting."
@@ -252,9 +252,11 @@ const ShipItemDetails: React.FC<{
 
           <ShippingContainer>
             <QuantityText
+              placeholderTextColor={"white"}
               placeholder="Enter quantity to ship"
               keyboardType="numeric"
-              onChangeText={(text) => setQuantityToShip(text)}
+              value={quantityToShip ? quantityToShip.toString() : ""}
+              onChangeText={(text) => setQuantityToShip(parseInt(text))}
             />
 
             <ShipButton onPress={submitItem}>

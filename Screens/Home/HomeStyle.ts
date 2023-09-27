@@ -74,7 +74,7 @@ export const TextBody = styled.Text`
 export const TextWrappper3 = styled.TouchableOpacity`
   margin-top: 5%;
   background-color: #419197;
-  justify-content: center;
+  justify-content: space-evenly;
   align-self: center;
   flex-direction: column;
   border-radius: 10px;
@@ -84,7 +84,6 @@ export const TextWrappper3 = styled.TouchableOpacity`
 
 export const TextBodyShip = styled.Text`
   font-size: 15px;
-  align-self: center;
 
   text-align: center;
   font-weight: 500;

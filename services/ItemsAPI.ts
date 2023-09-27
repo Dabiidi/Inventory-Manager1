@@ -4,6 +4,9 @@ import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import { Alert } from "react-native";
 
+
+
+
 export const useGetItems = () => {
   return useQuery({
     queryKey: ["Items"],
@@ -94,6 +97,23 @@ export const saveLogs = () => {
     return response.data;
   };
   return useMutation(res);
+};
+
+export const useDeleteItemsLogs = () => {
+  const navigation = useNavigation();
+  return useMutation({
+    mutationFn: async () => {
+      const res = await axios.delete(
+        "http://192.168.1.30:4000/inventoryapp/itemlogs"
+      );
+      return res.data;
+    },
+    onSuccess: () => {
+      Alert.alert("Delete", `Item Logs Successfully deleted.`);
+      navigation.goBack();
+      console.log("test");
+    },
+  });
 };
 
 export const UseCheckItemExistance = () => {

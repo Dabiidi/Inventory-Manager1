@@ -1,4 +1,4 @@
-import { View, Text, FlatList } from "react-native";
+import { View, Text, FlatList, Alert } from "react-native";
 import React from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
@@ -10,8 +10,10 @@ import {
   TimeDate,
   Name,
   Header,
+  ButtonText,
+  ClearButton,
 } from "./ReportScreenStyle";
-import { useGetLogs } from "../../services/ItemsAPI";
+import { useDeleteItemsLogs, useGetLogs } from "../../services/ItemsAPI";
 const ReportScreen: React.FC = () => {
   const { isLoading, error, data } = useGetLogs();
 
@@ -24,6 +26,28 @@ const ReportScreen: React.FC = () => {
       return "Invalid Timestamp";
     }
   };
+  const { mutateAsync, isError: ErrorDelete } = useDeleteItemsLogs();
+  const onClear = () => {
+    Alert.alert(
+      "Clear Shiping Logs",
+      "Are you sure to clear all Item logs?",
+      [
+        {
+          text: "No",
+          onPress: () => console.log("no thanks"),
+        },
+
+        {
+          text: "Yes",
+
+          onPress: () => mutateAsync(),
+        },
+      ],
+      {
+        cancelable: true,
+      }
+    );
+  };
 
   if (isLoading) return <Text> Loading Data...</Text>;
   if (error) {
@@ -32,6 +56,9 @@ const ReportScreen: React.FC = () => {
 
   return (
     <Container>
+      <ClearButton onPress={onClear}>
+        <ButtonText>Clear Shipping Logs</ButtonText>
+      </ClearButton>
       <FlatList
         data={data}
         renderItem={({ item }) => (

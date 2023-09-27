@@ -208,39 +208,100 @@ app.get("/inventoryapp/itemlist/:param", async (req, res) => {
     res.status(500).json({ message: "Error checking item existence" });
   }
 });
+const itemLogSchema = new mongoose.Schema(
+  {
+    itemName: {
+      type: String,
+      required: true,
+    },
+    action: {
+      type: String,
+      required: true,
+    },
+    timestamp: {
+      type: Date,
+      default: Date.now,
+    },
+  },
+  { timestamps: true }
+);
 
-const ShipItemSchema = new mongoose.Schema({
-  // Ship-list INVENTORY SCHEMA
-  itemId: {
-    type: String,
-    required: true,
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  quantityToShip: {
-    type: Number,
-    required: true,
-  },
-  price: {
-    type: Number,
-    required: true,
-  },
-  total: {
-    type: Number,
-    required: true,
-  },
-  destination: {
-    type: String,
-    required: true,
-  },
+const ItemLog = mongoose.model("itemlog", itemLogSchema);
+
+// Create an item log
+app.post("/inventoryapp/itemlogs", async (req, res) => {
+  const { itemName, action } = req.body;
+
+  const newItemLog = new ItemLog({
+    itemName,
+    action,
+  });
+  console.log("Item Logs", newItemLog);
+  try {
+    await newItemLog.save();
+    res.status(201).json({ message: "Item log saved successfully" });
+  } catch (error) {
+    console.error("Error saving item log:", error);
+    res.status(500).json({ message: "Error saving item log" });
+  }
 });
+
+// Get item logs for a specific item
+app.get("/inventoryapp/itemlogs/", async (req, res) => {
+  try {
+    const itemLogs = await ItemLog.find().sort({ createdAt: "descending" });
+    res.status(200).json(itemLogs);
+  } catch (error) {
+    console.error("Error fetching item logs:", error);
+    res.status(500).json({ message: "Error fetching item logs" });
+  }
+});
+
+app.delete("/inventoryapp/itemlogs", async (req, res) => {
+  try {
+    await ItemLog.deleteMany({});
+    res.status(200).json({ message: "All Item logs deleted successfully" });
+  } catch (error) {
+    console.error("Error Deleign Item Logs", error);
+    res.status(500).json({ message: "Error deleting Items logs" });
+  }
+});
+
+const ShipItemSchema = new mongoose.Schema(
+  {
+    // Ship-list INVENTORY SCHEMA
+    itemId: {
+      type: String,
+      required: true,
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+    quantityToShip: {
+      type: Number,
+      required: true,
+    },
+    price: {
+      type: Number,
+      required: true,
+    },
+    total: {
+      type: Number,
+      required: true,
+    },
+    destination: {
+      type: String,
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
 const ShipItem = mongoose.model("ShipItem", ShipItemSchema);
 
 app.post("/inventoryapp/ship-items", async (req, res) => {
   const { itemId, itemName, quantityToShip, destination } = req.body;
-  let total = 0; // Initialize total with 0
+  let total = 0; // Initialize tota  with 0
 
   try {
     const inventoryItem = await InventoryItem.findById(itemId);
@@ -290,7 +351,7 @@ app.post("/inventoryapp/ship-items", async (req, res) => {
 app.get("/inventoryapp/ship-items", async (req, res) => {
   try {
     // Use your ShipItem model to fetch ship items from the database
-    const shipItems = await ShipItem.find(); // This assumes you have a ShipItem model
+    const shipItems = await ShipItem.find().sort({ createdAt: "descending" }); // This assumes you have a ShipItem model
 
     // Return the ship items as a JSON response
     res.status(200).json(shipItems);
@@ -299,56 +360,6 @@ app.get("/inventoryapp/ship-items", async (req, res) => {
     res.status(500).json({ message: "Error fetching ship items" });
   }
 });
-const itemLogSchema = new mongoose.Schema(
-  {
-    itemName: {
-      type: String,
-      required: true,
-    },
-    action: {
-      type: String,
-      required: true,
-    },
-    timestamp: {
-      type: Date,
-      default: Date.now,
-    },
-  },
-  { timestamps: true }
-);
-
-const ItemLog = mongoose.model("itemlog", itemLogSchema);
-
-// Create an item log
-app.post("/inventoryapp/itemlogs", async (req, res) => {
-  const { itemName, action } = req.body;
-
-  const newItemLog = new ItemLog({
-    itemName,
-    action,
-  });
-  console.log("Item Logs", newItemLog);
-  try {
-    await newItemLog.save();
-    res.status(201).json({ message: "Item log saved successfully" });
-  } catch (error) {
-    console.error("Error saving item log:", error);
-    res.status(500).json({ message: "Error saving item log" });
-  }
-});
-
-// Get item logs for a specific item
-app.get("/inventoryapp/itemlogs/", async (req, res) => {
-  try {
-    const itemLogs = await ItemLog.find().sort({ timestamp: "desc" });
-    res.status(200).json(itemLogs);
-  } catch (error) {
-    console.error("Error fetching item logs:", error);
-    res.status(500).json({ message: "Error fetching item logs" });
-  }
-});
-
-
 app.delete("/inventoryapp/ship-items", async (req, res) => {
   try {
     await ShipItem.deleteMany({});
@@ -358,8 +369,6 @@ app.delete("/inventoryapp/ship-items", async (req, res) => {
     res.status(500).json({ message: "Error deleting shipping logs" });
   }
 });
-
-
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

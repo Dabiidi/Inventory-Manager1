@@ -20,7 +20,9 @@ export const TextStyle = styled.Text`
   text-align: center;
   font-weight: bold;
 `;
-export const HeaderLogo = styled.View``;
+export const HeaderLogo = styled.View`
+  height: 30%;
+`;
 
 export const Logo = styled.Image`
   width: 100px;

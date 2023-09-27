@@ -38,3 +38,18 @@ export const ItemContainer = styled.View`
   margin-top: 8px;
   border-radius: 8px;
 `;
+
+export const ClearButton = styled.TouchableOpacity`
+  height: 50px;
+  border-radius: 10px;
+  padding-top: 10px;
+  margin-top: 10px;
+  width: 90%;
+  align-self: center;
+  background-color: #ad0000;
+`;
+export const ButtonText = styled.Text`
+  font-size: 20px;
+  text-align: center;
+  color: #ffffff;
+`;

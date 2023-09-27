@@ -27,8 +27,8 @@ export const useDeleteShippingLogs = () => {
       return res.data;
     },
     onSuccess: () => {
-        Alert.alert("Delete", `Shipping Logs Successfully deleted.`);
-        navigation.goBack();
+      Alert.alert("Delete", `Shipping Logs Successfully deleted.`);
+      navigation.goBack();
       console.log("test");
     },
   });

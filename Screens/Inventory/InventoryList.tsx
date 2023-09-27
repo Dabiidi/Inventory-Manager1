@@ -90,7 +90,6 @@ const InventoryList = ({}) => {
   if (GetItemData.isLoading) return <Text> Loading data</Text>;
   if (GetItemData.error) return <Text> Error data</Text>;
   //<AntDesign name="search1" size={40} color="black" style={{ left: 8 }} />
-
   return (
     <Container>
       <SearchInput
@@ -118,19 +117,31 @@ const InventoryList = ({}) => {
           ))}
         </Picker>
       </PickerContainer>
-      <FlatList
-        data={inventories}
-        renderItem={({ item }) => (
-          <InventoryComponent
-            onPress={() => navigateToScreen(item)}
-            item={item}
-          />
-        )}
-        // renderItem={({item}) => (<InventoryComponent items={[item]} onPress={() => navigateToScreen(item) }></InventoryComponent>)}
-        // keyExtractor={(item, index) => `${item.name}_${index}`}
-        scrollEnabled
-        keyExtractor={(item) => item.name}
-      />
+      {GetItemData.isLoading ? (
+        <Text>Loading ....</Text>
+      ) : GetItemData.isError ? (
+        <Text>Error:</Text>
+      ) : inventories.length > 0 ? (
+        <FlatList
+          data={inventories}
+          renderItem={({ item }) => (
+            <InventoryComponent
+              onPress={() => navigateToScreen(item)}
+              item={item}
+            />
+          )}
+          // renderItem={({item}) => (<InventoryComponent items={[item]} onPress={() => navigateToScreen(item) }></InventoryComponent>)}
+          // keyExtractor={(item, index) => `${item.name}_${index}`}
+          scrollEnabled
+          keyExtractor={(item) => item.name}
+        />
+      ) : (
+        <ImageContainer>
+          <EmptyLogo source={require("../../Images/empty-box.png")}></EmptyLogo>
+
+          <InfoText> No Item Found.</InfoText>
+        </ImageContainer>
+      )}
     </Container>
   );
 };
@@ -148,10 +159,19 @@ const Name = styled.Text`
   color: #fff;
 `;
 
+const ImageContainer = styled.View`
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+`;
+const EmptyLogo = styled.Image`
+  width: 75%;
+  height: 60%;
+`;
 const InfoText = styled.Text`
-  font-size: 15px;
+  font-size: 30px;
   font-weight: bold;
-  color: #fff;
+  color: #ff0000;
 `;
 
 export default InventoryList;
