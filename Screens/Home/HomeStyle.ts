@@ -1,21 +1,27 @@
 import styled from "styled-components/native";
 
 export const Container = styled.SafeAreaView`
+  background-color: #fff;
   flex: 1;
-
-  background-color: #419197;
 `;
+
 export const Logo = styled.Image`
   width: 100px;
   height: 100px;
   border-radius: 50px;
 `;
+export const MainContainer = styled.View`
+  background-color: #419197;
+`;
+
 export const Header = styled.View`
+  justify-content: center;
   flex-direction: row;
+  width: 100%;
   background-color: #419197;
   padding-top: 50px;
   padding: 10px;
-  align-self: center;
+  align-items: center;
 `;
 export const HeaderTexts = styled.View`
   flex-direction: column;
@@ -37,7 +43,6 @@ export const SalesText = styled.Text`
 export const InfoContainer = styled.View`
   border-top-right-radius: 50px;
   border-top-left-radius: 50px;
-  height: 39%;
   background-color: #fff;
 `;
 
@@ -54,13 +59,13 @@ export const Texts = styled.Text`
 `;
 export const TextWrapper1 = styled.TouchableOpacity`
   background-color: #419197;
-  height: 110%;
+  padding-bottom: 10px;
   width: 150px;
   border-radius: 10px;
 `;
 export const TextWrapper2 = styled.TouchableOpacity`
   background-color: #419197;
-  height: 110%;
+  padding-bottom: 10px;
   width: 150px;
   border-radius: 10px;
 `;
@@ -72,28 +77,28 @@ export const TextBody = styled.Text`
   color: #000;
 `;
 export const TextWrappper3 = styled.TouchableOpacity`
-  margin-top: 5%;
-  background-color: #419197;
-  justify-content: space-evenly;
   align-self: center;
+  align-items: center;
+  margin-bottom: 5%;
   flex-direction: column;
   border-radius: 10px;
-  height: 35%;
-  width: 200px;
+  background-color: #419197;
+  padding-bottom: 10px;
+  width: 150px;
+  border-radius: 10px;
 `;
 
 export const TextBodyShip = styled.Text`
   font-size: 15px;
-
   text-align: center;
+  padding-top: 8%;
   font-weight: 500;
   color: #000;
 `;
 
 export const TextCountShip = styled.Text`
+  padding-top: 5%;
   font-size: 20px;
-  align-self: center;
-
   text-align: center;
   font-weight: 700;
   color: #fff;
@@ -126,11 +131,11 @@ export const DashboardCon = styled.View`
 `;
 
 export const Body = styled.View`
-  background-color: #ffffff;
+  background-color: #fff;
 `;
 export const ReportButton = styled.TouchableOpacity`
   background-color: #016a70;
-  height: 20%;
+  padding: 10px;
   width: 90%;
 
   margin-bottom: 10px;
@@ -142,7 +147,7 @@ export const ReportButton = styled.TouchableOpacity`
 
 export const AddButton = styled.TouchableOpacity`
   background-color: #016a70;
-  height: 20%;
+  padding: 4%;
   width: 90%;
   margin-bottom: 10px;
   flex-direction: row;
@@ -188,9 +193,9 @@ export const ReportLogo = styled.Image`
 
 export const ShipButton = styled.TouchableOpacity`
   background-color: #016a70;
-  height: 20%;
-  width: 90%;
 
+  width: 90%;
+  padding: 4%;
   margin-bottom: 10px;
   flex-direction: row;
   align-items: center;

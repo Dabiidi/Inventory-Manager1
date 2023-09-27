@@ -4,9 +4,6 @@ import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import { Alert } from "react-native";
 
-
-
-
 export const useGetItems = () => {
   return useQuery({
     queryKey: ["Items"],
