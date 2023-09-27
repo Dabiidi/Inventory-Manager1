@@ -1,4 +1,4 @@
-import { View, Text, Alert, ScrollView } from "react-native";
+import { Alert, ScrollView } from "react-native";
 import React from "react";
 import {
   Container,
@@ -13,7 +13,6 @@ import {
   PickerContainer,
 } from "../AddItem/AddStyle";
 import { useNavigation } from "@react-navigation/native";
-import { useQuery, useMutation } from "@tanstack/react-query";
 import { Picker } from "@react-native-picker/picker";
 import {
   UseAddItem,

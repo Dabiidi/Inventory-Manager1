@@ -29,6 +29,7 @@ import {
   TextBodyShip,
   TextCountShip,
   SalesText,
+  MainContainer,
 } from "./HomeStyle";
 
 import { useInventory } from "../Context/InventoryContent";
@@ -62,6 +63,7 @@ const HomeScreen: React.FC = () => {
   const filterInventory = (inventory: any) => {
     return useNoStock(inventory.filter((inv: any) => inv.quantity === 0));
   };
+
   React.useEffect(() => {
     const filteredInventoryNoStock = inventoryCount.filter(
       (inv) => inv.quantity === 0
@@ -136,8 +138,8 @@ const HomeScreen: React.FC = () => {
   );
 
   return (
-    <ScrollView contentContainerStyle={{ flex: 1 }}>
-      <Container>
+    <Container>
+      <ScrollView>
         <Header>
           <Logo source={require("../../Images/Profile.png")}></Logo>
           <HeaderTexts>
@@ -146,48 +148,52 @@ const HomeScreen: React.FC = () => {
             <SalesText>Total Sales: ₱{totalSales.toFixed(2)}</SalesText>
           </HeaderTexts>
         </Header>
-        <InfoContainer>
-          <Greetings>Summary</Greetings>
-          <Top>
-            <TextWrapper1 onPress={NavigateToLogs}>
-              <TextCount>{noStock}</TextCount>
 
-              <TextBody>Unavailable Item/s</TextBody>
-            </TextWrapper1>
+        <MainContainer>
+          <InfoContainer>
+            <Greetings>Summary</Greetings>
+            <Top>
+              <TextWrapper1 onPress={NavigateToLogs}>
+                <TextCount>{noStock}</TextCount>
 
-            <TextWrapper2 onPress={navigateToShip}>
-              <AvailableCount>{haveStock}</AvailableCount>
-              <TextBody>Available Item/s </TextBody>
-            </TextWrapper2>
-          </Top>
-          <TextWrappper3 onPress={NavigateToStock}>
-            <TextCountShip>{haveStock}</TextCountShip>
-            <TextBodyShip>Shipped Item/s</TextBodyShip>
-          </TextWrappper3>
-        </InfoContainer>
+                <TextBody>Unavailable Item/s</TextBody>
+              </TextWrapper1>
 
-        <Body>
-          <AddButton onPress={navigateToAdd}>
-            <ItemLogo source={require("../../Images/AddItem.png")}></ItemLogo>
+              <TextWrapper2 onPress={navigateToShip}>
+                <AvailableCount>{haveStock}</AvailableCount>
+                <TextBody>Available Item/s </TextBody>
+              </TextWrapper2>
+            </Top>
 
-            <ButtonText>Add Item</ButtonText>
-          </AddButton>
+            <TextWrappper3 onPress={NavigateToStock}>
+              <TextCountShip>{haveStock}</TextCountShip>
+              <TextBodyShip>Shipped Item/s</TextBodyShip>
+            </TextWrappper3>
+          </InfoContainer>
 
-          <ReportButton onPress={navigateToReport}>
-            <ReportLogo
-              source={require("../../Images/ReportLogo.png")}
-            ></ReportLogo>
+          <Body>
+            <AddButton onPress={navigateToAdd}>
+              <ItemLogo source={require("../../Images/AddItem.png")}></ItemLogo>
 
-            <ButtonText>Reports</ButtonText>
-          </ReportButton>
+              <ButtonText>Add Item</ButtonText>
+            </AddButton>
 
-          <ShipButton onPress={navigateToShip}>
-            <Octicons name="package-dependents" size={60} color="black" />
-            <ButtonShip>Ship Item</ButtonShip>
-          </ShipButton>
-        </Body>
-      </Container>
-    </ScrollView>
+            <ReportButton onPress={navigateToReport}>
+              <ReportLogo
+                source={require("../../Images/ReportLogo.png")}
+              ></ReportLogo>
+
+              <ButtonText>Reports</ButtonText>
+            </ReportButton>
+
+            <ShipButton onPress={navigateToShip}>
+              <Octicons name="package-dependents" size={60} color="black" />
+              <ButtonShip>Ship Item</ButtonShip>
+            </ShipButton>
+          </Body>
+        </MainContainer>
+      </ScrollView>
+    </Container>
   );
 };
 
