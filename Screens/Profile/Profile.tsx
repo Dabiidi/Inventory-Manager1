@@ -11,6 +11,7 @@ import {
   Greetings,
   GreetingsText,
   HeaderLogo,
+  BoxShadowView,
 } from "./ProfileStyle";
 import { getUserAcc } from "../../services/userAPI";
 
@@ -40,7 +41,6 @@ const Profile = () => {
       </>
     );
   const navigateToScreen = () => {
-    console.log("Click");
     navigation.navigate("Login", {
       screen: "Login",
     });
@@ -55,20 +55,22 @@ const Profile = () => {
 
   return (
     <Container>
-      <HeaderLogo>
-        <Logo source={require("../../Images/Profile.png")}></Logo>
-        <Texts>Welcome! {data[0].name} </Texts>
-      </HeaderLogo>
-
-      <Greetings>
-        <GreetingsText>
-          <Texts>
-            {currentDateTime.toLocaleDateString()} |{" "}
-            {currentDateTime.toLocaleTimeString()}
-          </Texts>
-        </GreetingsText>
-      </Greetings>
-
+      <BoxShadowView>
+        <HeaderLogo>
+          <Logo source={require("../../Images/Profile.png")}></Logo>
+          <Texts>Welcome! {data[0].name} </Texts>
+        </HeaderLogo>
+      </BoxShadowView>
+      <BoxShadowView>
+        <Greetings>
+          <GreetingsText>
+            <Texts>
+              {currentDateTime.toLocaleDateString()} |{" "}
+              {currentDateTime.toLocaleTimeString()}
+            </Texts>
+          </GreetingsText>
+        </Greetings>
+      </BoxShadowView>
       <Logout onPress={navigateToScreen}>
         <TextStyle>Logout</TextStyle>
       </Logout>

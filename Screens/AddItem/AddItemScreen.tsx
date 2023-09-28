@@ -1,4 +1,4 @@
-import { Alert, ScrollView } from "react-native";
+import { Alert, Button, ScrollView } from "react-native";
 import React from "react";
 import {
   Container,
@@ -11,6 +11,11 @@ import {
   Body,
   ButtonContainer,
   PickerContainer,
+  CrementText,
+  QuantityContainer,
+  ButtonIncrement,
+  ButtonDecrement,
+  InputQuantity,
 } from "../AddItem/AddStyle";
 import { useNavigation } from "@react-navigation/native";
 import { Picker } from "@react-native-picker/picker";
@@ -33,8 +38,7 @@ const AddItemScreen = () => {
   const { isLoading: loadingCheck, mutateAsync: loadingAsync } =
     UseCheckItemExistance();
 
-  const [changesMade, setChangesMade] = React.useState<string>();
-
+  const [count, setCount] = React.useState(0);
   const { isLoading, mutateAsync } = UseAddItem();
   const { isLoading: loadingLogs, mutateAsync: mutateLogs } = saveLogs();
 
@@ -81,6 +85,17 @@ const AddItemScreen = () => {
     Alert.alert("Cancel", "Cancel Adding Item");
     navigation.navigate("Home");
   };
+
+  const handleClickIncrementQuant = () => {
+    setCount(count + 1);
+    setQuantity(count);
+  };
+
+  const handleClickDecrimentQuant = () => {
+    setCount(count - 1);
+    setQuantity(count);
+  };
+
   const classificationOptions = [
     "School Supplies",
     "Hardware",
@@ -103,13 +118,23 @@ const AddItemScreen = () => {
             onChangeText={(text) => setName(text)}
             value={name}
           />
-          <Input
-            placeholder="Quantity"
-            placeholderTextColor={"white"}
-            onChangeText={(text) => setQuantity(parseInt(text))}
-            value={quantity ? quantity.toString() : ""}
-            keyboardType="numeric"
-          />
+
+          <QuantityContainer>
+            <InputQuantity
+              placeholder="Quantity"
+              placeholderTextColor={"white"}
+              onChangeText={(text) => setQuantity(parseInt(text))}
+              value={quantity ? quantity.toString() : ""}
+              keyboardType="numeric"
+            />
+            <ButtonIncrement onPress={handleClickIncrementQuant}>
+              <CrementText>+</CrementText>
+            </ButtonIncrement>
+            <ButtonDecrement onPress={handleClickDecrimentQuant}>
+              <CrementText>-</CrementText>
+            </ButtonDecrement>
+          </QuantityContainer>
+
           <Input
             placeholder="Price"
             placeholderTextColor={"white"}

@@ -115,7 +115,6 @@ const HomeScreen: React.FC = () => {
 
   const { data, isLoading, isError, refetch } = useGetShipping();
 
-  // Check if shipItems is undefined or null
   if (isLoading) {
     return (
       <View>

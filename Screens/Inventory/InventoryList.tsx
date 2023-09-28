@@ -106,7 +106,6 @@ const InventoryList = ({}) => {
           selectedValue={selectedClassification}
           onValueChange={(itemValue) => {
             setSelectedClassification(itemValue);
-            console.log("Item Value", itemValue);
             setInventories(masterDataSource);
             applyClassificationFilter(itemValue);
           }}

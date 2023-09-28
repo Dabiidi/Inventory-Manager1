@@ -35,11 +35,18 @@ export const Input = styled.TextInput`
   border-bottom-color: black;
   font-size: 15px;
   color: #fff;
-  
   width: 80%;
   margin-top: 20px;
 `;
 
+export const InputQuantity = styled.TextInput`
+  border-bottom-width: 2px;
+  border-bottom-color: black;
+  font-size: 15px;
+  color: #fff;
+  width: 50%;
+  margin-top: 20px;
+`;
 export const ButtonContainer = styled.View`
   width: 100%;
   padding: 20px;
@@ -65,4 +72,17 @@ export const PickerContainer = styled.View`
   padding: 5px;
   justify-content: center;
   flex: 1;
+`;
+
+export const QuantityContainer = styled.View`
+  flex-direction: row;
+`;
+
+export const ButtonIncrement = styled.TouchableOpacity``;
+
+export const ButtonDecrement = styled.TouchableOpacity`
+  margin-left: 10px;
+`;
+export const CrementText = styled.Text`
+  font-size: 40px;
 `;
