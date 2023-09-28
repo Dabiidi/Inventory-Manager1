@@ -45,14 +45,16 @@ export const Title = styled.Text`
 
 export const TitleText = styled.Text`
   font-size: 12px;
+  padding-right: 10px;
   font-weight: 500;
 `;
 
 export const LoginButton = styled.TouchableOpacity`
   background-color: #016a70;
   height: 60px;
-  width: 90%;
-  margin-left: 20px;
+  width: 85%;
+  align-self: center;
+
   border-radius: 40px;
   align-items: center;
   justify-content: center;
@@ -63,38 +65,62 @@ export const ButtonText = styled.Text`
   font-weight: 400;
   color: #fff;
 `;
-export const EmailInput = styled.TextInput<{ isError: boolean }>`
-  background-color: white;
+
+export const ChangeAccText = styled.Text`
+  color: blue;
+`;
+
+export const Texts = styled.Text`
+  font-weight: 700;
+`;
+
+export const ChangeAccContaierText = styled.View`
+  margin-top: 3%;
+  flex-direction: row;
+  justify-content: center;
+`;
+
+export const EmailInput = styled.TextInput<{
+  isError: boolean;
+}>`
+  background-color: ${({ editable }) => (editable ? "white" : "#DCDCDC")};
   height: 50px;
   border-width: 1px;
-  width: 90%;
-  margin-left: 18px;
+  width: 85%;
+  align-self: center;
   border-radius: 30px;
   margin-bottom: 10px;
   padding: 10px;
   border-color: ${({ isError }) => (isError ? "red" : "gray")};
 `;
+
 export const StyledErrorText = styled.Text`
   color: red;
   margin-bottom: 10px;
   text-align: center;
 `;
 
-export const PassInput = styled.TextInput<{ isError: boolean }>`
+export const PassInput = styled.TextInput<{
+  isError: boolean;
+}>`
   height: 50px;
   padding: 8px;
   flex: 1;
   border-color: ${({ isError }) => (isError ? "red" : "gray")};
 `;
 
-export const PasswordContainer = styled.View<{ isError: boolean }>`
+export const PasswordContainer = styled.View<{
+  isError: boolean;
+  editable: boolean;
+}>`
   flex-direction: row;
   align-items: center;
   border-color: ${({ isError }) => (isError ? "red" : "gray")};
   border-width: 1px;
-  margin-left: 18px;
+
   border-radius: 30px;
-  width: 90%;
+  width: 85%;
+  align-self: center;
   margin-bottom: 10px;
-  background-color: white;
+  background-color: ${({ editable }) => (editable ? "white" : "#DCDCDC")};
 `;

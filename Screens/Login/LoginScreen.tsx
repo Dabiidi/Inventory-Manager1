@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Text, ImageBackground } from "react-native";
 import {
   ButtonText,
+  ChangeAccContaierText,
+  ChangeAccText,
   Container,
   EmailInput,
   Header,
@@ -14,11 +16,13 @@ import {
   PasswordContainer,
   StyledErrorText,
   TextContainer,
+  Texts,
   Title,
   TitleText,
 } from "./LoginStyle";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { getUserAcc } from "../../services/userAPI";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface FormData {
   email: string;
@@ -31,10 +35,17 @@ interface LandingScreenProps {
   navigation: LoginformProps;
 }
 
+interface UserData {
+  name: string;
+  password: string;
+}
+
 const LoginForm: React.FC<LandingScreenProps> = ({ navigation }) => {
-  const { control, handleSubmit, formState } = useForm<FormData>();
+  const { control, handleSubmit, setValue } = useForm<FormData>();
 
   const [error, setError] = React.useState<string | null>(null);
+  const [status, setStatus] = React.useState<string | null>(null);
+  const [user, setUser] = React.useState<UserData | null>(null);
 
   const [showPassword, setShowPassword] = React.useState(false);
   const toggleShowPassword = () => {
@@ -43,16 +54,29 @@ const LoginForm: React.FC<LandingScreenProps> = ({ navigation }) => {
 
   const { data: account } = getUserAcc();
 
-  const onSubmit = (data: FormData) => {
-    const user = account.find((user: any) => user.name === data.email);
+  const saveUser = async (email: string, password: string) => {
+    const value = {
+      name: email,
+      password: password,
+    };
 
-    console.log("users", user);
-    if (user) {
-      if (user.pass === data.password) {
-        console.log("name", user.name);
+    try {
+      await AsyncStorage.setItem("userInfo", JSON.stringify(value));
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  };
+  const onSubmit = async (data: FormData) => {
+    console.log("test", user?.name);
+
+    const users = account.find((user: any) => user.name === data.email);
+
+    if (users) {
+      if (users.pass === data.password) {
+        saveUser(users.name, users.pass);
         navigation.navigate("Home", {
           screen: "Menu",
-          params: { email: user.name },
+          params: { email: users.name },
         });
       } else {
         setError("Incorrect Email or Password.");
@@ -61,7 +85,41 @@ const LoginForm: React.FC<LandingScreenProps> = ({ navigation }) => {
       setError("Incorrect Email or Password.");
     }
   };
+  const getUser = async () => {
+    try {
+      const savedUser = await AsyncStorage.getItem("userInfo");
 
+      if (savedUser !== null) {
+        const userData: UserData = JSON.parse(savedUser);
+        if (userData) {
+          setUser(userData);
+
+          setValue("email", userData.name);
+          setValue("password", userData.password);
+
+          setStatus("Found");
+        } else {
+          console.log("User not found");
+        }
+      } else {
+        console.log("No Data Found");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const accStatus = () => {
+    let status = "false";
+
+    setValue("email", "");
+    setValue("password", "");
+
+    setStatus(status);
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
   return (
     <>
       <Container>
@@ -81,72 +139,146 @@ const LoginForm: React.FC<LandingScreenProps> = ({ navigation }) => {
           </TextContainer>
         </IntroHeader>
         <LoginContainer>
-          <Controller
-            control={control}
-            render={({ field, fieldState }) => (
-              <>
-                <EmailInput
-                  isError={fieldState.invalid}
-                  placeholder="Email"
-                  value={field.value}
-                  onChangeText={field.onChange}
-                  onBlur={field.onBlur}
-                />
-                {fieldState.invalid && (
-                  <StyledErrorText>
-                    {fieldState.error ? fieldState.error.message : ""}
-                  </StyledErrorText>
+          {status === "Found" ? (
+            <>
+              <Controller
+                control={control}
+                render={({ field, fieldState }) => (
+                  <>
+                    <EmailInput
+                      editable={false}
+                      isError={fieldState.invalid}
+                      value={user?.name}
+                      style={{ color: "black" }}
+                    />
+                    {fieldState.invalid && (
+                      <StyledErrorText>
+                        {fieldState.error ? fieldState.error.message : ""}
+                      </StyledErrorText>
+                    )}
+                  </>
                 )}
-              </>
-            )}
-            name="email"
-            rules={{
-              required: "Email is required",
-              pattern: {
-                value: /\S+@\S+\.\S+/,
-                message: "Invalid email format",
-              },
-            }}
-            defaultValue=""
-          />
+                name="email"
+                rules={{
+                  required: "Email is required",
+                  pattern: {
+                    value: /\S+@\S+\.\S+/,
+                    message: "Invalid email format",
+                  },
+                }}
+                defaultValue=""
+              />
 
-          <Controller
-            control={control}
-            render={({ field, fieldState }) => (
-              <>
-                <PasswordContainer isError={fieldState.invalid}>
-                  <PassInput
-                    isError={fieldState.invalid}
-                    placeholder="Password"
-                    secureTextEntry={!showPassword}
-                    value={field.value}
-                    onChangeText={field.onChange}
-                    onBlur={field.onBlur}
-                  />
-                  <MaterialCommunityIcons
-                    name={showPassword ? "eye-off" : "eye"}
-                    size={24}
-                    color="#aaa"
-                    onPress={toggleShowPassword}
-                    style={{ marginRight: 10 }}
-                  />
-                </PasswordContainer>
-                {fieldState.invalid && (
-                  <StyledErrorText>
-                    {fieldState.error ? fieldState.error.message : ""}
-                  </StyledErrorText>
+              <Controller
+                control={control}
+                render={({ field, fieldState }) => (
+                  <>
+                    <PasswordContainer
+                      isError={fieldState.invalid}
+                      editable={false}
+                    >
+                      <PassInput
+                        editable={false}
+                        isError={fieldState.invalid}
+                        value={field.value}
+                        secureTextEntry={!showPassword}
+                        style={{ color: "black" }}
+                      />
+                      <MaterialCommunityIcons
+                        name={showPassword ? "eye-off" : "eye"}
+                        size={24}
+                        color="#aaa"
+                        onPress={toggleShowPassword}
+                        style={{ marginRight: 10 }}
+                      />
+                    </PasswordContainer>
+                  </>
                 )}
-                {error && <StyledErrorText>{error}</StyledErrorText>}
-              </>
-            )}
-            name="password"
-            rules={{ required: "Password is required", minLength: 6 }}
-            defaultValue=""
-          />
+                name="password"
+                rules={{ required: "Password is required", minLength: 6 }}
+                defaultValue=""
+              />
+            </>
+          ) : (
+            <>
+              <Controller
+                control={control}
+                render={({ field, fieldState }) => (
+                  <>
+                    <EmailInput
+                      editable={true}
+                      isError={fieldState.invalid}
+                      placeholder="Email"
+                      value={field.value}
+                      onChangeText={field.onChange}
+                      onBlur={field.onBlur}
+                    />
+                    {fieldState.invalid && (
+                      <StyledErrorText>
+                        {fieldState.error ? fieldState.error.message : ""}
+                      </StyledErrorText>
+                    )}
+                  </>
+                )}
+                name="email"
+                rules={{
+                  required: "Email is required",
+                  pattern: {
+                    value: /\S+@\S+\.\S+/,
+                    message: "Invalid email format",
+                  },
+                }}
+                defaultValue=""
+              />
+
+              <Controller
+                control={control}
+                render={({ field, fieldState }) => (
+                  <>
+                    <PasswordContainer
+                      isError={fieldState.invalid}
+                      editable={true}
+                    >
+                      <PassInput
+                        editable={true}
+                        isError={fieldState.invalid}
+                        placeholder="Password"
+                        secureTextEntry={!showPassword}
+                        value={field.value}
+                        onChangeText={field.onChange}
+                        onBlur={field.onBlur}
+                      />
+                      <MaterialCommunityIcons
+                        name={showPassword ? "eye-off" : "eye"}
+                        size={24}
+                        color="#aaa"
+                        onPress={toggleShowPassword}
+                        style={{ marginRight: 10 }}
+                      />
+                    </PasswordContainer>
+                    {fieldState.invalid && (
+                      <StyledErrorText>
+                        {fieldState.error ? fieldState.error.message : ""}
+                      </StyledErrorText>
+                    )}
+                    {error && <StyledErrorText>{error}</StyledErrorText>}
+                  </>
+                )}
+                name="password"
+                rules={{ required: "Password is required", minLength: 6 }}
+                defaultValue=""
+              />
+            </>
+          )}
+
           <LoginButton onPress={handleSubmit(onSubmit)}>
             <ButtonText>Login</ButtonText>
           </LoginButton>
-          <Text style={{ textAlign: "center" }}> Forgot Password?</Text>
+
+          <ChangeAccContaierText>
+            <Texts>Not you?</Texts>
+            <ChangeAccText onPress={accStatus}> Switch Account</ChangeAccText>
+          </ChangeAccContaierText>
         </LoginContainer>
       </Container>
     </>
