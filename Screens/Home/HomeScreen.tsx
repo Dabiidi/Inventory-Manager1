@@ -1,43 +1,36 @@
 import React from "react";
-import { ScrollView, Text, View } from "react-native";
+import {
+  Modal,
+  ScrollView,
+  Text,
+  TouchableHighlight,
+  View,
+} from "react-native";
 import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
 import {
   Body,
   Container,
   Greetings,
   Header,
-  Texts,
-  Logo,
   AddButton,
   ButtonText,
   TextBody,
-  ItemLogo,
   ReportButton,
   InfoContainer,
-  ReportLogo,
-  DashboardCon,
   ShipButton,
   ButtonShip,
-  Top,
-  TopText,
   TextWrapper1,
-  TextWrapper2,
-  HeaderTexts,
   TextCount,
-  AvailableCount,
-  TextWrappper3,
-  TextBodyShip,
-  TextCountShip,
   SalesText,
-  MainContainer,
+  BoxShadowView,
+  AddContainer,
+  ReportContainer,
+  ShipContaier,
 } from "./HomeStyle";
 
 import { useInventory } from "../Context/InventoryContent";
-import { Octicons } from "@expo/vector-icons";
-import { useGetItems } from "../../services/ItemsAPI";
+import { AntDesign, MaterialIcons, Octicons } from "@expo/vector-icons";
 
-import { ImageBackground } from "react-native";
-import ShipLogs from "../ShipItems/ShipLogs";
 import { useGetShipping } from "../../services/shippingAPI";
 
 type DashboardScreenRouteParams = {
@@ -55,6 +48,8 @@ const HomeScreen: React.FC = () => {
   const [haveStock, useHaveStock] = React.useState(0);
   const { inventoryCount } = useInventory();
   const [inventSales, setTotalSales] = React.useState(0);
+
+  const [infoModalVisible, setInfoModalVisible] = React.useState(false);
 
   const route =
     useRoute<RouteProp<Record<string, DashboardScreenRouteParams>, string>>();
@@ -136,61 +131,129 @@ const HomeScreen: React.FC = () => {
     0
   );
 
+  //   <Header>
+  //   <Logo source={require("../../Images/Profile.png")}></Logo>
+  //   <HeaderTexts>
+  //     <TopText>Hello!</TopText>
+  //     <TopText>{email}</TopText>
+  //
+  //   </HeaderTexts>
+  // </Header>
+
   return (
     <Container>
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <Header>
-          <Logo source={require("../../Images/Profile.png")}></Logo>
-          <HeaderTexts>
-            <TopText>Hello!</TopText>
-            <TopText>{email}</TopText>
+          <BoxShadowView>
             <SalesText>Total Sales: ₱{totalSales.toFixed(2)}</SalesText>
-          </HeaderTexts>
+            <AntDesign
+              onPress={() => setInfoModalVisible(true)}
+              name="exclamationcircleo"
+              size={24}
+              color="white"
+            />
+          </BoxShadowView>
+
+          <Modal
+            animationType="fade"
+            transparent={true}
+            visible={infoModalVisible}
+            onRequestClose={() => {
+              setInfoModalVisible(false);
+            }}
+          >
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+                right: 10,
+                top: 140,
+                position: "absolute",
+              }}
+            >
+              <View
+                style={{
+                  backgroundColor: "white",
+                  padding: 10,
+                  borderRadius: 10,
+                }}
+              >
+                <Text>Total Sales</Text>
+                <TouchableHighlight
+                  onPress={() => {
+                    setInfoModalVisible(false);
+                  }}
+                  underlayColor="transparent"
+                >
+                  <Text
+                    style={{
+                      marginTop: 10,
+                      color: "blue",
+                      textAlign: "center",
+                    }}
+                  >
+                    Ok
+                  </Text>
+                </TouchableHighlight>
+              </View>
+            </View>
+          </Modal>
         </Header>
-
-        <MainContainer>
-          <InfoContainer>
-            <Greetings>Summary</Greetings>
-            <Top>
-              <TextWrapper1 onPress={NavigateToLogs}>
-                <TextCount>{noStock}</TextCount>
-
-                <TextBody>Unavailable Item/s</TextBody>
-              </TextWrapper1>
-
-              <TextWrapper2 onPress={navigateToShip}>
-                <AvailableCount>{haveStock}</AvailableCount>
-                <TextBody>Available Item/s </TextBody>
-              </TextWrapper2>
-            </Top>
-
-            <TextWrappper3 onPress={NavigateToStock}>
-              <TextCountShip>{haveStock}</TextCountShip>
-              <TextBodyShip>Shipped Item/s</TextBodyShip>
-            </TextWrappper3>
-          </InfoContainer>
-
-          <Body>
+        <Body>
+          <AddContainer>
             <AddButton onPress={navigateToAdd}>
-              <ItemLogo source={require("../../Images/AddItem.png")}></ItemLogo>
-
-              <ButtonText>Add Item</ButtonText>
+              <MaterialIcons
+                style={{ alignSelf: "center" }}
+                name="add-box"
+                size={70}
+                color="red"
+              />
             </AddButton>
+            <ButtonText>Add Item</ButtonText>
+          </AddContainer>
 
+          <ReportContainer>
             <ReportButton onPress={navigateToReport}>
-              <ReportLogo
-                source={require("../../Images/ReportLogo.png")}
-              ></ReportLogo>
-
-              <ButtonText>Reports</ButtonText>
+              <Octicons
+                style={{ alignSelf: "center" }}
+                name="report"
+                size={70}
+                color="red"
+              />
             </ReportButton>
+            <ButtonText>Reports</ButtonText>
+          </ReportContainer>
 
+          <ShipContaier>
             <ShipButton onPress={navigateToShip}>
-              <Octicons name="package-dependents" size={60} color="black" />
-              <ButtonShip>Ship Item</ButtonShip>
+              <Octicons
+                style={{ alignSelf: "center" }}
+                name="package-dependents"
+                size={70}
+                color="red"
+              />
             </ShipButton>
-          </Body>
-        </MainContainer>
+            <ButtonShip>Ship Item</ButtonShip>
+          </ShipContaier>
+        </Body>
+        <Greetings>Summary</Greetings>
+        <InfoContainer>
+          <TextWrapper1 onPress={NavigateToLogs}>
+            <TextBody>Unavailable Item/s</TextBody>
+            <TextCount>{noStock}</TextCount>
+          </TextWrapper1>
+
+          <TextWrapper1 onPress={navigateToShip}>
+            <TextBody>Available Item/s </TextBody>
+            <TextCount>{haveStock}</TextCount>
+          </TextWrapper1>
+
+          <TextWrapper1 onPress={NavigateToStock}>
+            <TextBody>Shipped Item/s</TextBody>
+            <TextCount>{haveStock}</TextCount>
+          </TextWrapper1>
+        </InfoContainer>
       </ScrollView>
     </Container>
   );

@@ -11,11 +11,14 @@ import {
   Body,
   ButtonContainer,
   PickerContainer,
-  CrementText,
   QuantityContainer,
   ButtonIncrement,
   ButtonDecrement,
   InputQuantity,
+  QuantText,
+  QuantityContainer1,
+  Textbody,
+  BoxShadowView,
 } from "../AddItem/AddStyle";
 import { useNavigation } from "@react-navigation/native";
 import { Picker } from "@react-native-picker/picker";
@@ -24,6 +27,7 @@ import {
   UseCheckItemExistance,
   saveLogs,
 } from "../../services/ItemsAPI";
+import { AntDesign } from "@expo/vector-icons";
 
 const AddItemScreen = () => {
   const [name, setName] = React.useState<string>("");
@@ -39,6 +43,7 @@ const AddItemScreen = () => {
     UseCheckItemExistance();
 
   const [count, setCount] = React.useState(0);
+
   const { isLoading, mutateAsync } = UseAddItem();
   const { isLoading: loadingLogs, mutateAsync: mutateLogs } = saveLogs();
 
@@ -87,13 +92,17 @@ const AddItemScreen = () => {
   };
 
   const handleClickIncrementQuant = () => {
+    console.log("count", count);
     setCount(count + 1);
-    setQuantity(count);
+    setQuantity(count + 1);
   };
 
   const handleClickDecrimentQuant = () => {
-    setCount(count - 1);
-    setQuantity(count);
+    if (count > 0) {
+      console.log("count", count);
+      setCount(count - 1);
+      setQuantity(count - 1);
+    }
   };
 
   const classificationOptions = [
@@ -105,74 +114,82 @@ const AddItemScreen = () => {
 
   return (
     <Container>
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <Header>
           <Texts>ADD INVENTORY ITEM </Texts>
           <Logo source={require("../../Images/AddInventory.png")}></Logo>
         </Header>
-        <Body>
-          <Input
-            placeholder="Item Name"
-            placeholderTextColor={"white"}
-            autoCapitalize="words"
-            onChangeText={(text) => setName(text)}
-            value={name}
-          />
 
-          <QuantityContainer>
-            <InputQuantity
-              placeholder="Quantity"
+        <BoxShadowView>
+          <Textbody>Item Details </Textbody>
+          <Body>
+            <Input
+              placeholder="Item Name"
               placeholderTextColor={"white"}
-              onChangeText={(text) => setQuantity(parseInt(text))}
-              value={quantity ? quantity.toString() : ""}
+              autoCapitalize="words"
+              onChangeText={(text) => setName(text)}
+              value={name}
+            />
+
+            <QuantityContainer>
+              <QuantText>Quantity:</QuantText>
+              <QuantityContainer1>
+                <ButtonDecrement onPress={handleClickDecrimentQuant}>
+                  <AntDesign name="minus" size={30} color="black" />
+                </ButtonDecrement>
+                <InputQuantity
+                  placeholder="0"
+                  placeholderTextColor={"white"}
+                  onChangeText={(text) => setQuantity(parseInt(text))}
+                  value={quantity ? quantity.toString() : ""}
+                  keyboardType="numeric"
+                  inputMode="numeric"
+                />
+                <ButtonIncrement onPress={handleClickIncrementQuant}>
+                  <AntDesign name="plus" size={30} color="black" />
+                </ButtonIncrement>
+              </QuantityContainer1>
+            </QuantityContainer>
+
+            <Input
+              placeholder="Price"
+              placeholderTextColor={"white"}
+              onChangeText={(text) => setPrice(parseFloat(text))}
+              value={price ? price.toString() : ""}
               keyboardType="numeric"
             />
-            <ButtonIncrement onPress={handleClickIncrementQuant}>
-              <CrementText>+</CrementText>
-            </ButtonIncrement>
-            <ButtonDecrement onPress={handleClickDecrimentQuant}>
-              <CrementText>-</CrementText>
-            </ButtonDecrement>
-          </QuantityContainer>
+            <Input
+              placeholder="Description"
+              placeholderTextColor={"white"}
+              autoCapitalize="words"
+              onChangeText={(text) => setDesc(text)}
+              value={desc}
+            />
+          </Body>
+          <PickerContainer>
+            <Picker
+              selectedValue={classification}
+              onValueChange={(itemValue) => setClassification(itemValue)}
+              style={{
+                color: "#fff",
+              }}
+            >
+              <Picker.Item label="Select Classification" value={null} />
+              {classificationOptions.map((option, index) => (
+                <Picker.Item key={index} label={option} value={option} />
+              ))}
+            </Picker>
+          </PickerContainer>
 
-          <Input
-            placeholder="Price"
-            placeholderTextColor={"white"}
-            onChangeText={(text) => setPrice(parseFloat(text))}
-            value={price ? price.toString() : ""}
-            keyboardType="numeric"
-          />
-          <Input
-            placeholder="Description"
-            placeholderTextColor={"white"}
-            autoCapitalize="words"
-            onChangeText={(text) => setDesc(text)}
-            value={desc}
-          />
-        </Body>
-        <PickerContainer>
-          <Picker
-            selectedValue={classification}
-            onValueChange={(itemValue) => setClassification(itemValue)}
-            style={{
-              color: "#fff",
-            }}
-          >
-            <Picker.Item label="Select Classification" value={null} />
-            {classificationOptions.map((option, index) => (
-              <Picker.Item key={index} label={option} value={option} />
-            ))}
-          </Picker>
-        </PickerContainer>
-
-        <ButtonContainer>
-          <SubmitButton onPress={handleSubmit}>
-            <ButtonText>Submit</ButtonText>
-          </SubmitButton>
-          <SubmitButton onPress={handleCancel}>
-            <ButtonText>Cancel</ButtonText>
-          </SubmitButton>
-        </ButtonContainer>
+          <ButtonContainer>
+            <SubmitButton onPress={handleSubmit}>
+              <ButtonText>Submit</ButtonText>
+            </SubmitButton>
+            <SubmitButton onPress={handleCancel}>
+              <ButtonText>Cancel</ButtonText>
+            </SubmitButton>
+          </ButtonContainer>
+        </BoxShadowView>
       </ScrollView>
     </Container>
   );
