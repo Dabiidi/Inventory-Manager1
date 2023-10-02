@@ -79,10 +79,10 @@ const LoginForm: React.FC<LandingScreenProps> = ({ navigation }) => {
           params: { email: users.name },
         });
       } else {
-        setError("Incorrect Email or Password.");
+        setError("Invalid Credentials.");
       }
     } else {
-      setError("Incorrect Email or Password.");
+      setError("Invalid Credentials.");
     }
   };
   const getUser = async () => {
@@ -95,7 +95,6 @@ const LoginForm: React.FC<LandingScreenProps> = ({ navigation }) => {
           setUser(userData);
 
           setValue("email", userData.name);
-          setValue("password", userData.password);
 
           setStatus("Found");
         } else {
@@ -175,15 +174,18 @@ const LoginForm: React.FC<LandingScreenProps> = ({ navigation }) => {
                   <>
                     <PasswordContainer
                       isError={fieldState.invalid}
-                      editable={false}
+                      editable={true}
                     >
                       <PassInput
-                        editable={false}
+                        editable={true}
                         isError={fieldState.invalid}
-                        value={field.value}
+                        placeholder="Password"
                         secureTextEntry={!showPassword}
-                        style={{ color: "black" }}
+                        value={field.value}
+                        onChangeText={field.onChange}
+                        onBlur={field.onBlur}
                       />
+
                       <MaterialCommunityIcons
                         name={showPassword ? "eye-off" : "eye"}
                         size={24}
@@ -192,6 +194,7 @@ const LoginForm: React.FC<LandingScreenProps> = ({ navigation }) => {
                         style={{ marginRight: 10 }}
                       />
                     </PasswordContainer>
+                    {error && <StyledErrorText>{error}</StyledErrorText>}
                   </>
                 )}
                 name="password"

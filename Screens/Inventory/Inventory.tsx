@@ -39,7 +39,7 @@ const InventoryComponent = ({ item, onPress }: MyProps) => {
 };
 
 const Container = styled.View`
-  background-color: #2f4f4f;
+  background-color: #12486b;
   padding: 20px;
   margin-top: 8px;
   border-radius: 8px;

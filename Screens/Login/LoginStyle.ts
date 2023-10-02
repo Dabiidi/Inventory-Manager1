@@ -2,12 +2,12 @@ import { KeyboardAvoidingView, TextInput } from "react-native";
 import { styled } from "styled-components/native";
 
 export const Container = styled.View`
-  background-color: #419197;
+  background-color: #12486b;
   flex: 1;
   justify-content: center;
 `;
 export const Header = styled.View`
-  background-color: #419197;
+  background-color: #12486b;
   height: 20%;
   flex: 1;
 `;
@@ -50,7 +50,7 @@ export const TitleText = styled.Text`
 `;
 
 export const LoginButton = styled.TouchableOpacity`
-  background-color: #016a70;
+  background-color: #1f4172;
   height: 60px;
   width: 85%;
   align-self: center;
