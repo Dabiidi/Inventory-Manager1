@@ -3,7 +3,7 @@ import styled from "styled-components/native";
 
 export const Container = styled.View`
   flex: 1;
-  background-color: #419197;
+  background-color: #12486B;
   justify-content: center;
 `;
 export const Header = styled.View`
@@ -50,7 +50,7 @@ export const ButtonContainer = styled.View`
   margin-top: 15px;
 `;
 export const SubmitButton = styled.TouchableOpacity`
-  background-color: #2f4f4f;
+  background-color: #0A2647;
   width: 80%;
   padding: 15px;
   border-radius: 20px;
@@ -112,7 +112,7 @@ export const BoxShadowView = styled.View`
   margin-top: 5%;
   align-items: center;
   flex-direction: column;
-  background-color: #419197;
+  background-color: #12486B;
   height: 70%;
   align-self: center;
   ${Platform.select({

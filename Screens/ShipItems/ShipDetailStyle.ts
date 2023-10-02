@@ -14,12 +14,14 @@ export const ItemHeader = styled.View`
   margin-top: 10px;
   padding: 20px;
   width: 90%;
-  background-color: #2f4f4f;
+  background-color: #12486b;
   align-self: center;
 
   align-content: center;
 `;
-export const MapContainer = styled.View``;
+export const MapContainer = styled.View`
+  flex-direction: row;
+`;
 
 export const LocContainer = styled.View`
   flex-direction: column;
@@ -83,7 +85,7 @@ export const ButtonText = styled.Text`
 export const ShipButton = styled.TouchableOpacity`
   margin-top: 10px;
   width: 90%;
-  background-color: #016a70;
+  background-color: #12486b;
   height: 40px;
   justify-content: center;
   border-radius: 20px;

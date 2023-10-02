@@ -5,6 +5,7 @@ import {
   ButtonAdd,
   ButtonTexts,
   ButtonScan,
+  ShadowContainer,
 } from "./QRDashboardStyle";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -22,17 +23,25 @@ const QRDashboard = () => {
 
   return (
     <Container>
-      <ButtonAdd onPress={ScanToAdd}>
-        <MaterialCommunityIcons name="cube-scan" size={100} color="black" />
+      <ShadowContainer>
+        <ButtonAdd onPress={ScanToAdd}>
+          <MaterialCommunityIcons name="cube-scan" size={100} color="white" />
 
-        <ButtonTexts>Scan to ADD</ButtonTexts>
-      </ButtonAdd>
+          <ButtonTexts>Scan to ADD</ButtonTexts>
+        </ButtonAdd>
+      </ShadowContainer>
 
-      <ButtonScan onPress={ScanToSearch}>
-        <MaterialCommunityIcons name="magnify-scan" size={100} color="black" />
+      <ShadowContainer>
+        <ButtonScan onPress={ScanToSearch}>
+          <MaterialCommunityIcons
+            name="magnify-scan"
+            size={100}
+            color="white"
+          />
 
-        <ButtonTexts>Scan to Search</ButtonTexts>
-      </ButtonScan>
+          <ButtonTexts>Scan to Search</ButtonTexts>
+        </ButtonScan>
+      </ShadowContainer>
     </Container>
   );
 };

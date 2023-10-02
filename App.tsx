@@ -17,6 +17,7 @@ import ReportScreen from "./Screens/Report/ReportScreen";
 import ScantoSearch from "./Screens/QRScanner/SearchQR";
 import ScanToAdd from "./Screens/QRScanner/AddQR";
 import ShipItems from "./Screens/ShipItems/ShipItems";
+
 import ShipItemDetails from "./Screens/ShipItems/ShipItemDetails";
 const Stack = createNativeStackNavigator();
 import {
@@ -26,6 +27,7 @@ import {
 } from "@expo/vector-icons";
 import OutofStockItems from "./Screens/ShipItems/OutofStockItems";
 import ShipLogs from "./Screens/ShipItems/ShipLogs";
+import LandingPage from "./Screens/LandingPage/LandingPage";
 const Tab = createBottomTabNavigator();
 const queryClient = new QueryClient();
 
@@ -34,6 +36,12 @@ const RenderShipScreen = (props: any) => <ShipItemDetails {...props} />;
 function StackNav() {
   return (
     <Stack.Navigator initialRouteName="Main">
+      <Stack.Screen
+        name="Landing"
+        component={LandingPage}
+        options={{ headerShown: false }}
+      />
+
       <Stack.Screen
         name="Login"
         component={LoginScreen}
@@ -44,16 +52,16 @@ function StackNav() {
         name="AddInventory"
         component={AddItem}
         options={{
-          title: "Inventory Item",
+          title: "Inventory",
           headerBackVisible: false,
-          headerTitleAlign: "center",
+
           headerShown: true,
           headerTitleStyle: {
             fontWeight: "bold",
             color: "white",
           },
           headerStyle: {
-            backgroundColor: "#016a70",
+            backgroundColor: "#12486B",
           },
         }}
       />
@@ -71,7 +79,7 @@ function StackNav() {
             color: "white",
           },
           headerStyle: {
-            backgroundColor: "#016a70",
+            backgroundColor: "#12486B",
           },
         }}
       />
@@ -89,7 +97,7 @@ function StackNav() {
             color: "white",
           },
           headerStyle: {
-            backgroundColor: "#016a70",
+            backgroundColor: "#12486B",
           },
         }}
       />
@@ -106,7 +114,7 @@ function StackNav() {
             color: "white",
           },
           headerStyle: {
-            backgroundColor: "#016a70",
+            backgroundColor: "#12486B",
           },
         }}
       />
@@ -124,7 +132,7 @@ function StackNav() {
             color: "white",
           },
           headerStyle: {
-            backgroundColor: "#016a70",
+            backgroundColor: "#12486B",
           },
         }}
       />
@@ -142,7 +150,7 @@ function StackNav() {
             color: "white",
           },
           headerStyle: {
-            backgroundColor: "#016a70",
+            backgroundColor: "#12486B",
           },
         }}
       />
@@ -160,7 +168,7 @@ function StackNav() {
             color: "white",
           },
           headerStyle: {
-            backgroundColor: "#016a70",
+            backgroundColor: "#12486B",
           },
         }}
       />
@@ -178,7 +186,7 @@ function StackNav() {
             color: "white",
           },
           headerStyle: {
-            backgroundColor: "#016a70",
+            backgroundColor: "#12486B",
           },
         }}
       />
@@ -196,7 +204,7 @@ function StackNav() {
             color: "white",
           },
           headerStyle: {
-            backgroundColor: "#016a70",
+            backgroundColor: "#12486B",
           },
         }}
       />
@@ -213,7 +221,7 @@ function StackNav() {
             color: "white",
           },
           headerStyle: {
-            backgroundColor: "#016a70",
+            backgroundColor: "#12486B",
           },
         }}
       />
@@ -236,12 +244,13 @@ function Home() {
         options={{
           title: "Dashboard",
           headerStyle: {
-            backgroundColor: "#016a70",
+            backgroundColor: "#12486B",
           },
           headerTintColor: "#fff",
           headerTitleStyle: {
             fontWeight: "bold",
           },
+
           tabBarIcon: ({ color, size }) => (
             <AntDesign name="home" color={color} size={size} />
           ),
@@ -252,7 +261,7 @@ function Home() {
         component={InventoryList}
         options={{
           headerStyle: {
-            backgroundColor: "#016a70",
+            backgroundColor: "#12486B",
           },
           headerTintColor: "#fff",
           headerTitleStyle: {
@@ -268,7 +277,7 @@ function Home() {
         component={QRDashboard}
         options={{
           headerStyle: {
-            backgroundColor: "#016a70",
+            backgroundColor: "#12486B",
           },
           headerTintColor: "#fff",
           headerTitleStyle: {
@@ -290,7 +299,7 @@ function Home() {
         component={Profile}
         options={{
           headerStyle: {
-            backgroundColor: "#016a70",
+            backgroundColor: "#12486B",
           },
           headerTintColor: "#fff",
           headerTitleStyle: {

@@ -26,6 +26,7 @@ import {
   AddContainer,
   ReportContainer,
   ShipContaier,
+  BackgroundImage,
 } from "./HomeStyle";
 
 import { useInventory } from "../Context/InventoryContent";
@@ -47,7 +48,6 @@ const HomeScreen: React.FC = () => {
   const [noStock, useNoStock] = React.useState(0);
   const [haveStock, useHaveStock] = React.useState(0);
   const { inventoryCount } = useInventory();
-  const [inventSales, setTotalSales] = React.useState(0);
 
   const [infoModalVisible, setInfoModalVisible] = React.useState(false);
 
@@ -108,7 +108,7 @@ const HomeScreen: React.FC = () => {
     return classificationCounts;
   };
 
-  const { data, isLoading, isError, refetch } = useGetShipping();
+  const { data, isLoading, isError } = useGetShipping();
 
   if (isLoading) {
     return (
@@ -131,74 +131,21 @@ const HomeScreen: React.FC = () => {
     0
   );
 
-  //   <Header>
-  //   <Logo source={require("../../Images/Profile.png")}></Logo>
-  //   <HeaderTexts>
-  //     <TopText>Hello!</TopText>
-  //     <TopText>{email}</TopText>
-  //
-  //   </HeaderTexts>
-  // </Header>
-
   return (
     <Container>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <Header>
-          <BoxShadowView>
-            <SalesText>Total Sales: ₱{totalSales.toFixed(2)}</SalesText>
-            <AntDesign
-              onPress={() => setInfoModalVisible(true)}
-              name="exclamationcircleo"
-              size={24}
-              color="white"
-            />
-          </BoxShadowView>
-
-          <Modal
-            animationType="fade"
-            transparent={true}
-            visible={infoModalVisible}
-            onRequestClose={() => {
-              setInfoModalVisible(false);
-            }}
-          >
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-                right: 10,
-                top: 140,
-                position: "absolute",
-              }}
-            >
-              <View
-                style={{
-                  backgroundColor: "white",
-                  padding: 10,
-                  borderRadius: 10,
-                }}
-              >
-                <Text>Total Sales</Text>
-                <TouchableHighlight
-                  onPress={() => {
-                    setInfoModalVisible(false);
-                  }}
-                  underlayColor="transparent"
-                >
-                  <Text
-                    style={{
-                      marginTop: 10,
-                      color: "blue",
-                      textAlign: "center",
-                    }}
-                  >
-                    Ok
-                  </Text>
-                </TouchableHighlight>
-              </View>
-            </View>
-          </Modal>
+          <BackgroundImage source={require("../../Images/HomeBackground.png")}>
+            <BoxShadowView>
+              <SalesText>Total Sales: ₱{totalSales.toFixed(2)}</SalesText>
+              <AntDesign
+                onPress={() => setInfoModalVisible(true)}
+                name="exclamationcircleo"
+                size={24}
+                color="#ffffff"
+              />
+            </BoxShadowView>
+          </BackgroundImage>
         </Header>
         <Body>
           <AddContainer>
@@ -207,7 +154,7 @@ const HomeScreen: React.FC = () => {
                 style={{ alignSelf: "center" }}
                 name="add-box"
                 size={70}
-                color="red"
+                color="#26577c"
               />
             </AddButton>
             <ButtonText>Add Item</ButtonText>
@@ -219,7 +166,7 @@ const HomeScreen: React.FC = () => {
                 style={{ alignSelf: "center" }}
                 name="report"
                 size={70}
-                color="red"
+                color="#26577c"
               />
             </ReportButton>
             <ButtonText>Reports</ButtonText>
@@ -231,7 +178,7 @@ const HomeScreen: React.FC = () => {
                 style={{ alignSelf: "center" }}
                 name="package-dependents"
                 size={70}
-                color="red"
+                color="#26577c"
               />
             </ShipButton>
             <ButtonShip>Ship Item</ButtonShip>
@@ -255,6 +202,52 @@ const HomeScreen: React.FC = () => {
           </TextWrapper1>
         </InfoContainer>
       </ScrollView>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={infoModalVisible}
+        onRequestClose={() => {
+          setInfoModalVisible(false);
+        }}
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            right: 10,
+            top: 140,
+            position: "absolute",
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: "white",
+              padding: 10,
+              borderRadius: 10,
+            }}
+          >
+            <Text>Total Sales</Text>
+            <TouchableHighlight
+              onPress={() => {
+                setInfoModalVisible(false);
+              }}
+              underlayColor="transparent"
+            >
+              <Text
+                style={{
+                  marginTop: 10,
+                  color: "blue",
+                  textAlign: "center",
+                }}
+              >
+                Ok
+              </Text>
+            </TouchableHighlight>
+          </View>
+        </View>
+      </Modal>
     </Container>
   );
 };

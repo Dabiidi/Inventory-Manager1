@@ -1,5 +1,5 @@
 import { View, Text, Button, ActivityIndicator } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -8,10 +8,9 @@ import {
   Container,
   Logo,
   Texts,
-  Greetings,
-  GreetingsText,
   HeaderLogo,
   BoxShadowView,
+  BackgroundImage,
 } from "./ProfileStyle";
 import { getUserAcc } from "../../services/userAPI";
 
@@ -25,6 +24,7 @@ const Profile = () => {
 
   const { data, isLoading } = getUserAcc();
 
+  useEffect(() => {}, [data]);
   if (isLoading)
     return (
       <>
@@ -54,27 +54,24 @@ const Profile = () => {
   }, []);
 
   return (
-    <Container>
-      <BoxShadowView>
-        <HeaderLogo>
-          <Logo source={require("../../Images/Profile.png")}></Logo>
-          <Texts>Welcome! {data[0].name} </Texts>
-        </HeaderLogo>
-      </BoxShadowView>
-      <BoxShadowView>
-        <Greetings>
-          <GreetingsText>
+    <BackgroundImage source={require("../../Images/Details.png")}>
+      <Container>
+        <BoxShadowView>
+          <HeaderLogo>
+            <Logo source={require("../../Images/Profile.png")}></Logo>
+            <Texts>Welcome! {data[0].name} </Texts>
             <Texts>
-              {currentDateTime.toLocaleDateString()} |{" "}
+              {currentDateTime.toLocaleDateString()} | |
               {currentDateTime.toLocaleTimeString()}
             </Texts>
-          </GreetingsText>
-        </Greetings>
-      </BoxShadowView>
-      <Logout onPress={navigateToScreen}>
-        <TextStyle>Logout</TextStyle>
-      </Logout>
-    </Container>
+          </HeaderLogo>
+        </BoxShadowView>
+
+        <Logout onPress={navigateToScreen}>
+          <TextStyle>Logout</TextStyle>
+        </Logout>
+      </Container>
+    </BackgroundImage>
   );
 };
 

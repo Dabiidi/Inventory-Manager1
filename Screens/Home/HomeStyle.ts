@@ -12,23 +12,20 @@ export const Logo = styled.Image`
   border-radius: 50px;
 `;
 
-export const Header = styled.View`
+export const BackgroundImage = styled.ImageBackground`
+  flex: 1;
   justify-content: center;
-  flex-direction: row;
-  height: 30%;
-
-  background-color: #016a70;
-  padding-top: 50px;
-  padding: 10px;
   align-items: center;
+  object-fit: contain;
+`;
+export const Header = styled.View`
+  height: 30%;
+  background-color: #12486b;
+
   border-bottom-right-radius: 30px;
   border-bottom-left-radius: 30px;
 `;
-export const HeaderTexts = styled.View`
-  flex-direction: column;
-  padding-left: 25px;
-  padding-top: 10px;
-`;
+
 export const TopText = styled.Text`
   font-size: 15px;
   font-weight: bold;
@@ -50,7 +47,7 @@ export const Texts = styled.Text`
   font-weight: 400;
 `;
 export const TextWrapper1 = styled.TouchableOpacity`
-  background-color: pink;
+  background-color: #26577c;
 
   flex-direction: row;
   justify-content: space-between;
@@ -75,7 +72,7 @@ export const TextBody = styled.Text`
   text-align: center;
 
   font-weight: 800;
-  color: #000;
+  color: #fff;
 `;
 
 export const Greetings = styled.Text`
@@ -178,9 +175,10 @@ export const ShipButton = styled.TouchableOpacity`
 export const BoxShadowView = styled.View`
   justify-content: space-between;
   flex-direction: row;
+
   padding: 16px;
-  background-color: #016a70;
-  width: 90%;
+  background-color: #26577c;
+  width: 80%;
   ${Platform.select({
     ios: `
       shadow-color: black;

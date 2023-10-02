@@ -9,7 +9,12 @@ import {
   Texts,
   Container,
   BodyContainer,
+  ButtonContainer,
+  ShipLogs,
+  OutOfStockLogs,
+  ShadowBoxContainer,
 } from "./ShipItemStyle";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 const ShipItems = () => {
   const navigation = useNavigation<any>();
   const { inventories, setInventories } = useInventory();
@@ -33,14 +38,35 @@ const ShipItems = () => {
   return (
     <>
       <Container>
-        <ButtonLogs onPress={NavigateToStock}>
-          <ButtonText>Shipping Logs</ButtonText>
-        </ButtonLogs>
+        <ButtonContainer>
+          <ShipLogs>
+            <ShadowBoxContainer>
+              <MaterialCommunityIcons
+                onPress={NavigateToStock}
+                name="clipboard-list-outline"
+                size={70}
+                color="black"
+              />
+              <ButtonLogs onPress={NavigateToStock}>
+                <ButtonText>Shipping Logs</ButtonText>
+              </ButtonLogs>
+            </ShadowBoxContainer>
+          </ShipLogs>
 
-        <ButtonLogs onPress={NavigateToLogs}>
-          <ButtonText>Out of stock Logs</ButtonText>
-        </ButtonLogs>
-
+          <OutOfStockLogs>
+            <ShadowBoxContainer>
+              <MaterialCommunityIcons
+                onPress={NavigateToLogs}
+                name="close-box-outline"
+                size={70}
+                color="black"
+              />
+              <ButtonLogs onPress={NavigateToLogs}>
+                <ButtonText>Out Of Stock</ButtonText>
+              </ButtonLogs>
+            </ShadowBoxContainer>
+          </OutOfStockLogs>
+        </ButtonContainer>
         <Texts> Available Items: (Click to Ship)</Texts>
         <BodyContainer>
           <FlatList

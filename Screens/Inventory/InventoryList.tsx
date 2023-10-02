@@ -6,10 +6,15 @@ import InventoryComponent from "../Inventory/Inventory";
 import { useNavigation } from "@react-navigation/native";
 
 import { useInventory } from "../Context/InventoryContent";
-import { PickerContainer, SearchInput } from "./InventoryStyle";
+import {
+  PickerContainer,
+  SearchContainer,
+  SearchInput,
+} from "./InventoryStyle";
 
 import { Picker } from "@react-native-picker/picker";
 import { useGetItems } from "../../services/ItemsAPI";
+import { EvilIcons } from "@expo/vector-icons";
 
 const InventoryList = ({}) => {
   const navigation = useNavigation<any>();
@@ -31,9 +36,6 @@ const InventoryList = ({}) => {
 
   const applyClassificationFilter = (selectedClassification: string | null) => {
     if (selectedClassification) {
-      // Inserted text is not blank
-      // Filter the inventories
-
       const newData = masterInventory.filter(function (item) {
         // Applying filter for the inserted text in the search bar (Checking the name)
         const itemData = item.classification
@@ -45,8 +47,6 @@ const InventoryList = ({}) => {
       setInventories(newData);
       setSearch(selectedClassification);
     } else {
-      // Inserted text is blank
-      // Update FilteredDataSource with masterDataSource
       setInventories(masterDataSource);
       setSearch("");
     }
@@ -60,8 +60,6 @@ const InventoryList = ({}) => {
   const searchFilterFunction = (text: any) => {
     // Check if searched text is not blank
     if (text) {
-      // Inserted text is not blank
-      // Filter the inventories
       const newData = inventories.filter(function (item) {
         // Applying filter for the inserted text in the search bar (Checking the name)
         const itemData = item.name ? item.name.toUpperCase() : "".toUpperCase();
@@ -92,14 +90,16 @@ const InventoryList = ({}) => {
   //<AntDesign name="search1" size={40} color="black" style={{ left: 8 }} />
   return (
     <Container>
-      <SearchInput
-        autoCapitalize="none"
-        autoCorrect={false}
-        clearButtonMode="always"
-        placeholder="Click here to search an item"
-        onChangeText={(text) => searchFilterFunction(text)}
-        value={search}
-      />
+      <SearchContainer>
+        <SearchInput
+          autoCapitalize="none"
+          autoCorrect={false}
+          clearButtonMode="always"
+          onChangeText={(text) => searchFilterFunction(text)}
+          value={search}
+        />
+        <EvilIcons name="search" size={50} color="black" />
+      </SearchContainer>
 
       <PickerContainer>
         <Picker
@@ -109,6 +109,7 @@ const InventoryList = ({}) => {
             setInventories(masterDataSource);
             applyClassificationFilter(itemValue);
           }}
+          style={{ color: "#fff" }}
         >
           <Picker.Item label="Select Classification Filter" value={null} />
           {classificationOptions.map((option) => (
@@ -129,8 +130,6 @@ const InventoryList = ({}) => {
               item={item}
             />
           )}
-          // renderItem={({item}) => (<InventoryComponent items={[item]} onPress={() => navigateToScreen(item) }></InventoryComponent>)}
-          // keyExtractor={(item, index) => `${item.name}_${index}`}
           scrollEnabled
           keyExtractor={(item) => item.name}
         />
@@ -146,9 +145,9 @@ const InventoryList = ({}) => {
 };
 
 const Container = styled.View`
-  background-color: #b9eddd;
+  background-color: #fff;
   padding: 20px;
-  border-radius: 8px;
+
   flex: 1;
 `;
 

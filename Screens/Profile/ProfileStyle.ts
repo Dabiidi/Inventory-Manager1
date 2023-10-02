@@ -2,9 +2,10 @@ import { styled } from "styled-components/native";
 import { Platform } from "react-native";
 
 export const BoxShadowView = styled.View`
-  background-color: white; /* Set the background color as needed */
+  background-color: #26577c; /* Set the background color as needed */
   padding: 16px;
 
+  border-radius: 30px;
   ${Platform.select({
     ios: `
       shadow-color: black;
@@ -20,14 +21,14 @@ export const BoxShadowView = styled.View`
 
 export const Container = styled.View`
   flex: 1;
-  background-color: #b9eddd;
+  background-color: transparent;
   align-items: center;
   justify-content: center;
 `;
 export const Logout = styled.TouchableOpacity`
-  background-color: #000;
+  background-color: #0f2c59;
   border-radius: 20px;
-  font-weight: bold;
+  width: 40%;
   margin-top: 8px;
 `;
 
@@ -50,10 +51,15 @@ export const Logo = styled.Image`
   align-self: center;
 `;
 
-export const GreetingsText = styled.View``;
-export const Greetings = styled.Text``;
-
 export const Texts = styled.Text`
   font-size: 20px;
+  text-align: center;
   font-weight: 400;
+  color: #ffffff;
+`;
+export const BackgroundImage = styled.ImageBackground`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  object-fit: cover;
 `;
