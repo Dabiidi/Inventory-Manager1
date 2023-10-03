@@ -59,6 +59,9 @@ const HomeScreen: React.FC = () => {
   const filterInventory = (inventory: any) => {
     return useNoStock(inventory.filter((inv: any) => inv.quantity === 0));
   };
+  BackHandler.addEventListener("hardwareBackPress", function () {
+    return true;
+  }); // disable hardware back press
 
   React.useEffect(() => {
     const filteredInventoryNoStock = inventoryCount.filter(
