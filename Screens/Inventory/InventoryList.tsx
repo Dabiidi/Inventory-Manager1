@@ -131,7 +131,7 @@ const InventoryList = ({}) => {
             />
           )}
           scrollEnabled
-          keyExtractor={(item) => item.name}
+          keyExtractor={(item, index) => item.id || index.toString()}
         />
       ) : (
         <ImageContainer>
