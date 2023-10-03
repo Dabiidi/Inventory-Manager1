@@ -33,7 +33,7 @@ export const InfoText = styled.Text`
 `;
 export const ItemContainer = styled.View`
   margin-bottom: 5px;
-  background-color: #2f4f4f;
+  background-color: #12486B;
   padding: 20px;
   margin-top: 8px;
   border-radius: 8px;

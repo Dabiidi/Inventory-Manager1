@@ -5,6 +5,7 @@ import {
   useDeleteShippingLogs,
 } from "../../services/shippingAPI"; // Make sure to import your hook
 import styled from "styled-components/native";
+import moment from "moment";
 
 const ShipLogs = () => {
   // Use the custom hook to fetch ship items
@@ -59,6 +60,17 @@ const ShipLogs = () => {
       }
     );
   };
+
+  const formatDate = (timestamp: string) => {
+    try {
+      const formattedDate = moment(timestamp).format("MMMM DD, YYYY, hh:mm A");
+      return formattedDate;
+    } catch (error) {
+      console.error("Error formatting timestamp:", error);
+      return "Invalid Timestamp";
+    }
+  };
+
   if (isLoading) {
     return (
       <View>
@@ -90,6 +102,7 @@ const ShipLogs = () => {
               <InfoText>Quantity To Ship: {item.quantityToShip}</InfoText>
               <InfoText>Total Sales: ₱{item.total}</InfoText>
               <InfoText>Destination: {item.destination}</InfoText>
+              <InfoText>Shipped Date: {formatDate(item.createdAt)}</InfoText>
             </Container>
           )}
         />
@@ -99,7 +112,7 @@ const ShipLogs = () => {
 };
 
 const Container = styled.View`
-  background-color: #12486B;
+  background-color: #12486b;
   padding: 20px;
   margin-top: 8px;
   border-radius: 8px;

@@ -29,8 +29,14 @@ import {
   ButtonText,
   ShipButton,
   QuantityText,
+  QuantityShipContainer,
+  ButtonDecrement,
+  ButtonIncrement,
+  QuantityTextButton,
+  ButtonContainer,
 } from "./ShipDetailStyle";
 import CustomModal from "../Custom/CustomModal";
+import { AntDesign } from "@expo/vector-icons";
 
 type Items = {
   _id: string;
@@ -74,6 +80,8 @@ const ShipItemDetails: React.FC<{
 
   const [selectedPlaceName, setSelectedPlaceName] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const [count, setCount] = React.useState(0);
   const userLocation = async () => {
     try {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -141,6 +149,14 @@ const ShipItemDetails: React.FC<{
     }
   };
 
+  // const setQuantityCountIncrement = () => {
+
+  // };
+
+  // const setQuantityCountIncrement = () => {
+  //
+  // };
+
   const submitItem = async () => {
     const quantitySelected = quantityToShip;
 
@@ -162,6 +178,21 @@ const ShipItemDetails: React.FC<{
       setIsModalVisible(true);
     }
   };
+
+  const handleClickIncrementQuant = () => {
+    console.log("count", count);
+    setCount(count + 1);
+    setQuantityToShip(count + 1);
+  };
+
+  const handleClickDecrimentQuant = () => {
+    if (count > 0) {
+      console.log("count", count);
+      setCount(count - 1);
+      setQuantityToShip(count - 1);
+    }
+  };
+
   const handleMapTap = async (e: any) => {
     const tappedLocation = e.nativeEvent.coordinate;
     setSelectedLocation(tappedLocation);
@@ -250,14 +281,24 @@ const ShipItemDetails: React.FC<{
           </ItemHeader>
 
           <ShippingContainer>
-            <QuantityText
-              placeholderTextColor={"white"}
-              placeholder="Enter quantity to ship"
-              keyboardType="numeric"
-              value={quantityToShip ? quantityToShip.toString() : ""}
-              onChangeText={(text) => setQuantityToShip(parseInt(text))}
-            />
-
+            <QuantityShipContainer>
+              <QuantityTextButton>Quantity to Ship: </QuantityTextButton>
+              <ButtonContainer>
+                <ButtonDecrement onPress={handleClickDecrimentQuant}>
+                  <AntDesign name="minus" size={30} color="black" />
+                </ButtonDecrement>
+                <QuantityText
+                  placeholderTextColor={"black"}
+                  placeholder="0"
+                  keyboardType="numeric"
+                  value={quantityToShip ? quantityToShip.toString() : ""}
+                  onChangeText={(text) => setQuantityToShip(parseInt(text))}
+                />
+                <ButtonIncrement onPress={handleClickIncrementQuant}>
+                  <AntDesign name="plus" size={30} color="black" />
+                </ButtonIncrement>
+              </ButtonContainer>
+            </QuantityShipContainer>
             <ShipButton onPress={submitItem}>
               <ButtonText>Ship Item</ButtonText>
             </ShipButton>

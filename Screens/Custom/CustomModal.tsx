@@ -54,7 +54,10 @@ const CustomModal: React.FC<CustomModalProps> = ({
             {` to `}
             <Text style={{ fontWeight: "bold" }}>{shipAddress}</Text>
             {` \n\n Total Price: `}
-            <Text style={{ fontWeight: "bold" }}>₱{total}{`.`}</Text>
+            <Text style={{ fontWeight: "bold" }}>
+              ₱{total}
+              {`.`}
+            </Text>
           </Text>
 
           <View style={{ flexDirection: "row", marginTop: 20 }}>
