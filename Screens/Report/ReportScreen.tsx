@@ -70,7 +70,7 @@ const ReportScreen: React.FC = () => {
           </ItemContainer>
         )}
         scrollEnabled
-        keyExtractor={(item) => item.itemName}
+        keyExtractor={(item, index) => item.id || index.toString()}
       />
     </Container>
   );

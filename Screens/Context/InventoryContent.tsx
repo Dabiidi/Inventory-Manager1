@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useGetItems } from "../../services/ItemsAPI";
 
 export interface Item {
+  id: string;
   name: string;
   quantity: number;
   price: number;
