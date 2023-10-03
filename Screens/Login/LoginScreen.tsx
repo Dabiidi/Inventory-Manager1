@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { Text, ImageBackground } from "react-native";
+import { Text, ImageBackground, BackHandler } from "react-native";
 import {
   ButtonText,
   ChangeAccContaierText,
@@ -114,6 +114,10 @@ const LoginForm: React.FC<LandingScreenProps> = ({ navigation }) => {
 
     setStatus(status);
   };
+
+  BackHandler.addEventListener("hardwareBackPress", function () {
+    return true;
+  });
 
   useEffect(() => {
     getUser();
