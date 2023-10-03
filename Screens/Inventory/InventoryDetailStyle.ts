@@ -2,7 +2,7 @@ import styled from "styled-components/native";
 
 export const Container = styled.View`
   padding: 16px;
-  background-color: #12486B;
+  background-color: #12486b;
   border-radius: 8px;
   margin-top: 50%;
   margin-left: 5%;
@@ -19,7 +19,7 @@ export const PickerContainer = styled.View`
 
 export const NameContainer = styled.View`
   height: 30px;
-  background-color: #12486B;
+  background-color: #12486b;
   flex-direction: row;
   margin-bottom: 10px;
 `;
@@ -30,7 +30,7 @@ export const Name = styled.Text`
   color: #fff;
 `;
 export const TextInputs = styled.TextInput`
-  background-color: #12486B;
+  background-color: #12486b;
   width: 50%;
   border-bottom-width: 1px;
   border-bottom-color: black;
@@ -84,26 +84,26 @@ export const EditTexts = styled.Text`
 `;
 export const QuantityContainer = styled.View`
   height: 30px;
-  background-color: #12486B;
+  background-color: #12486b;
   flex-direction: row;
   margin-bottom: 10px;
 `;
 export const PriceContainer = styled.View`
   height: 30px;
-  background-color: #12486B;
+  background-color: #12486b;
   flex-direction: row;
   margin-bottom: 10px;
 `;
 export const DescContainer = styled.View`
   height: 30px;
-  background-color: #12486B;
+  background-color: #12486b;
   flex-direction: row;
   margin-bottom: 10px;
 `;
 
 export const ClassificationContainer = styled.View`
   height: 30px;
-  background-color: #12486B;
+  background-color: #12486b;
   flex-direction: row;
   margin-bottom: 10px;
 `;
@@ -126,6 +126,7 @@ export const InfoContainer = styled.Text`
 export const ButtonDelete = styled.TouchableOpacity`
   background-color: #ad0000;
   border-radius: 50px;
+  margin-left: 10px;
   width: 50px;
   flex: 1;
   align-items: center;

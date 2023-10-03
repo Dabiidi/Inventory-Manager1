@@ -41,7 +41,7 @@ const Profile = () => {
       </>
     );
   const navigateToScreen = () => {
-    navigation.navigate("Login", {
+    navigation.replace("Login", {
       screen: "Login",
     });
   };
