@@ -68,14 +68,7 @@ export const Classification = styled.Text`
   font-size: 16px;
   color: #fff;
 `;
-export const QuantityText = styled.TextInput`
-  border-width: 1px;
-  width: 90%;
-  border-color: #000;
-  padding: 10px;
-  margin-top: 10px;
-  border-radius: 5px;
-`;
+
 export const ButtonText = styled.Text`
   font-size: 20px;
   font-weight: 400;
@@ -89,4 +82,37 @@ export const ShipButton = styled.TouchableOpacity`
   height: 40px;
   justify-content: center;
   border-radius: 20px;
+`;
+
+export const QuantityShipContainer = styled.View`
+  flex-direction: row;
+  border-color: #12486b;
+  border-width: 3px;
+  margin-top: 5px;
+  justify-content: space-between;
+  padding: 5px;
+  width: 90%;
+`;
+
+export const QuantityText = styled.TextInput`
+  border-bottom-width: 2px;
+  border-bottom-color: #000000;
+  font-size: 15px;
+
+  text-align: center;
+  width: 20%;
+`;
+export const ButtonIncrement = styled.TouchableOpacity``;
+export const ButtonDecrement = styled.TouchableOpacity``;
+export const QuantityTextButton = styled.Text`
+  justify-content: center;
+  align-self: center;
+  right: 1px;
+  font-weight: 700;
+`;
+
+export const ButtonContainer = styled.View`
+  flex-direction: row;
+  position: relative;
+  left: 45px;
 `;

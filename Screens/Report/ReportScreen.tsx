@@ -1,7 +1,6 @@
 import { View, Text, FlatList, Alert } from "react-native";
 import React from "react";
-import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
+
 import moment from "moment"; // Import Moment.js
 import {
   Container,

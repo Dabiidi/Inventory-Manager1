@@ -196,6 +196,8 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
     );
   };
 
+  console.log(editedInventory.classification);
+
   return (
     <>
       <ImageBackground
@@ -253,7 +255,7 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
           </PriceContainer>
 
           <DescContainer>
-            <Desc>Description:</Desc>
+            <Desc>Description: </Desc>
             {editMode ? (
               <TextInputs
                 value={editedInventory.desc}
@@ -270,7 +272,7 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
             )}
           </DescContainer>
           <ClassificationContainer>
-            <Classification>Classification:</Classification>
+            <Classification>Classification: </Classification>
 
             {editMode ? (
               <PickerContainer>
