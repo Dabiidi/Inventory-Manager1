@@ -5,6 +5,7 @@ import {
   Text,
   TouchableHighlight,
   View,
+  BackHandler,
 } from "react-native";
 import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
 import {
