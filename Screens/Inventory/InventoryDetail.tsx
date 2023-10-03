@@ -85,6 +85,7 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
     if (
       fieldName !== "name" &&
       fieldName !== "desc" &&
+      fieldName !== "classification" &&
       (value === "" || value === null || isNaN(Number(value)))
     ) {
       value = 0;
@@ -145,7 +146,10 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
           });
           queryClient.invalidateQueries(["Items"]);
 
-          Alert.alert("Success", "Inventry item updated successfully");
+          Alert.alert(
+            "Success",
+            `${editedInventory.name} updated successfully.`
+          );
           setEditMode(false);
           setEditableField(null);
         } else {
@@ -197,7 +201,7 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
   };
 
   console.log(editedInventory.classification);
-
+  console.log(editMode);
   return (
     <>
       <ImageBackground
