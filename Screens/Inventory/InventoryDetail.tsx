@@ -74,7 +74,7 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
 
   const queryClient = useQueryClient();
 
-  const { isLoading: loadingLogs, mutateAsync: mutateLogs } = saveLogs();
+  const { isLoading, mutateAsync: mutateLogs } = saveLogs();
 
   const handleInputChange = async (fieldName: string, value: any) => {
     if (editedInventory[fieldName] !== value) {
@@ -114,7 +114,6 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
   } = useUpdateInventory();
 
   const handleSave = async () => {
-    console.log("Clicked");
     if (
       !editedInventory.name ||
       !editedInventory.quantity ||
@@ -200,8 +199,6 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
     );
   };
 
-  console.log(editedInventory.classification);
-  console.log(editMode);
   return (
     <>
       <ImageBackground

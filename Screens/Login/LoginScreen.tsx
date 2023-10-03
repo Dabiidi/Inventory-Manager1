@@ -41,7 +41,7 @@ interface UserData {
 }
 
 const LoginForm: React.FC<LandingScreenProps> = ({ navigation }) => {
-  const { control, handleSubmit, setValue } = useForm<FormData>();
+  const { control, handleSubmit, setValue, clearErrors } = useForm<FormData>();
 
   const [error, setError] = React.useState<string | null>(null);
   const [status, setStatus] = React.useState<string | null>(null);
@@ -67,8 +67,6 @@ const LoginForm: React.FC<LandingScreenProps> = ({ navigation }) => {
     }
   };
   const onSubmit = async (data: FormData) => {
-    console.log("test", user?.name);
-
     const users = account.find((user: any) => user.name === data.email);
 
     if (users) {
@@ -109,7 +107,8 @@ const LoginForm: React.FC<LandingScreenProps> = ({ navigation }) => {
   };
   const accStatus = () => {
     let status = "false";
-
+    clearErrors();
+    setError(null);
     setValue("email", "");
     setValue("password", "");
 
@@ -142,7 +141,7 @@ const LoginForm: React.FC<LandingScreenProps> = ({ navigation }) => {
             <>
               <Controller
                 control={control}
-                render={({ field, fieldState }) => (
+                render={({ fieldState }) => (
                   <>
                     <EmailInput
                       editable={false}
@@ -150,11 +149,6 @@ const LoginForm: React.FC<LandingScreenProps> = ({ navigation }) => {
                       value={user?.name}
                       style={{ color: "black" }}
                     />
-                    {fieldState.invalid && (
-                      <StyledErrorText>
-                        {fieldState.error ? fieldState.error.message : ""}
-                      </StyledErrorText>
-                    )}
                   </>
                 )}
                 name="email"
@@ -194,11 +188,19 @@ const LoginForm: React.FC<LandingScreenProps> = ({ navigation }) => {
                         style={{ marginRight: 10 }}
                       />
                     </PasswordContainer>
-                    {error && <StyledErrorText>{error}</StyledErrorText>}
+                    {fieldState.invalid || error ? (
+                      <StyledErrorText>
+                        {fieldState.error
+                          ? fieldState.error.message
+                          : error
+                          ? error
+                          : ""}
+                      </StyledErrorText>
+                    ) : null}
                   </>
                 )}
                 name="password"
-                rules={{ required: "Password is required", minLength: 6 }}
+                rules={{ required: "Password is required", minLength: 0 }}
                 defaultValue=""
               />
             </>
@@ -259,16 +261,19 @@ const LoginForm: React.FC<LandingScreenProps> = ({ navigation }) => {
                         style={{ marginRight: 10 }}
                       />
                     </PasswordContainer>
-                    {fieldState.invalid && (
+                    {fieldState.invalid || error ? (
                       <StyledErrorText>
-                        {fieldState.error ? fieldState.error.message : ""}
+                        {fieldState.error
+                          ? fieldState.error.message
+                          : error
+                          ? error
+                          : ""}
                       </StyledErrorText>
-                    )}
-                    {error && <StyledErrorText>{error}</StyledErrorText>}
+                    ) : null}
                   </>
                 )}
                 name="password"
-                rules={{ required: "Password is required", minLength: 6 }}
+                rules={{ required: "Password is required", minLength: 0 }}
                 defaultValue=""
               />
             </>
