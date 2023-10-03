@@ -124,3 +124,10 @@ export const PasswordContainer = styled.View<{
   margin-bottom: 10px;
   background-color: ${({ editable }) => (editable ? "white" : "#DCDCDC")};
 `;
+
+export const TextAreas = styled.Text`
+  font-size: 10px;
+  margin-top: 1%;
+  font-weight: 500;
+  align-self: center;
+`;
