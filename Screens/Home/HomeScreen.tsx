@@ -7,7 +7,12 @@ import {
   View,
   BackHandler,
 } from "react-native";
-import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
+import {
+  useRoute,
+  RouteProp,
+  useNavigation,
+  useFocusEffect,
+} from "@react-navigation/native";
 import {
   Body,
   Container,
@@ -59,9 +64,24 @@ const HomeScreen: React.FC = () => {
   const filterInventory = (inventory: any) => {
     return useNoStock(inventory.filter((inv: any) => inv.quantity === 0));
   };
-  BackHandler.addEventListener("hardwareBackPress", function () {
-    return true;
-  }); // disable hardware back press
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        // Return true to stop default back navigaton
+        // Return false to keep default back navigaton
+        return true;
+      };
+
+      // Add Event Listener for hardwareBackPress
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+
+      return () => {
+        // Once the Screen gets blur Remove Event Listener
+        BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+      };
+    }, [])
+  );
 
   React.useEffect(() => {
     const filteredInventoryNoStock = inventoryCount.filter(
