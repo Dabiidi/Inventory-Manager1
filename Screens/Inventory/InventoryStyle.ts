@@ -26,7 +26,7 @@ export const PickerContainer = styled.View`
   padding: 10px;
   justify-content: center;
   height: 50px;
-
+  margin-bottom: 5px;
   background-color: #12486b;
   border-radius: 10px;
   margin-top: 10px;

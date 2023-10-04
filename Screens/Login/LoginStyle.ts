@@ -14,6 +14,7 @@ export const Header = styled.View`
 
 export const LoginContainer = styled.View`
   padding-top: 40px;
+
   background-color: #fff;
   justify-content: center;
   padding-bottom: 30px;
@@ -90,7 +91,7 @@ export const EmailInput = styled.TextInput<{
   align-self: center;
   border-radius: 30px;
   margin-bottom: 10px;
-  padding: 10px;
+  padding-left: 23px;
   border-color: ${({ isError }) => (isError ? "red" : "gray")};
 `;
 
@@ -113,11 +114,11 @@ export const PasswordContainer = styled.View<{
   isError: boolean;
   editable: boolean;
 }>`
+  padding-left: 15px;
   flex-direction: row;
   align-items: center;
   border-color: ${({ isError }) => (isError ? "red" : "gray")};
   border-width: 1px;
-
   border-radius: 30px;
   width: 85%;
   align-self: center;

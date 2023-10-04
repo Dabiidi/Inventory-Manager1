@@ -24,7 +24,6 @@ const Profile = () => {
 
   const { data, isLoading } = getUserAcc();
 
-  useEffect(() => {}, [data]);
   if (isLoading)
     return (
       <>
@@ -61,8 +60,7 @@ const Profile = () => {
             <Logo source={require("../../Images/Profile.png")}></Logo>
             <Texts>Welcome! {data[0].name} </Texts>
             <Texts>
-              {currentDateTime.toLocaleDateString()} | |
-              {currentDateTime.toLocaleTimeString()}
+              {currentDateTime.toLocaleDateString()} | {currentDateTime.toLocaleTimeString()}
             </Texts>
           </HeaderLogo>
         </BoxShadowView>

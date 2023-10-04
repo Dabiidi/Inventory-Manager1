@@ -33,7 +33,7 @@ export const InfoText = styled.Text`
 `;
 export const ItemContainer = styled.View`
   margin-bottom: 5px;
-  background-color: #12486B;
+  background-color: #12486b;
   padding: 20px;
   margin-top: 8px;
   border-radius: 8px;
@@ -43,8 +43,8 @@ export const ClearButton = styled.TouchableOpacity`
   height: 50px;
   border-radius: 10px;
   padding-top: 10px;
-  margin-top: 10px;
-  width: 90%;
+  margin-bottom: 10px;
+  width: 90%; 
   align-self: center;
   background-color: #ad0000;
 `;

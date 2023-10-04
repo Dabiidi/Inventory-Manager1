@@ -30,7 +30,10 @@ interface FormData {
   password: string;
 }
 interface LoginformProps {
-  replace(arg0: string, arg1: { screen: string; params: { email: any; }; }): unknown;
+  replace(
+    arg0: string,
+    arg1: { screen: string; params: { email: any } }
+  ): unknown;
   navigate: (screen: string, params?: object) => void;
 }
 interface LandingScreenProps {

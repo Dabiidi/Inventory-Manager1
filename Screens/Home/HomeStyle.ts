@@ -40,6 +40,7 @@ export const SalesText = styled.Text`
 
 export const InfoContainer = styled.View`
   margin-top: 3%;
+  flex: 2;
 `;
 
 export const Texts = styled.Text`
@@ -108,7 +109,7 @@ export const ButtonText = styled.Text`
 `;
 export const AddContainer = styled.View`
   align-items: center;
-
+  border-radius: 10px;
   justify-content: center;
   background-color: #fff;
   flex-direction: column;
@@ -132,7 +133,7 @@ export const ButtonShip = styled.Text`
 
 export const ReportContainer = styled.View`
   align-items: center;
-
+  border-radius: 10px;
   justify-content: center;
   background-color: #fff;
 
@@ -152,7 +153,7 @@ export const ReportContainer = styled.View`
 export const ShipContaier = styled.View`
   align-items: center;
   width: 30%;
-
+  border-radius: 10px;
   background-color: #fff;
   justify-content: center;
   flex-direction: column;
@@ -175,7 +176,7 @@ export const ShipButton = styled.TouchableOpacity`
 export const BoxShadowView = styled.View`
   justify-content: space-between;
   flex-direction: row;
-
+  border-radius: 10px;
   padding: 16px;
   background-color: #26577c;
   width: 80%;

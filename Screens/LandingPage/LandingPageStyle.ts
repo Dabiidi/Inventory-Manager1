@@ -24,6 +24,7 @@ export const Title = styled.Text`
 export const Header = styled.View`
   border-top-right-radius: 40px;
   padding-bottom: 10px;
+  margin-bottom: 40px;
   border-top-left-radius: 40px;
   background-color: #fff;
   flex-direction: row;
