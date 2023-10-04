@@ -12,8 +12,10 @@ import {
   ButtonText,
   ClearButton,
 } from "./ReportScreenStyle";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useDeleteItemsLogs, useGetLogs } from "../../services/ItemsAPI";
 const ReportScreen: React.FC = () => {
+  const navigation = useNavigation<any>();
   const { isLoading, error, data } = useGetLogs();
 
   const formatDate = (timestamp: string) => {
@@ -25,6 +27,20 @@ const ReportScreen: React.FC = () => {
       return "Invalid Timestamp";
     }
   };
+
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     const onBackPress = () => {
+  //       return false;
+  //     };
+  //     BackHandler.addEventListener("hardwareBackPress", onBackPress);
+  //     return () => {
+  //       // Once the Screen gets blur Remove Event Listener
+  //       BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+  //     };
+  //   }, [])
+  // );
+
   const { mutateAsync, isError: ErrorDelete } = useDeleteItemsLogs();
   const onClear = () => {
     Alert.alert(
