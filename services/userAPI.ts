@@ -12,10 +12,8 @@ export const getUserAcc = () => {
         const response = await axios.get(
           "http://192.168.1.30:4000/inventoryapp/userlogs"
         );
-
-        const userData = response.data;
-
-        return userData;
+        console.log(response.data);
+        return response.data;
       } catch (error) {
         throw error;
       }

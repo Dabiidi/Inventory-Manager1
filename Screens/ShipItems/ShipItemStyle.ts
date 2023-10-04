@@ -7,6 +7,7 @@ export const Container = styled.View`
 export const BodyContainer = styled.View`
   align-self: center;
   width: 90%;
+    height: 70%;
 `;
 export const ButtonContainer = styled.View`
   margin-top: 5%;

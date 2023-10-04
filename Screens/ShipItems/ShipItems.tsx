@@ -45,7 +45,7 @@ const ShipItems = () => {
                 onPress={NavigateToStock}
                 name="clipboard-list-outline"
                 size={70}
-                color="black"
+                color="#26577c"
               />
               <ButtonLogs onPress={NavigateToStock}>
                 <ButtonText>Shipping Logs</ButtonText>
@@ -59,7 +59,7 @@ const ShipItems = () => {
                 onPress={NavigateToLogs}
                 name="close-box-outline"
                 size={70}
-                color="black"
+                color="#26577c"
               />
               <ButtonLogs onPress={NavigateToLogs}>
                 <ButtonText>Out Of Stock</ButtonText>
