@@ -30,6 +30,7 @@ export const Logout = styled.TouchableOpacity`
   border-radius: 20px;
   width: 40%;
   margin-top: 8px;
+  margin-bottom: 50%;
 `;
 
 export const TextStyle = styled.Text`

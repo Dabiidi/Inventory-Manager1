@@ -87,7 +87,7 @@ const AddItemScreen = () => {
   };
 
   const handleCancel = () => {
-    Alert.alert("Cancel", "Cancel Adding Item");
+    // Alert.alert("Cancel", "Cancel Adding Item");
     navigation.navigate("Home");
   };
 

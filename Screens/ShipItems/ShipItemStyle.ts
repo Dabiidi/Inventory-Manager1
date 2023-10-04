@@ -16,6 +16,7 @@ export const ButtonContainer = styled.View`
 `;
 export const ShadowBoxContainer = styled.View`
   align-items: center;
+  border-radius: 10px;
   padding: 20px;
   background-color: #fff;
   justify-content: center;
@@ -39,6 +40,7 @@ export const ShipLogs = styled.View`
 `;
 export const OutOfStockLogs = styled.View`
   align-items: center;
+
   flex-direction: column;
 `;
 export const ButtonLogs = styled.TouchableOpacity`
@@ -57,7 +59,7 @@ export const ButtonText = styled.Text`
 `;
 export const Texts = styled.Text`
   font-size: 20px;
-padding: 15px;
+  padding: 15px;
   text-align: center;
   font-weight: 700;
 `;

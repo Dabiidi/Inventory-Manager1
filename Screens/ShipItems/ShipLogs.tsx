@@ -41,12 +41,11 @@ const ShipLogs = () => {
 
   const onClear = () => {
     Alert.alert(
-      "Clear Shiping Logs",
+      "Clear Shipping Logs",
       "Are you sure to clear all shipping logs?",
       [
         {
           text: "No",
-          onPress: () => console.log("no thanks"),
         },
 
         {

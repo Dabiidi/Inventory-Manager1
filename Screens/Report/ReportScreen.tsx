@@ -1,4 +1,4 @@
-import { View, Text, FlatList, Alert } from "react-native";
+import { View, Text, FlatList, Alert, BackHandler } from "react-native";
 import React from "react";
 
 import moment from "moment"; // Import Moment.js
@@ -47,6 +47,9 @@ const ReportScreen: React.FC = () => {
       }
     );
   };
+  BackHandler.removeEventListener("hardwareBackPress", function () {
+    return false;
+  }); // disable hardware back press
 
   if (isLoading) return <Text> Loading Data...</Text>;
   if (error) {
