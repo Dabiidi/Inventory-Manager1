@@ -15,13 +15,16 @@ import {
   ScanData,
   HeaderInformation,
   HeaderContainer,
+  ScanTexts,
+  ScanTextsContainer,
+  Headertext,
 } from "./AddQRStyle";
 import { UseAddItem, UseCheckItemExistance } from "../../services/ItemsAPI";
 
 const AddQR = () => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [scanned, setScanned] = useState<boolean>(false);
-  const [text, setText] = useState<string>("Not yet scanned");
+  const [text, setText] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [quantity, setQuantity] = useState<number>(0);
   const [price, setPrice] = useState<number>(0);
@@ -55,6 +58,7 @@ const AddQR = () => {
   const scanFalse = () => {
     setScanned(false);
     setName("");
+    setText("");
     setQuantity(0);
     setPrice(0);
     setDesc("");
@@ -66,29 +70,17 @@ const AddQR = () => {
 
   const { isLoading, mutateAsync } = UseAddItem();
 
-  const handleSave = async () => {
-    if (!name || !quantity || !price || !desc || !classification) {
-      Alert.alert("Error", "Please fill in all fields before submitting");
-      return;
-    }
-    const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
-    const nameExists = await loadingAsync(capitalizedName);
-    console.log("NameExistLog", nameExists);
-    if (nameExists.exists !== false) {
-      // Check for existence and if exists is true
-      Alert.alert("Error", `Item ${capitalizedName} already exists.`);
-      return;
-    }
+  const saveItem = async (name: string) => {
     try {
       await mutateAsync({
-        name: capitalizedName,
+        name: name,
         quantity,
         price,
         desc,
         classification,
       });
 
-      Alert.alert(`Inventory Item ${capitalizedName} added successfully.`);
+      Alert.alert(`Inventory Item ${name} added successfully.`);
       setName("");
       setQuantity(0);
       setPrice(0);
@@ -99,37 +91,84 @@ const AddQR = () => {
     }
   };
 
+  const handleSave = async () => {
+    if (!name || !quantity || !price || !desc || !classification) {
+      Alert.alert("Error", "Please fill in all fields before submitting.");
+      return;
+    }
+    const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
+    const nameExists = await loadingAsync(capitalizedName);
+
+    if (nameExists.exists !== false) {
+      // Check for existence and if exists is true
+      Alert.alert("Error", `Item ${capitalizedName} already exists.`);
+      return;
+    }
+    Alert.alert(
+      "Save Item",
+      `Are you sure to save ${capitalizedName}? `,
+      [
+        {
+          text: "No",
+        },
+        {
+          text: "Yes",
+
+          onPress: () => saveItem(capitalizedName),
+        },
+      ],
+      {
+        cancelable: true,
+      }
+    );
+  };
+
   useEffect(() => {
     askForCameraPermission();
   }, []);
 
   return (
     <>
-      <HeaderContainer>
-        <BarcodeBox>
-          <StyledBarCodeScanner
-            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-          />
-        </BarcodeBox>
-      </HeaderContainer>
-
       <Container>
-        <></>
-
+        <HeaderContainer>
+        <Headertext>Scan QR to add an item</Headertext>
+          <BarcodeBox>
+            <StyledBarCodeScanner
+              onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+            />
+          </BarcodeBox>
+        </HeaderContainer>
         <ResultHeader>
-          <ScanData>Scanned Data: {text}</ScanData>
+          <Texts>Scanned Data:</Texts>
+          <ScanData>{text}</ScanData>
         </ResultHeader>
-        <HeaderInformation>Item Information</HeaderInformation>
-        <Texts>Name: {name}</Texts>
-        <Texts>Quantity: {quantity}</Texts>
-        <Texts>Price: {price}</Texts>
-        <Texts>Description: {desc}</Texts>
-        <Texts>Item Classification: {classification}</Texts>
+
+        <HeaderInformation>ITEM INFORMATION</HeaderInformation>
+        <ScanTextsContainer>
+          <Texts>Item Name:</Texts>
+          <ScanTexts> {name}</ScanTexts>
+        </ScanTextsContainer>
+
+        <ScanTextsContainer>
+          <Texts>Item Quantity:</Texts>
+          <ScanTexts> {quantity}</ScanTexts>
+        </ScanTextsContainer>
+        <ScanTextsContainer>
+          <Texts>Item Price:</Texts>
+          <ScanTexts> ₱{price}</ScanTexts>
+        </ScanTextsContainer>
+        <ScanTextsContainer>
+          <Texts>Item Description:</Texts>
+          <ScanTexts> {desc}</ScanTexts>
+        </ScanTextsContainer>
+        <ScanTextsContainer>
+          <Texts>Item Classification:</Texts>
+          <ScanTexts> {classification}</ScanTexts>
+        </ScanTextsContainer>
 
         <SubmitButtom onPress={handleSave}>
           <TextStyleSubmit>Submit</TextStyleSubmit>
         </SubmitButtom>
-
         {scanned && (
           <ScanAgainButton onPress={scanFalse}>
             <TextStyle>Scan Again</TextStyle>

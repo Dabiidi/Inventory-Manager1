@@ -28,18 +28,7 @@ const ReportScreen: React.FC = () => {
     }
   };
 
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     const onBackPress = () => {
-  //       return false;
-  //     };
-  //     BackHandler.addEventListener("hardwareBackPress", onBackPress);
-  //     return () => {
-  //       // Once the Screen gets blur Remove Event Listener
-  //       BackHandler.removeEventListener("hardwareBackPress", onBackPress);
-  //     };
-  //   }, [])
-  // );
+
 
   const { mutateAsync, isError: ErrorDelete } = useDeleteItemsLogs();
   const onClear = () => {
@@ -48,6 +37,7 @@ const ReportScreen: React.FC = () => {
       "Are you sure to clear all Item logs?",
       [
         {
+          text: "No",
           text: "No",
           onPress: () => console.log("no thanks"),
         },

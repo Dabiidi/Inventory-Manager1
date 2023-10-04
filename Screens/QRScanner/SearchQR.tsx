@@ -7,18 +7,21 @@ import {
   Texts,
   Container,
   OutputData,
+  HeaderContainer,
+  DataContainer,
+  HeaderInformation,
+  ScanTexts,
+  ScanTextsContainer,
+  ResultHeader,
+  ScanAgainButton,
+  TextStyle,
 } from "./SearchStyle";
 import { UseCheckItemExistance } from "../../services/ItemsAPI";
 
-interface Items {
-  name: string;
-  quantity: number;
-  total: number;
-}
 const ScantoSearch = () => {
   const [hasPermission, setHasPermission] = useState<Boolean | null>(null);
   const [scanned, setScanned] = useState<boolean>(false);
-  const [text, setText] = useState<string>("Not yet Scanned");
+  const [text, setText] = useState<string>("");
   const [itemData, setItemData] = useState<any | null>(null);
   const askForCameraPermission = async () => {
     const { status } = await BarCodeScanner.requestPermissionsAsync();
@@ -54,10 +57,10 @@ const ScantoSearch = () => {
 
     if (itemExists.name && itemExists) {
       // Fetch and display item data from the database
-      alert(`Item ${itemExists.name} Found!`);
+      Alert.alert("Item Found ", `Item ${itemExists.name} Found! `);
       setItemData(itemExists);
     } else {
-      Alert.alert("ITEM NOT FOUND", `Item ${data} doesn't exist.`);
+      Alert.alert("Item Not Found", `Item ${data} doesn't exist.`);
 
       setItemData(null);
     }
@@ -78,29 +81,48 @@ const ScantoSearch = () => {
   return (
     <>
       <Container>
-        <Texts>Scan QR to Search an Item</Texts>
-        <BarcodeBox>
-          <StyledBarCodeScanner
-            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-          />
-        </BarcodeBox>
+        <HeaderContainer>
+          <Texts>Scan QR to Search an Item</Texts>
 
-        <Container>
-          <OutputData>Scanned Data: {text}</OutputData>
+          <BarcodeBox>
+            <StyledBarCodeScanner
+              onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+            />
+          </BarcodeBox>
+        </HeaderContainer>
 
-          <OutputData>Item Name: {itemData?.name}</OutputData>
-          <OutputData>Item Quantity: {itemData?.quantity}</OutputData>
-          <OutputData>Item Total: {itemData?.price}</OutputData>
-          <OutputData>Item Description: {itemData?.desc}</OutputData>
-          <OutputData>
-            Item Classification: {itemData?.classification}
-          </OutputData>
-          <Button
-            title={"Scan again?"}
-            onPress={() => scanFalse()}
-            color="tomato"
-          />
-        </Container>
+        <DataContainer>
+          <ResultHeader>
+            <OutputData>Scanned Data:</OutputData>
+            <ScanTexts>{text}</ScanTexts>
+          </ResultHeader>
+          <HeaderInformation>ITEM INFORMATION</HeaderInformation>
+          <ScanTextsContainer>
+            <OutputData>Item Name:</OutputData>
+            <ScanTexts> {itemData?.name}</ScanTexts>
+          </ScanTextsContainer>
+          <ScanTextsContainer>
+            <OutputData>Item Quantity:</OutputData>
+            <ScanTexts> {itemData?.quantity}</ScanTexts>
+          </ScanTextsContainer>
+          <ScanTextsContainer>
+            <OutputData>Item Price:</OutputData>
+            <ScanTexts> {itemData?.price}</ScanTexts>
+          </ScanTextsContainer>
+          <ScanTextsContainer>
+            <OutputData>Item Description:</OutputData>
+            <ScanTexts> {itemData?.desc}</ScanTexts>
+          </ScanTextsContainer>
+          <ScanTextsContainer>
+            <OutputData>Item Classification:</OutputData>
+            <ScanTexts> {itemData?.classification}</ScanTexts>
+          </ScanTextsContainer>
+        </DataContainer>
+        {scanned && (
+          <ScanAgainButton onPress={scanFalse}>
+            <TextStyle>Scan Again</TextStyle>
+          </ScanAgainButton>
+        )}
       </Container>
     </>
   );
