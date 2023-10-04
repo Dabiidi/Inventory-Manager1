@@ -2,12 +2,12 @@ import { KeyboardAvoidingView, TextInput } from "react-native";
 import { styled } from "styled-components/native";
 
 export const Container = styled.View`
-  background-color: #12486b;
+  background-color: #12486B;
   flex: 1;
   justify-content: center;
 `;
 export const Header = styled.View`
-  background-color: #12486b;
+  background-color: #12486B ;
   height: 20%;
   flex: 1;
 `;

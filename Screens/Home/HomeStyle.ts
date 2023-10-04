@@ -14,14 +14,15 @@ export const Logo = styled.Image`
 
 export const BackgroundImage = styled.ImageBackground`
   flex: 1;
+  border-bottom-right-radius: 30px;
+  border-bottom-left-radius: 30px;
   justify-content: center;
   align-items: center;
-  object-fit: contain;
 `;
 export const Header = styled.View`
   height: 30%;
-  background-color: #12486b;
 
+  background-color: #12486b;
   border-bottom-right-radius: 30px;
   border-bottom-left-radius: 30px;
 `;
@@ -48,7 +49,7 @@ export const Texts = styled.Text`
   font-weight: 400;
 `;
 export const TextWrapper1 = styled.TouchableOpacity`
-  background-color: #26577c;
+  background-color: #12486b;
 
   flex-direction: row;
   justify-content: space-between;
@@ -178,7 +179,8 @@ export const BoxShadowView = styled.View`
   flex-direction: row;
   border-radius: 10px;
   padding: 16px;
-  background-color: #26577c;
+  margin-bottom: 10px;
+  background-color: #12486b;
   width: 80%;
   ${Platform.select({
     ios: `

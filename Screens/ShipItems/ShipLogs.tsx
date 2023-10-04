@@ -116,6 +116,7 @@ const Container = styled.View`
   margin-top: 8px;
   border-radius: 8px;
   width: 90%;
+
   align-self: center;
 `;
 const MainContaier = styled.View`

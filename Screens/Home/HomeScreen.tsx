@@ -53,10 +53,12 @@ const HomeScreen: React.FC = () => {
   const navigation = useNavigation<any>();
   const [noStock, useNoStock] = React.useState(0);
   const [haveStock, useHaveStock] = React.useState(0);
+  const [shipItems, shipItemsCount] = React.useState(0);
   const { inventoryCount } = useInventory();
 
   const [infoModalVisible, setInfoModalVisible] = React.useState(false);
-
+  const [totalInventoryModalVisible, setInventoryModalVisible] =
+    React.useState(false);
   const route =
     useRoute<RouteProp<Record<string, DashboardScreenRouteParams>, string>>();
   const { email } = route.params;
@@ -154,7 +156,18 @@ const HomeScreen: React.FC = () => {
     (total: number, item: ShipItem) => total + item.total,
     0
   );
+  const setModalTimeouts = (type: string) => {
+    if (type === "info") {
+      setInfoModalVisible(true);
+    } else {
+      setInventoryModalVisible(true);
+    }
 
+    setTimeout(() => {
+      setInfoModalVisible(false);
+      setInventoryModalVisible(false);
+    }, 2000);
+  };
   return (
     <Container>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -163,7 +176,18 @@ const HomeScreen: React.FC = () => {
             <BoxShadowView>
               <SalesText>Total Sales: ₱{totalSales.toFixed(2)}</SalesText>
               <AntDesign
-                onPress={() => setInfoModalVisible(true)}
+                onPress={() => setModalTimeouts("info")}
+                name="exclamationcircleo"
+                size={24}
+                color="#ffffff"
+              />
+            </BoxShadowView>
+            <BoxShadowView>
+              <SalesText>
+                Total Inventory Count: {inventoryCount.length}
+              </SalesText>
+              <AntDesign
+                onPress={() => setModalTimeouts("")}
                 name="exclamationcircleo"
                 size={24}
                 color="#ffffff"
@@ -174,9 +198,9 @@ const HomeScreen: React.FC = () => {
         <Body>
           <AddContainer>
             <AddButton onPress={navigateToAdd}>
-              <MaterialIcons
+              <Octicons
                 style={{ alignSelf: "center" }}
-                name="add-box"
+                name="diff-added"
                 size={70}
                 color="#26577c"
               />
@@ -222,17 +246,46 @@ const HomeScreen: React.FC = () => {
 
           <TextWrapper1 onPress={NavigateToStock}>
             <TextBody>Shipped Item/s</TextBody>
-            <TextCount>{haveStock}</TextCount>
+            <TextCount>{data.length}</TextCount>
           </TextWrapper1>
         </InfoContainer>
       </ScrollView>
-
       <Modal
         animationType="fade"
         transparent={true}
         visible={infoModalVisible}
         onRequestClose={() => {
           setInfoModalVisible(false);
+        }}
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            right: 30,
+            top: 70,
+            position: "absolute",
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: "white",
+              padding: 10,
+              borderRadius: 10,
+            }}
+          >
+            <Text>Total Sales</Text>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={totalInventoryModalVisible}
+        onRequestClose={() => {
+          setInventoryModalVisible(false);
         }}
       >
         <View
@@ -252,23 +305,7 @@ const HomeScreen: React.FC = () => {
               borderRadius: 10,
             }}
           >
-            <Text>Total Sales</Text>
-            <TouchableHighlight
-              onPress={() => {
-                setInfoModalVisible(false);
-              }}
-              underlayColor="transparent"
-            >
-              <Text
-                style={{
-                  marginTop: 10,
-                  color: "blue",
-                  textAlign: "center",
-                }}
-              >
-                Ok
-              </Text>
-            </TouchableHighlight>
+            <Text>Overall Quantity of the Inventory</Text>
           </View>
         </View>
       </Modal>

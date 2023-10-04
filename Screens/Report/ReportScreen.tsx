@@ -38,7 +38,7 @@ const ReportScreen: React.FC = () => {
       [
         {
           text: "No",
-          text: "No",
+
           onPress: () => console.log("no thanks"),
         },
 
