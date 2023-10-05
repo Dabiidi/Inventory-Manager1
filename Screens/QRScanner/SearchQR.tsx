@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Button, Alert } from "react-native";
+import { View, Button, Alert, ScrollView } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import {
   BarcodeBox,
@@ -81,48 +81,50 @@ const ScantoSearch = () => {
   return (
     <>
       <Container>
-        <HeaderContainer>
-          <Texts>Scan QR to Search an Item</Texts>
+        <ScrollView>
+          <HeaderContainer>
+            <Texts>Scan QR to Search an Item</Texts>
 
-          <BarcodeBox>
-            <StyledBarCodeScanner
-              onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-            />
-          </BarcodeBox>
-        </HeaderContainer>
+            <BarcodeBox>
+              <StyledBarCodeScanner
+                onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+              />
+            </BarcodeBox>
+          </HeaderContainer>
 
-        <DataContainer>
-          <ResultHeader>
-            <OutputData>Scanned Data:</OutputData>
-            <ScanTexts>{text}</ScanTexts>
-          </ResultHeader>
-          <HeaderInformation>ITEM INFORMATION</HeaderInformation>
-          <ScanTextsContainer>
-            <OutputData>Item Name:</OutputData>
-            <ScanTexts> {itemData?.name}</ScanTexts>
-          </ScanTextsContainer>
-          <ScanTextsContainer>
-            <OutputData>Item Quantity:</OutputData>
-            <ScanTexts> {itemData?.quantity}</ScanTexts>
-          </ScanTextsContainer>
-          <ScanTextsContainer>
-            <OutputData>Item Price:</OutputData>
-            <ScanTexts> {itemData?.price}</ScanTexts>
-          </ScanTextsContainer>
-          <ScanTextsContainer>
-            <OutputData>Item Description:</OutputData>
-            <ScanTexts> {itemData?.desc}</ScanTexts>
-          </ScanTextsContainer>
-          <ScanTextsContainer>
-            <OutputData>Item Classification:</OutputData>
-            <ScanTexts> {itemData?.classification}</ScanTexts>
-          </ScanTextsContainer>
-        </DataContainer>
-        {scanned && (
-          <ScanAgainButton onPress={scanFalse}>
-            <TextStyle>Scan Again</TextStyle>
-          </ScanAgainButton>
-        )}
+          <DataContainer>
+            <ResultHeader>
+              <OutputData>Scanned Data:</OutputData>
+              <ScanTexts>{text}</ScanTexts>
+            </ResultHeader>
+            <HeaderInformation>ITEM INFORMATION</HeaderInformation>
+            <ScanTextsContainer>
+              <OutputData>Item Name:</OutputData>
+              <ScanTexts> {itemData?.name}</ScanTexts>
+            </ScanTextsContainer>
+            <ScanTextsContainer>
+              <OutputData>Item Quantity:</OutputData>
+              <ScanTexts> {itemData?.quantity}</ScanTexts>
+            </ScanTextsContainer>
+            <ScanTextsContainer>
+              <OutputData>Item Price:</OutputData>
+              <ScanTexts> {itemData?.price}</ScanTexts>
+            </ScanTextsContainer>
+            <ScanTextsContainer>
+              <OutputData>Item Description:</OutputData>
+              <ScanTexts> {itemData?.desc}</ScanTexts>
+            </ScanTextsContainer>
+            <ScanTextsContainer>
+              <OutputData>Item Classification:</OutputData>
+              <ScanTexts> {itemData?.classification}</ScanTexts>
+            </ScanTextsContainer>
+          </DataContainer>
+          {scanned && (
+            <ScanAgainButton onPress={scanFalse}>
+              <TextStyle>Scan Again</TextStyle>
+            </ScanAgainButton>
+          )}
+        </ScrollView>
       </Container>
     </>
   );

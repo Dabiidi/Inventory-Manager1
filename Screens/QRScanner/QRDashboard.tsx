@@ -9,7 +9,7 @@ import {
 } from "./QRDashboardStyle";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
 const QRDashboard = () => {
   const navigation = useNavigation<any>();

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Button, Alert } from "react-native";
-import axios from "axios";
+import { Alert, ScrollView } from "react-native";
+
 import { BarCodeScanner } from "expo-barcode-scanner";
 import {
   BarcodeBox,
@@ -130,50 +130,52 @@ const AddQR = () => {
   return (
     <>
       <Container>
-        <HeaderContainer>
-        <Headertext>Scan QR to add an item</Headertext>
-          <BarcodeBox>
-            <StyledBarCodeScanner
-              onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-            />
-          </BarcodeBox>
-        </HeaderContainer>
-        <ResultHeader>
-          <Texts>Scanned Data:</Texts>
-          <ScanData>{text}</ScanData>
-        </ResultHeader>
+        <ScrollView>
+          <HeaderContainer>
+            <Headertext>Scan QR to add an item</Headertext>
+            <BarcodeBox>
+              <StyledBarCodeScanner
+                onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+              />
+            </BarcodeBox>
+          </HeaderContainer>
+          <ResultHeader>
+            <Texts>Scanned Data:</Texts>
+            <ScanData>{text}</ScanData>
+          </ResultHeader>
 
-        <HeaderInformation>ITEM INFORMATION</HeaderInformation>
-        <ScanTextsContainer>
-          <Texts>Item Name:</Texts>
-          <ScanTexts> {name}</ScanTexts>
-        </ScanTextsContainer>
+          <HeaderInformation>ITEM INFORMATION</HeaderInformation>
+          <ScanTextsContainer>
+            <Texts>Item Name:</Texts>
+            <ScanTexts> {name}</ScanTexts>
+          </ScanTextsContainer>
 
-        <ScanTextsContainer>
-          <Texts>Item Quantity:</Texts>
-          <ScanTexts> {quantity}</ScanTexts>
-        </ScanTextsContainer>
-        <ScanTextsContainer>
-          <Texts>Item Price:</Texts>
-          <ScanTexts> ₱{price}</ScanTexts>
-        </ScanTextsContainer>
-        <ScanTextsContainer>
-          <Texts>Item Description:</Texts>
-          <ScanTexts> {desc}</ScanTexts>
-        </ScanTextsContainer>
-        <ScanTextsContainer>
-          <Texts>Item Classification:</Texts>
-          <ScanTexts> {classification}</ScanTexts>
-        </ScanTextsContainer>
+          <ScanTextsContainer>
+            <Texts>Item Quantity:</Texts>
+            <ScanTexts> {quantity}</ScanTexts>
+          </ScanTextsContainer>
+          <ScanTextsContainer>
+            <Texts>Item Price:</Texts>
+            <ScanTexts> ₱{price}</ScanTexts>
+          </ScanTextsContainer>
+          <ScanTextsContainer>
+            <Texts>Item Description:</Texts>
+            <ScanTexts> {desc}</ScanTexts>
+          </ScanTextsContainer>
+          <ScanTextsContainer>
+            <Texts>Item Classification:</Texts>
+            <ScanTexts> {classification}</ScanTexts>
+          </ScanTextsContainer>
 
-        <SubmitButtom onPress={handleSave}>
-          <TextStyleSubmit>Submit</TextStyleSubmit>
-        </SubmitButtom>
-        {scanned && (
-          <ScanAgainButton onPress={scanFalse}>
-            <TextStyle>Scan Again</TextStyle>
-          </ScanAgainButton>
-        )}
+          <SubmitButtom onPress={handleSave}>
+            <TextStyleSubmit>Submit</TextStyleSubmit>
+          </SubmitButtom>
+          {scanned && (
+            <ScanAgainButton onPress={scanFalse}>
+              <TextStyle>Scan Again</TextStyle>
+            </ScanAgainButton>
+          )}
+        </ScrollView>
       </Container>
     </>
   );

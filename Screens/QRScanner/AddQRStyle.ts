@@ -2,7 +2,6 @@ import styled from "styled-components/native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 
 export const Container = styled.View`
-  padding: 0 20px;
   background-color: #fff;
 
   flex: 1;
@@ -13,7 +12,7 @@ export const Headertext = styled.Text`
 `;
 export const HeaderContainer = styled.View`
   justify-content: center;
-  margin-top: 50px;
+  margin-top: 30px;
 
   align-items: center;
 `;
@@ -26,6 +25,8 @@ export const ScanData = styled.Text`
 export const HeaderInformation = styled.Text`
   margin-bottom: 2%;
   font-size: 30px;
+  margin-left: 20px;
+  margin-right: 20px;
   border-width: 2px;
   text-align: center;
   font-weight: 900;
@@ -34,12 +35,16 @@ export const HeaderInformation = styled.Text`
 export const ResultHeader = styled.View`
   margin-top: 5%;
   margin-bottom: 5%;
+  margin-left: 20px;
+  margin-right: 20px;
 `;
 
 export const SubmitButtom = styled.TouchableOpacity`
   margin-top: 10px;
   background-color: #2f4f4f;
   padding: 3%;
+  margin-left: 20px;
+  margin-right: 20px;
   border-radius: 30px;
 `;
 
@@ -72,11 +77,15 @@ export const ScanTexts = styled.Text`
 `;
 export const ScanTextsContainer = styled.View`
   flex-direction: row;
+  margin-left: 20px;
+  margin-right: 20px;
 `;
 export const ScanAgainButton = styled.TouchableOpacity`
   margin-top: 10px;
   background-color: #ad0000;
   padding: 3%;
+  margin-left: 20px;
+  margin-right: 20px;
   justify-content: center;
   border-radius: 30px;
 `;

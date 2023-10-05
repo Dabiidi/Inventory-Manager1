@@ -20,3 +20,33 @@ export const getUserAcc = () => {
     },
   });
 };
+
+export const useUploadImage = () => {
+  const uploadImageMutation = useMutation(
+    async (formData: any) => {
+      try {
+        const response = await axios.put(
+          `http://192.168.1.30:4000/inventoryapp/userlogs/${formData.id}`,
+          {
+            ...formData,
+          }
+        );
+        return response.data;
+      } catch (error) {
+        throw error;
+      }
+    },
+    {
+      onSuccess: () => {
+        // Handle successful image upload, e.g., show a success message
+        console.log("Image uploaded successfully");
+      },
+      onError: (error) => {
+        // Handle error during image upload, e.g., show an error message
+        console.error("Error uploading image:", error);
+      },
+    }
+  );
+
+  return uploadImageMutation;
+};

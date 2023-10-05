@@ -135,6 +135,7 @@ export const ButtonShip = styled.Text`
 export const ReportContainer = styled.View`
   align-items: center;
   border-radius: 10px;
+  width:31%;
   justify-content: center;
   background-color: #fff;
 
