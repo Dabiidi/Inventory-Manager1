@@ -43,26 +43,55 @@ app.use(bodyParser.json());
 
 // API endpoint to save user logs
 
+app.put("/inventoryapp/userlogs/:id", async (req, res) => {
+  const id = req.params.id;
+
+  const profileUrl = req.body;
+
+  try {
+    const updatedItem = await User.findByIdAndUpdate(
+      new mongoose.Types.ObjectId(id),
+      { ...profileUrl },
+      { upsert: true }
+    );
+    if (updatedItem)
+      res.status(201).json({ message: "profile update successfully" });
+  } catch (error) {
+    console.error("Error saving user:", error);
+    res.status(500).json({ message: "Error update profile" });
+  }
+});
+// Update database cutie API ENDPOINT
+
+app.put("/inventoryapp/itemlist/:id", async (req, res) => {
+  const { id } = req.params;
+  const { name, quantity, price, desc, classification } = req.body;
+
+  try {
+    const updatedItem = await InventoryItem.findByIdAndUpdate(
+      id,
+      { name, quantity, price, desc, classification },
+      { upsert: true }
+      // This ensures that the updated item is returned
+    );
+
+    if (updatedItem) {
+      res.status(200).json({ message: "Inventory item updated successfully" });
+    } else {
+      res.status(404).json({ message: "Inventory item not found" });
+    }
+  } catch (error) {
+    console.error("Error updating inventory item:", error);
+    res.status(500).json({ message: "Error updating inventory item" });
+  }
+});
+
 app.get("/inventoryapp/userlogs", async (req, res) => {
   try {
     const Users = await User.find();
     res.status(200).json(Users);
   } catch (error) {
     res.status(500).json({ message: "Error fetching users" });
-  }
-});
-
-app.post("/inventoryapp/userlogs", async (req, res) => {
-  const { name, pass } = req.body;
-
-  const newUser = new User({ name, pass });
-
-  try {
-    await newUser.save();
-    res.status(201).json({ message: "User saved successfully" });
-  } catch (error) {
-    console.error("Error saving user:", error);
-    res.status(500).json({ message: "Error saving user" });
   }
 });
 
@@ -111,30 +140,6 @@ app.post("/inventoryapp/itemlist", async (req, res) => {
   } catch (error) {
     console.error("Error saving inventory item:", error);
     res.status(500).json({ message: "Error saving inventory item" });
-  }
-});
-
-// Update database cutie API ENDPOINT
-app.put("/inventoryapp/itemlist/:id", async (req, res) => {
-  const { id } = req.params;
-  const { name, quantity, price, desc, classification } = req.body;
-
-  try {
-    const updatedItem = await InventoryItem.findByIdAndUpdate(
-      id,
-      { name, quantity, price, desc, classification },
-      { upsert: true }
-      // This ensures that the updated item is returned
-    );
-
-    if (updatedItem) {
-      res.status(200).json({ message: "Inventory item updated successfully" });
-    } else {
-      res.status(404).json({ message: "Inventory item not found" });
-    }
-  } catch (error) {
-    console.error("Error updating inventory item:", error);
-    res.status(500).json({ message: "Error updating inventory item" });
   }
 });
 
