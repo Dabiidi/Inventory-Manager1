@@ -1,4 +1,11 @@
-import { View, Text, Button, ActivityIndicator, Image } from "react-native";
+import {
+  View,
+  Text,
+  Button,
+  ActivityIndicator,
+  Image,
+  Alert,
+} from "react-native";
 import React, { useEffect } from "react";
 
 import * as ImagePicker from "expo-image-picker";
@@ -8,41 +15,34 @@ import {
   Logout,
   TextStyle,
   Container,
-  Logo,
   Texts,
-  HeaderLogo,
-  BoxShadowView,
   BackgroundImage,
+  UploadContainer,
+  UploadButton,
+  TextUploadImage,
+  UploadbuttonContainer,
+  BoxShadowView,
+  BodyContainer,
 } from "./ProfileStyle";
 import { getUserAcc, useUploadImage } from "../../services/userAPI";
+import { AntDesign } from "@expo/vector-icons";
 
 interface User {
   name: string;
 }
 interface ImagePickerResponse {
   uri: string;
-  // Add other properties based on the response from your image picker library
 }
 
 const Profile = () => {
   const [image, setImage] = React.useState<any>(null);
-  const [newImage, setNewImage] = React.useState<any>(null);
+  const [isLoadingUpload, setloadingImage] = React.useState(false);
   const navigation = useNavigation<any>();
   const [currentDateTime, setCurrentDateTime] = React.useState(new Date());
 
-  const { data, isLoading } = getUserAcc();
+  const { data, isLoading: isLoadingUser, isStale, status } = getUserAcc();
+
   const uploadImageMutation = useUploadImage();
-
-  const handleImageUpload = async () => {
-    const payload = { id: data[0]._id, profilePicture: image };
-
-    try {
-      await uploadImageMutation.mutateAsync(payload);
-    } catch (error) {
-      // Handle error if necessary
-      console.error("Error uploading image:", error);
-    }
-  };
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -53,35 +53,100 @@ const Profile = () => {
     });
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
-      handleImageUpload();
+      const payload = { id: data[0]._id, profilePicture: result.assets[0].uri };
+
+      try {
+        setloadingImage(true);
+        console.log(uploadImageMutation.isLoading);
+        await uploadImageMutation.mutateAsync(payload);
+        setloadingImage(false);
+        setImage(data[0].profilePicture);
+      } catch (error) {
+        // Handle error if necessary
+        console.error("Error uploading image:", error);
+      }
     }
   };
 
-  if (isLoading)
-    return (
-      <>
-        <View
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <ActivityIndicator size="large" color="#00ff00" />
-          <Text style={{ textAlign: "center" }}> Loading...</Text>
-        </View>
-      </>
-    );
+  const CaptureImage = async () => {
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      const payload = { id: data[0]._id, profilePicture: result.assets[0].uri };
+
+      try {
+        setloadingImage(true);
+        console.log(isLoadingUpload);
+        await uploadImageMutation.mutateAsync(payload);
+        setloadingImage(false);
+        setImage(data[0].profilePicture);
+      } catch (error) {
+        // Handle error if necessary
+        console.error("Error uploading image:", error);
+      }
+    }
+  };
+
+  const showImagePickerOptions = async () => {
+    // Present the user with options to choose between camera and library
+    const { status } = await ImagePicker.getMediaLibraryPermissionsAsync();
+
+    if (status) {
+      Alert.alert(
+        "Select Image Source",
+        "Choose an image source for your profile picture:",
+        [
+          {
+            text: "Camera",
+            onPress: CaptureImage,
+          },
+          {
+            text: "Image Library",
+            onPress: pickImage,
+          },
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+        ]
+      );
+    } else {
+      Alert.alert(
+        "Select Image Source",
+        "You need to give permission to access your image library",
+        [
+          {
+            text: "OK",
+            onPress: () => console.log("OK Pressed"),
+          },
+        ]
+      );
+    }
+  };
+
   const navigateToScreen = () => {
     navigation.replace("Login", {
       screen: "Login",
     });
   };
 
+  // React.useEffect(() => {
+  //   if (GetItemData.data && !GetItemData.isLoading) {
+  //     setInventories(GetItemData.data);
+  //     setMasterInventory(GetItemData.data);
+  //     setInventoryCount(GetItemData.data);
+  //   }
+  //   GetItemData.refetch();
+  // }, [GetItemData.isLoading, GetItemData.data, GetItemData.refetch]);
+
   React.useEffect(() => {
     setImage(data[0].profilePicture);
-
+    console.log("Loading?", isStale);
     const intervalId = setInterval(() => {
       setCurrentDateTime(new Date());
     }, 1000);
@@ -92,23 +157,46 @@ const Profile = () => {
     <BackgroundImage source={require("../../Images/Details.png")}>
       <Container>
         <BoxShadowView>
-          <HeaderLogo>
-            <Logo source={{ uri: image }}></Logo>
-            <Texts>Welcome! {data[0].name} </Texts>
-            <Texts>
-              {currentDateTime.toLocaleDateString()} |
-              {currentDateTime.toLocaleTimeString()}
-            </Texts>
+          <UploadContainer>
+            {image && (
+              <Image
+                source={{ uri: image }}
+                style={{ width: 200, height: 200 }}
+              />
+            )}
+            <UploadbuttonContainer>
+              <UploadButton onPress={showImagePickerOptions}>
+                <TextUploadImage>
+                  {image ? "Edit" : "Upload"} Image
+                </TextUploadImage>
+                <AntDesign name="camera" size={20} color="black" />
+              </UploadButton>
+            </UploadbuttonContainer>
+          </UploadContainer>
 
-            <Button
-              title="Pick an image from camera roll"
-              onPress={pickImage}
-            />
-          </HeaderLogo>
+          <Texts>Welcome! {data[0].name} </Texts>
+          <Texts>
+            {currentDateTime.toLocaleDateString()} |
+            {currentDateTime.toLocaleTimeString()}
+          </Texts>
+          {uploadImageMutation.isLoading && (
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <ActivityIndicator size="large" color="#09ff00" />
+              <Text style={{ textAlign: "center" }}> Uploading...</Text>
+            </View>
+          )}
+          <BodyContainer>
+            <Logout onPress={navigateToScreen}>
+              <TextStyle>Logout</TextStyle>
+            </Logout>
+          </BodyContainer>
         </BoxShadowView>
-        <Logout onPress={navigateToScreen}>
-          <TextStyle>Logout</TextStyle>
-        </Logout>
       </Container>
     </BackgroundImage>
   );
