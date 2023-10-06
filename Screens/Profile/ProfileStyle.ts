@@ -95,5 +95,4 @@ export const BackgroundImage = styled.ImageBackground`
 
 export const BodyContainer = styled.View`
   height: 70px;
-  background-color: #fff;
 `;

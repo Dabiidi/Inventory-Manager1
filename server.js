@@ -3,8 +3,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 
-const multer = require("multer"); // to store image huehue
-
 const app = express();
 const PORT = 4000;
 

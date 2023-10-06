@@ -36,11 +36,23 @@ interface ImagePickerResponse {
 
 const Profile = () => {
   const [image, setImage] = React.useState<any>(null);
-  const [isLoadingUpload, setloadingImage] = React.useState(false);
   const navigation = useNavigation<any>();
   const [currentDateTime, setCurrentDateTime] = React.useState(new Date());
+  const [imageLoading, setImageLoading] = React.useState(false);
 
-  const { data, isLoading: isLoadingUser, isStale, status } = getUserAcc();
+  const {
+    data,
+    isLoading: isLoadingUser,
+    isStale,
+    status,
+    dataUpdatedAt,
+  } = getUserAcc();
+
+  useEffect(() => {
+    if (imageLoading) {
+      setImageLoading(false);
+    }
+  }, [image]);
 
   const uploadImageMutation = useUploadImage();
 
@@ -53,13 +65,13 @@ const Profile = () => {
     });
 
     if (!result.canceled) {
+      setImageLoading(true);
       const payload = { id: data[0]._id, profilePicture: result.assets[0].uri };
 
       try {
-        setloadingImage(true);
-        console.log(uploadImageMutation.isLoading);
+        // console.log(uploadImageMutation.isLoading);
         await uploadImageMutation.mutateAsync(payload);
-        setloadingImage(false);
+
         setImage(data[0].profilePicture);
       } catch (error) {
         // Handle error if necessary
@@ -77,13 +89,12 @@ const Profile = () => {
     });
 
     if (!result.canceled) {
+      setImageLoading(true);
       const payload = { id: data[0]._id, profilePicture: result.assets[0].uri };
 
       try {
-        setloadingImage(true);
-        console.log(isLoadingUpload);
         await uploadImageMutation.mutateAsync(payload);
-        setloadingImage(false);
+
         setImage(data[0].profilePicture);
       } catch (error) {
         // Handle error if necessary
@@ -146,7 +157,8 @@ const Profile = () => {
 
   React.useEffect(() => {
     setImage(data[0].profilePicture);
-    console.log("Loading?", isStale);
+
+    // console.log("Loading?", isLoadingUser);
     const intervalId = setInterval(() => {
       setCurrentDateTime(new Date());
     }, 1000);
@@ -171,6 +183,31 @@ const Profile = () => {
                 </TextUploadImage>
                 <AntDesign name="camera" size={20} color="black" />
               </UploadButton>
+              {imageLoading && (
+                <View
+                  style={{
+                    flex: 1,
+
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <View
+                    style={{
+                      height: 300,
+                      width: 150,
+
+                      backgroundColor: "gray",
+                    }}
+                  >
+                    <ActivityIndicator
+                      style={{ marginTop: 60, opacity: 9 }}
+                      size="large"
+                      color="#000000"
+                    />
+                  </View>
+                </View>
+              )}
             </UploadbuttonContainer>
           </UploadContainer>
 
@@ -179,18 +216,7 @@ const Profile = () => {
             {currentDateTime.toLocaleDateString()} |
             {currentDateTime.toLocaleTimeString()}
           </Texts>
-          {uploadImageMutation.isLoading && (
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <ActivityIndicator size="large" color="#09ff00" />
-              <Text style={{ textAlign: "center" }}> Uploading...</Text>
-            </View>
-          )}
+
           <BodyContainer>
             <Logout onPress={navigateToScreen}>
               <TextStyle>Logout</TextStyle>
