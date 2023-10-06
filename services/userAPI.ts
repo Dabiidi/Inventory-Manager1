@@ -1,9 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-import { useNavigation } from "@react-navigation/native";
-import { Alert } from "react-native";
-
 export const getUserAcc = () => {
   return useQuery({
     queryKey: ["Users"], // Use the email as part of the query key
@@ -18,6 +15,8 @@ export const getUserAcc = () => {
         throw error;
       }
     },
+    refetchInterval: 5000,
+    staleTime: 5000,
   });
 };
 
@@ -31,6 +30,8 @@ export const useUploadImage = () => {
             ...formData,
           }
         );
+        console.log("Test", response.data);
+
         return response.data;
       } catch (error) {
         throw error;
