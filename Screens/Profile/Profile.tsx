@@ -1,11 +1,4 @@
-import {
-  View,
-  Text,
-  Button,
-  ActivityIndicator,
-  Image,
-  Alert,
-} from "react-native";
+import { View, ActivityIndicator, Image, Alert } from "react-native";
 import React, { useEffect } from "react";
 
 import * as ImagePicker from "expo-image-picker";
@@ -40,13 +33,7 @@ const Profile = () => {
   const [currentDateTime, setCurrentDateTime] = React.useState(new Date());
   const [imageLoading, setImageLoading] = React.useState(false);
 
-  const {
-    data,
-    isLoading: isLoadingUser,
-    isStale,
-    status,
-    dataUpdatedAt,
-  } = getUserAcc();
+  const { data, isLoading: isLoadingUser } = getUserAcc();
 
   useEffect(() => {
     if (imageLoading) {

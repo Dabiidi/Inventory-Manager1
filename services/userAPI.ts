@@ -9,7 +9,7 @@ export const getUserAcc = () => {
         const response = await axios.get(
           "http://192.168.1.30:4000/inventoryapp/userlogs"
         );
-        console.log(response.data);
+
         return response.data;
       } catch (error) {
         throw error;
@@ -30,7 +30,6 @@ export const useUploadImage = () => {
             ...formData,
           }
         );
-        console.log("Test", response.data);
 
         return response.data;
       } catch (error) {

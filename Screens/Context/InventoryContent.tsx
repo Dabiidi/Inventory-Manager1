@@ -39,6 +39,7 @@ const InventoryContent: React.FC<InventoryProviderProp> = ({ children }) => {
   const [inventoryCount, setInventoryCount] = useState<Item[]>([]);
 
   const GetItemData = useGetItems();
+
   React.useEffect(() => {
     if (GetItemData.data && !GetItemData.isLoading) {
       setInventories(GetItemData.data);
