@@ -2,7 +2,7 @@ import { styled } from "styled-components/native";
 import { Platform } from "react-native";
 
 export const BoxShadowView = styled.View`
-  background-color: #26577c; /* Set the background color as needed */
+  background-color: #26577c;
   padding: 16px;
   align-items: center;
 
@@ -10,12 +10,12 @@ export const BoxShadowView = styled.View`
   ${Platform.select({
     ios: `
       shadow-color: black;
-      shadow-offset: 0px 2px; /* Adjust the offset as needed */
-      shadow-opacity: 0.2; /* Adjust the opacity as needed */
-      shadow-radius: 4px; /* Adjust the radius as needed */
+      shadow-offset: 0px 2px; 
+      shadow-opacity: 0.2; 
+      shadow-radius: 4px; 
     `,
     android: `
-      elevation: 10; /* Adjust the elevation level as needed */
+      elevation: 10;
     `,
   })}
 `;
@@ -33,12 +33,12 @@ export const UploadContainer = styled.View`
   ${Platform.select({
     ios: `
       shadow-color: black;
-      shadow-offset: 0px 2px; /* Adjust the offset as needed */
-      shadow-opacity: 0.2; /* Adjust the opacity as needed */
-      shadow-radius: 4px; /* Adjust the radius as needed */
+      shadow-offset: 0px 2px; 
+      shadow-opacity: 0.2;
+      shadow-radius: 4px;
     `,
     android: `
-      elevation: 10; /* Adjust the elevation level as needed */
+      elevation: 10;
     `,
   })}
 `;

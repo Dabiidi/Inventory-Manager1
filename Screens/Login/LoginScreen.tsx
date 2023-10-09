@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { Text, ImageBackground, BackHandler } from "react-native";
+import { ImageBackground } from "react-native";
 import {
   ButtonText,
   ChangeAccContaierText,
@@ -30,10 +30,6 @@ interface FormData {
   password: string;
 }
 interface LoginformProps {
-  replace(
-    arg0: string,
-    arg1: { screen: string; params: { email: any } }
-  ): unknown;
   navigate: (screen: string, params?: object) => void;
 }
 interface LandingScreenProps {
@@ -77,7 +73,7 @@ const LoginForm: React.FC<LandingScreenProps> = ({ navigation }) => {
     if (users) {
       if (users.pass === data.password) {
         saveUser(users.name, users.pass);
-        navigation.replace("Home", {
+        navigation.navigate("Home", {
           screen: "Menu",
           params: { email: users.name },
         });
@@ -292,7 +288,7 @@ const LoginForm: React.FC<LandingScreenProps> = ({ navigation }) => {
             <Texts>Not you?</Texts>
             <ChangeAccText onPress={accStatus}> Switch Account</ChangeAccText>
           </ChangeAccContaierText>
-          <TextAreas>Version v1.0</TextAreas>
+          <TextAreas>Version v0.0.1</TextAreas>
         </LoginContainer>
       </Container>
     </>
