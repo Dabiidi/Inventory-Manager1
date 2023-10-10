@@ -1,7 +1,7 @@
 // server.js
-const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const express = require("express");
 
 const app = express();
 const PORT = 4000;
@@ -61,29 +61,6 @@ app.put("/inventoryapp/userlogs/:id", async (req, res) => {
 });
 // Update database cutie API ENDPOINT
 
-app.put("/inventoryapp/itemlist/:id", async (req, res) => {
-  const { id } = req.params;
-  const { name, quantity, price, desc, classification } = req.body;
-
-  try {
-    const updatedItem = await InventoryItem.findByIdAndUpdate(
-      id,
-      { name, quantity, price, desc, classification },
-      { upsert: true }
-      // This ensures that the updated item is returned
-    );
-
-    if (updatedItem) {
-      res.status(200).json({ message: "Inventory item updated successfully" });
-    } else {
-      res.status(404).json({ message: "Inventory item not found" });
-    }
-  } catch (error) {
-    console.error("Error updating inventory item:", error);
-    res.status(500).json({ message: "Error updating inventory item" });
-  }
-});
-
 app.get("/inventoryapp/userlogs", async (req, res) => {
   try {
     const Users = await User.find();
@@ -116,13 +93,41 @@ const inventoryItemSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    itemImage: {
+      type: String,
+      default: null, // Set a default value to null to indicate no profile picture
+    },
   },
   { timestamps: true }
 );
 const InventoryItem = mongoose.model("itemlist", inventoryItemSchema);
 
+app.put("/inventoryapp/itemlist/:id", async (req, res) => {
+  const { id } = req.params;
+  const { name, quantity, price, desc, classification, itemImage } = req.body;
+  console.log(" ngano mani", itemImage);
+  try {
+    const updatedItem = await InventoryItem.findByIdAndUpdate(
+      new mongoose.Types.ObjectId(id),
+      { name, quantity, price, desc, classification, itemImage },
+      { upsert: true }
+      // This ensures that the updated item is returned
+    );
+    console.log("The updated item", updatedItem);
+
+    if (updatedItem) {
+      res.status(200).json({ message: "Inventory item updated successfully" });
+    } else {
+      res.status(404).json({ message: "Inventory item not found" });
+    }
+  } catch (error) {
+    console.error("Error updating inventory item:", error);
+    res.status(500).json({ message: "Error updating inventory item" });
+  }
+});
+
 app.post("/inventoryapp/itemlist", async (req, res) => {
-  const { name, quantity, price, desc, classification } = req.body;
+  const { name, quantity, price, desc, classification, itemImage } = req.body;
 
   const newInventoryItem = new InventoryItem({
     name,
@@ -130,6 +135,7 @@ app.post("/inventoryapp/itemlist", async (req, res) => {
     price,
     desc,
     classification,
+    itemImage,
   });
   try {
     await newInventoryItem.save();

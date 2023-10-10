@@ -3,9 +3,10 @@ import {
   Text,
   TextInput,
   Button,
-  TouchableOpacity,
+  Image,
   Alert,
   ImageBackground,
+  ActivityIndicator,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { RouteProp, useNavigation } from "@react-navigation/native";
@@ -30,9 +31,14 @@ import {
   Texts,
   PickerContainer,
   ButtonDelete,
+  UploadContainer,
+  UploadbuttonContainer,
+  UploadButton,
+  TextUploadImage,
 } from "./InventoryDetailStyle";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import debounce from "lodash/debounce";
+
+import * as ImagePicker from "expo-image-picker";
 
 import { Picker } from "@react-native-picker/picker";
 
@@ -40,7 +46,9 @@ import {
   useDeleteInventory,
   useUpdateInventory,
   saveLogs,
+  useGetItems,
 } from "../../services/ItemsAPI";
+import { AntDesign } from "@expo/vector-icons";
 type Items = {
   _id: string;
   name: string;
@@ -48,6 +56,7 @@ type Items = {
   price: number;
   desc: string;
   classification: string;
+  itemImage: string;
   [key: string]: string | number;
 };
 type InventoryDetailRouteParamList = {
@@ -62,19 +71,19 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
   const { inventory } = route.params;
   // console.log("Item ID", inventory._id);
   const navigation = useNavigation();
-
+  const [image, setImage] = React.useState<string | null>(null);
+  const [imageLoading, setImageLoading] = React.useState(false);
   const [editedInventory, setEditedInventory] = useState<Items>(
     inventory as Items
   );
   const [editMode, setEditMode] = useState(false);
   const [originalInventory, setOriginalInventory] = useState<Items>(inventory);
-
   const [editableField, setEditableField] = useState<string | null>(null);
   const [changesMade, setChangesMade] = useState<string>();
-
   const queryClient = useQueryClient();
 
   const { isLoading, mutateAsync: mutateLogs } = saveLogs();
+  const { data: DataInvent } = useGetItems();
 
   const handleInputChange = async (fieldName: string, value: any) => {
     if (editedInventory[fieldName] !== value) {
@@ -113,6 +122,118 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
     isSuccess,
   } = useUpdateInventory();
 
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      const newImage = result.assets[0].uri;
+
+      const data = {
+        ...editedInventory,
+        itemImage: result.assets[0].uri,
+      };
+      try {
+        const payload = { id: editedInventory._id, data: data };
+        await mutateUpdate(payload);
+        setImageLoading(true);
+
+        const matchingItem = DataInvent.find(
+          (item: any) => item._id === inventory._id
+        );
+
+        if (matchingItem) {
+          setImage(matchingItem.itemImage);
+        }
+      } catch (error) {
+        // Handle error if necessary
+        console.error("Error uploading image:", error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (imageLoading) {
+      setImageLoading(false);
+    }
+  }, [image]);
+
+  const CaptureImage = async () => {
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (!result.canceled) {
+      try {
+        const newImage = result.assets[0].uri;
+
+        const data = {
+          ...editedInventory,
+          itemImage: result.assets[0].uri,
+        };
+
+        const payload = { id: editedInventory._id, data: data };
+
+        await mutateUpdate(payload);
+        setImageLoading(true);
+
+        const matchingItem = DataInvent.find(
+          (item: any) => item._id === inventory._id
+        );
+
+        if (matchingItem) {
+          setImage(matchingItem.itemImage);
+        }
+      } catch (error) {
+        // Handle error if necessary
+        console.error("Error uploading image:", error);
+      }
+    }
+  };
+
+  const showImagePickerOptions = async () => {
+    // Present the user with options to choose between camera and library
+    const { status } = await ImagePicker.getMediaLibraryPermissionsAsync();
+
+    if (status) {
+      Alert.alert(
+        "Select Image Source",
+        "Choose an image source for your item picture:",
+        [
+          {
+            text: "Camera",
+            onPress: CaptureImage,
+          },
+          {
+            text: "Image Library",
+            onPress: pickImage,
+          },
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+        ]
+      );
+    } else {
+      Alert.alert(
+        "Select Image Source",
+        "You need to give permission to access your image library",
+        [
+          {
+            text: "OK",
+            onPress: () => console.log("OK Pressed"),
+          },
+        ]
+      );
+    }
+  };
   const handleSave = async () => {
     if (
       !editedInventory.name ||
@@ -131,6 +252,7 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
       editedInventory.price !== originalInventory.price ||
       editedInventory.desc !== originalInventory.desc ||
       editedInventory.classification !== originalInventory.classification;
+    editedInventory.itemImage !== originalInventory.itemImage;
 
     if (dataChanged) {
       const payload = { id: editedInventory._id, data: editedInventory };
@@ -199,6 +321,15 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
     );
   };
 
+  React.useEffect(() => {
+    const matchingItem = DataInvent.find(
+      (item: any) => item._id === inventory._id
+    );
+
+    if (matchingItem) {
+      setImage(matchingItem.itemImage);
+    }
+  }, [editedInventory, inventory, image, DataInvent]);
   return (
     <>
       <ImageBackground
@@ -208,6 +339,51 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
         blurRadius={1}
       >
         <Container>
+          <UploadContainer>
+            {image && (
+              <Image
+                source={{ uri: image }}
+                style={{ width: 350, height: 310 }}
+              />
+            )}
+            <UploadbuttonContainer>
+              <UploadButton onPress={showImagePickerOptions}>
+                <TextUploadImage>
+                  {image ? "Edit" : "Upload"} Image
+                </TextUploadImage>
+                <AntDesign name="camera" size={30} color="black" />
+              </UploadButton>
+              {imageLoading && (
+                <View
+                  style={{
+                    flex: 1,
+
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <View
+                    style={{
+                      height: 600,
+                      width: 400,
+
+                      backgroundColor: "gray",
+                    }}
+                  >
+                    <ActivityIndicator
+                      style={{
+                        marginTop: 150,
+                        opacity: 9,
+                      }}
+                      size="large"
+                      color="#000000"
+                    />
+                  </View>
+                </View>
+              )}
+            </UploadbuttonContainer>
+          </UploadContainer>
+
           <NameContainer>
             <Name>Item Name: {editedInventory.name}</Name>
           </NameContainer>

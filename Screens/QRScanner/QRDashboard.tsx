@@ -14,11 +14,15 @@ import { useNavigation } from "@react-navigation/native";
 const QRDashboard = () => {
   const navigation = useNavigation<any>();
   const ScanToSearch = () => {
-    navigation.navigate("ScanSearch");
+    navigation.navigate("Main", {
+      screen: "ScanSearch",
+    });
   };
 
   const ScanToAdd = () => {
-    navigation.navigate("ScanToAdd");
+    navigation.navigate("Main", {
+      screen: "ScanToAdd",
+    });
   };
 
   return (

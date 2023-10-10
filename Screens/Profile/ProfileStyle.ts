@@ -26,7 +26,7 @@ export const UploadContainer = styled.View`
   align-items: center;
   justify-content: center;
   overflow: hidden;
-
+  margin-bottom: 10px;
   background-color: #efefef;
 
   border-radius: 999px;

@@ -99,24 +99,34 @@ const HomeScreen: React.FC = () => {
 
   const navigateToAdd = () => {
     console.log("Click");
-    navigation.navigate("AddInventory");
+
+    navigation.navigate("Main", {
+      screen: "AddInventory",
+    });
   };
+
   const navigateToReport = () => {
-    console.log("Click");
-    navigation.navigate("Report Screen");
+    navigation.navigate("Main", {
+      screen: "Report Screen",
+    });
   };
 
   const navigateToShip = () => {
-    console.log("Click");
-    navigation.navigate("ShipItem");
+    navigation.navigate("Main", {
+      screen: "ShipItem",
+    });
   };
 
   const NavigateToLogs = () => {
-    navigation.navigate("OutOfStock");
+    navigation.navigate("Main", {
+      screen: "OutOfStock",
+    });
   };
 
   const NavigateToStock = () => {
-    navigation.navigate("ShipLogs");
+    navigation.navigate("Main", {
+      screen: "ShipLogs",
+    });
   };
 
   const countItemsByClassification = () => {

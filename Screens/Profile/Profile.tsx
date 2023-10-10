@@ -19,13 +19,7 @@ import {
 } from "./ProfileStyle";
 import { getUserAcc, useUploadImage } from "../../services/userAPI";
 import { AntDesign } from "@expo/vector-icons";
-
-interface User {
-  name: string;
-}
-interface ImagePickerResponse {
-  uri: string;
-}
+/*  */
 
 const Profile = () => {
   const [image, setImage] = React.useState<any>(null);
@@ -58,7 +52,7 @@ const Profile = () => {
       try {
         // console.log(uploadImageMutation.isLoading);
         await uploadImageMutation.mutateAsync(payload);
-
+        
         setImage(data[0].profilePicture);
       } catch (error) {
         // Handle error if necessary
@@ -71,7 +65,8 @@ const Profile = () => {
     let result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [4, 3],
+
+      aspect: [9, 16],
       quality: 1,
     });
 
@@ -133,15 +128,6 @@ const Profile = () => {
     });
   };
 
-  // React.useEffect(() => {
-  //   if (GetItemData.data && !GetItemData.isLoading) {
-  //     setInventories(GetItemData.data);
-  //     setMasterInventory(GetItemData.data);
-  //     setInventoryCount(GetItemData.data);
-  //   }
-  //   GetItemData.refetch();
-  // }, [GetItemData.isLoading, GetItemData.data, GetItemData.refetch]);
-
   React.useEffect(() => {
     setImage(data[0].profilePicture);
 
@@ -200,7 +186,7 @@ const Profile = () => {
 
           <Texts>Welcome! {data[0].name} </Texts>
           <Texts>
-            {currentDateTime.toLocaleDateString()} |
+            {currentDateTime.toLocaleDateString()} |{" "}
             {currentDateTime.toLocaleTimeString()}
           </Texts>
 
