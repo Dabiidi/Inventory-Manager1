@@ -1,4 +1,4 @@
-import { View, Text, FlatList } from "react-native";
+import { View, Text, FlatList, Alert } from "react-native";
 import React, { useEffect } from "react";
 import styled from "styled-components/native";
 import InventoryComponent from "../Inventory/Inventory";
@@ -53,8 +53,11 @@ const InventoryList = ({}) => {
   };
 
   const navigateToScreen = (inventory: any) => {
-    console.log("Inventory", inventory);
-    navigation.navigate("Inventory Detail", { inventory });
+    navigation.navigate("Main", {
+      screen: "Inventory Detail",
+
+      params: { inventory },
+    });
   };
 
   const searchFilterFunction = (text: any) => {

@@ -38,6 +38,7 @@ const AddItemScreen = () => {
   const [classification, setClassification] = React.useState<string | null>(
     null
   );
+  const [image, setImage] = React.useState<string | null>(null);
 
   const { isLoading: loadingCheck, mutateAsync: loadingAsync } =
     UseCheckItemExistance();
@@ -67,6 +68,7 @@ const AddItemScreen = () => {
         price,
         desc,
         classification,
+        image,
       });
 
       await mutateLogs({

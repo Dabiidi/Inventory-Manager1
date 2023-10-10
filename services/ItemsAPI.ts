@@ -52,8 +52,6 @@ export const useDeleteInventory = (id: string, name: string) => {
 
 //ADD API
 export const useUpdateInventory = () => {
-  const navigation = useNavigation();
-
   const updateItem = async (data: any) => {
     const response = await axios.put(
       `http://192.168.1.30:4000/inventoryapp/itemlist/${data.id}`,
@@ -68,8 +66,6 @@ export const useUpdateInventory = () => {
 
 //ADD API
 export const UseAddItem = () => {
-  const navigation = useNavigation();
-
   const addItem = async (data: any) => {
     const response = await axios.post(
       "http://192.168.1.30:4000/inventoryapp/itemlist",

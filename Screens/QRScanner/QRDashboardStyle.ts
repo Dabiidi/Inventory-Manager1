@@ -5,7 +5,7 @@ export const Container = styled.View`
   flex: 1;
   flex-direction: column;
   align-items: center;
-  background-color: #12486B;
+  background-color: #12486b;
 `;
 export const ShadowContainer = styled.View`
   justify-content: center;
@@ -13,6 +13,7 @@ export const ShadowContainer = styled.View`
   background-color: #12486b;
   height: 45%;
   width: 90%;
+  border-radius: 10px;
   margin-bottom: 10px;
   ${Platform.select({
     ios: `
