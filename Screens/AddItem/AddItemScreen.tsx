@@ -34,7 +34,7 @@ const AddItemScreen = () => {
   const [quantity, setQuantity] = React.useState<number>(0);
   const [price, setPrice] = React.useState<number>(0);
   const [desc, setDesc] = React.useState<string>("");
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation();
   const [classification, setClassification] = React.useState<string | null>(
     null
   );
@@ -82,7 +82,7 @@ const AddItemScreen = () => {
       setPrice(0);
       setDesc("");
 
-      navigation.navigate("Home");
+      navigation.goBack();
     } catch (error: any) {
       Alert.alert("Error", error.message || "An error occurred");
     }
@@ -90,7 +90,8 @@ const AddItemScreen = () => {
 
   const handleCancel = () => {
     // Alert.alert("Cancel", "Cancel Adding Item");
-    navigation.navigate("Home");
+
+    navigation.goBack();
   };
 
   const handleClickIncrementQuant = () => {

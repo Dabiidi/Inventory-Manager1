@@ -12,7 +12,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
 const QRDashboard = () => {
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation();
   const ScanToSearch = () => {
     navigation.navigate("Main", {
       screen: "ScanSearch",

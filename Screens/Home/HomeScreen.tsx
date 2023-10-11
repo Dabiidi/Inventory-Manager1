@@ -50,7 +50,7 @@ interface ShipItem {
 }
 
 const HomeScreen: React.FC = () => {
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation();
   const [noStock, useNoStock] = React.useState(0);
   const [haveStock, useHaveStock] = React.useState(0);
   const [shipItems, shipItemsCount] = React.useState(0);

@@ -23,7 +23,7 @@ import { AntDesign } from "@expo/vector-icons";
 
 const Profile = () => {
   const [image, setImage] = React.useState<any>(null);
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation();
   const [currentDateTime, setCurrentDateTime] = React.useState(new Date());
   const [imageLoading, setImageLoading] = React.useState(false);
 
@@ -52,7 +52,7 @@ const Profile = () => {
       try {
         // console.log(uploadImageMutation.isLoading);
         await uploadImageMutation.mutateAsync(payload);
-        
+
         setImage(data[0].profilePicture);
       } catch (error) {
         // Handle error if necessary
@@ -123,15 +123,13 @@ const Profile = () => {
   };
 
   const navigateToScreen = () => {
-    navigation.replace("Login", {
-      screen: "Login",
-    });
+    navigation.navigate("Login");
   };
 
   React.useEffect(() => {
     setImage(data[0].profilePicture);
 
-    // console.log("Loading?", isLoadingUser);
+    // console.log("Loading?", isL  oadingUser);
     const intervalId = setInterval(() => {
       setCurrentDateTime(new Date());
     }, 1000);
