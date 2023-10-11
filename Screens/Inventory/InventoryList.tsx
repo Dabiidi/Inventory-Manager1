@@ -17,7 +17,7 @@ import { useGetItems } from "../../services/ItemsAPI";
 import { EvilIcons } from "@expo/vector-icons";
 
 const InventoryList = ({}) => {
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation();
   const { inventories, setInventories, masterInventory } = useInventory();
   const [search, setSearch] = React.useState(""); // Search data
   const [masterDataSource, setMasterDataSource] = React.useState([]); // All data

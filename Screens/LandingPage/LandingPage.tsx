@@ -15,7 +15,7 @@ import {
 } from "./LandingPageStyle";
 
 const LandingPage: React.FC = () => {
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation();
 
   const Images: any[] = [
     require("../../Images/1.png"),
@@ -30,9 +30,7 @@ const LandingPage: React.FC = () => {
   ];
 
   const navigateToScreen = () => {
-    navigation.replace("Login", {
-      screen: "Login",
-    });
+    navigation.navigate("Login");
   };
 
   return (

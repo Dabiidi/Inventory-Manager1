@@ -56,7 +56,7 @@ type ShipItemDetailsRouteParams = {
 const ShipItemDetails: React.FC<{
   route: RouteProp<ShipItemDetailsRouteParams, "ShipItemDetails">;
 }> = ({ route }) => {
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation();
   const [total, setTotal] = React.useState(0);
   const { inventory } = route.params;
   const [currentAddress, setCurrentAddress] = useState("");

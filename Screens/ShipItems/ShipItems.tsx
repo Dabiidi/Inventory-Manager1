@@ -16,7 +16,7 @@ import {
 } from "./ShipItemStyle";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 const ShipItems = () => {
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation();
   const { inventories, setInventories } = useInventory();
 
   const navigateToScreen = (inventory: any) => {
