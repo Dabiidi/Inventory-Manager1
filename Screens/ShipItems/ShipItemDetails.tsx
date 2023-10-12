@@ -119,7 +119,7 @@ const ShipItemDetails: React.FC<{
     }
     try {
       const response = await fetch(
-        "http://192.168.1.30:4000/inventoryapp/ship-items",
+        "http://192.168.110.110:4000/inventoryapp/ship-items",
         {
           method: "POST",
           headers: {
@@ -197,6 +197,7 @@ const ShipItemDetails: React.FC<{
     const tappedLocation = e.nativeEvent.coordinate;
     setSelectedLocation(tappedLocation);
 
+    
     try {
       const getAddress = await Location.reverseGeocodeAsync(tappedLocation);
       if (getAddress.length > 0) {

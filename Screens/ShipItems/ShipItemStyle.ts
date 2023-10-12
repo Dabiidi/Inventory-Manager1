@@ -2,12 +2,13 @@ import { Platform } from "react-native";
 import styled from "styled-components/native";
 
 export const Container = styled.View`
-  flex: 1;
+  flex: 1; 
+  padding:20px
 `;
 export const BodyContainer = styled.View`
   align-self: center;
   width: 90%;
-    height: 70%;
+
 `;
 export const ButtonContainer = styled.View`
   margin-top: 5%;

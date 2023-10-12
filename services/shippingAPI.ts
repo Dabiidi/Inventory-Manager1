@@ -9,7 +9,7 @@ export const useGetShipping = () => {
     queryKey: ["ShipItems"],
     queryFn: async () => {
       const response = await axios.get(
-        "http://192.168.1.30:4000/inventoryapp/ship-items"
+        "http://192.168.110.110:4000/inventoryapp/ship-items"
       );
       return response.data;
     },
@@ -22,7 +22,7 @@ export const useDeleteShippingLogs = () => {
   return useMutation({
     mutationFn: async () => {
       const res = await axios.delete(
-        `http://192.168.1.30:4000/inventoryapp/ship-items`
+        `http://192.168.110.110:4000/inventoryapp/ship-items`
       );
       return res.data;
     },

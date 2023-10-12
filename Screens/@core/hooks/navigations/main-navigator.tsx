@@ -15,10 +15,12 @@ import {
   AntDesign,
   MaterialIcons,
   MaterialCommunityIcons,
+
 } from "@expo/vector-icons";
 import HomeScreen from "../../../Home/HomeScreen";
 import InventoryList from "../../../Inventory/InventoryList";
 import Profile from "../../../Profile/Profile";
+import {  } from "react-native";
 const RenderDetaiScreen = (props: any) => <InventoryDetail {...props} />;
 const RenderShipScreen = (props: any) => <ShipItemDetails {...props} />;
 
@@ -34,7 +36,7 @@ export function MainNavigator() {
         options={{
           title: "Inventory",
           headerBackVisible: false,
-
+          headerTintColor: "white",
           headerShown: true,
           headerTitleStyle: {
             fontWeight: "bold",
@@ -68,6 +70,7 @@ export function MainNavigator() {
         options={{
           title: "Inventory Details",
           headerBackVisible: true,
+          headerTintColor: "white",
           headerTitleAlign: "center",
           headerShown: true,
           headerTitleStyle: {
@@ -86,6 +89,7 @@ export function MainNavigator() {
           title: "Inventory Logs",
           headerBackVisible: true,
           headerTitleAlign: "center",
+          headerTintColor: "white",
           headerShown: true,
           headerTitleStyle: {
             color: "white",
@@ -101,6 +105,7 @@ export function MainNavigator() {
         options={{
           title: "Scan to Search",
           headerBackVisible: true,
+          headerTintColor: "white",
           headerTitleAlign: "center",
           headerShown: true,
           headerTitleStyle: {
@@ -114,11 +119,16 @@ export function MainNavigator() {
       />
       <Stack.Screen
         name="ScanToAdd"
+        
         component={ScanToAdd}
         options={{
           title: "Scan to Add Item",
           headerBackVisible: true,
           headerTitleAlign: "center",
+        
+       
+        
+          headerTintColor: "white",
           headerShown: true,
           headerTitleStyle: {
             fontWeight: "bold",
@@ -135,6 +145,7 @@ export function MainNavigator() {
         options={{
           title: "Ship Items Dashboard",
           headerBackVisible: true,
+          headerTintColor: "white",
           headerTitleAlign: "center",
           headerShown: true,
           headerTitleStyle: {
@@ -152,6 +163,7 @@ export function MainNavigator() {
         options={{
           title: "Ship Item",
           headerBackVisible: true,
+          headerTintColor: "white",
           headerTitleAlign: "center",
           headerShown: true,
           headerTitleStyle: {
@@ -170,6 +182,7 @@ export function MainNavigator() {
           title: "Unavailable Items",
           headerBackVisible: true,
           headerTitleAlign: "center",
+          headerTintColor: "white",
           headerShown: true,
           headerTitleStyle: {
             fontWeight: "bold",
@@ -187,6 +200,7 @@ export function MainNavigator() {
           title: "Shipping Logs",
           headerBackVisible: true,
           headerTitleAlign: "center",
+          headerTintColor: "white",
           headerShown: true,
           headerTitleStyle: {
             fontWeight: "bold",
@@ -200,14 +214,17 @@ export function MainNavigator() {
     </Stack.Navigator>
   );
 }
+
 export function TabNavigator() {
   return (
     <Tab.Navigator initialRouteName="Menu">
       <Tab.Screen
         name="Menu"
         component={HomeScreen}
+        
         options={{
           title: "Dashboard",
+          headerShown: false,
           headerStyle: {
             backgroundColor: "#12486B",
           },

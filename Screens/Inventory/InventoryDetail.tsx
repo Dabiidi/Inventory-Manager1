@@ -87,7 +87,7 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
 
   const handleInputChange = async (fieldName: string, value: any) => {
     if (editedInventory[fieldName] !== value) {
-      const changeDescription = `Changed ${fieldName} from "${editedInventory[fieldName]}" to "${value}"`;
+      const changeDescription = `Changed ${fieldName} from "${editedInventory[fieldName]}" to "${value}."`;
       setChangesMade(changeDescription);
     }
 
@@ -199,7 +199,6 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
   };
 
   const showImagePickerOptions = async () => {
-    // Present the user with options to choose between camera and library
     const { status } = await ImagePicker.getMediaLibraryPermissionsAsync();
 
     if (status) {
@@ -372,7 +371,7 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
                   >
                     <ActivityIndicator
                       style={{
-                        marginTop: 150,
+                        marginTop: 140,
                         opacity: 9,
                       }}
                       size="large"

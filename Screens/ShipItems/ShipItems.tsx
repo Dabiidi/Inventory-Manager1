@@ -1,4 +1,4 @@
-import { View, Text, FlatList } from "react-native";
+import { View, Text, FlatList, ScrollView } from "react-native";
 import React from "react";
 import { useInventory } from "../Context/InventoryContent";
 import InventoryComponent from "../Inventory/Inventory";
@@ -38,6 +38,9 @@ const ShipItems = () => {
   return (
     <>
       <Container>
+ 
+
+
         <ButtonContainer>
           <ShipLogs>
             <ShadowBoxContainer>
@@ -68,8 +71,7 @@ const ShipItems = () => {
           </OutOfStockLogs>
         </ButtonContainer>
         <Texts> Available Items: (Click to Ship)</Texts>
-        <BodyContainer>
-          <FlatList
+        <FlatList
             data={filterInventory(inventories)}
             renderItem={({ item }) => (
               <InventoryComponent
@@ -82,7 +84,9 @@ const ShipItems = () => {
             scrollEnabled
             keyExtractor={(item) => item.name}
           />
-        </BodyContainer>
+  
+   
+     
       </Container>
     </>
   );

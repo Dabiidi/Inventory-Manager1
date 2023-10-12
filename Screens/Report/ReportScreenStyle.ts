@@ -1,11 +1,12 @@
 import styled from "styled-components/native";
 
 export const Container = styled.View`
-  background-color: #fff;
-  padding: 20px;
-  margin-top: 5px;
-  border-radius: 8px;
+
   flex: 1;
+  padding: 20px;
+
+  border-radius: 8px;
+
 `;
 
 export const TimeDate = styled.Text`
@@ -36,6 +37,7 @@ export const ItemContainer = styled.View`
   background-color: #12486b;
   padding: 20px;
   margin-top: 8px;
+
   border-radius: 8px;
 `;
 

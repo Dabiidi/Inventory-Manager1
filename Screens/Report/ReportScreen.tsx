@@ -64,13 +64,13 @@ const ReportScreen: React.FC = () => {
       <ClearButton onPress={onClear}>
         <ButtonText>Clear Shipping Logs</ButtonText>
       </ClearButton>
-      <FlatList
+      <FlatList 
         data={data}
         renderItem={({ item }) => (
-          <ItemContainer>
+          <ItemContainer >
             <TimeDate>{`${formatDate(item.createdAt)} ${
               item.action
-            }.`}</TimeDate>
+            }`}</TimeDate>
 
             <Name>{`Item Name: ${item.itemName}`} </Name>
           </ItemContainer>
@@ -78,6 +78,7 @@ const ReportScreen: React.FC = () => {
         scrollEnabled
         keyExtractor={(item, index) => item.id || index.toString()}
       />
+      
     </Container>
   );
 };
