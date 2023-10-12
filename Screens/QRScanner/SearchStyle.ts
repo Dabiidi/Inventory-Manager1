@@ -33,7 +33,7 @@ export const BarcodeBox = styled.View`
 `;
 
 export const StyledBarCodeScanner = styled(BarCodeScanner)`
-  width: 400px;
+  width: 300px;
   height: 400px;
 `;
 

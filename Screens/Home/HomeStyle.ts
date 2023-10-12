@@ -4,6 +4,7 @@ import styled from "styled-components/native";
 export const Container = styled.SafeAreaView`
   background-color: #fff;
   flex: 1;
+
 `;
 
 export const Logo = styled.Image`
@@ -12,6 +13,12 @@ export const Logo = styled.Image`
   border-radius: 50px;
 `;
 
+export const HeaderContainer = styled.View`
+background-color: #12486b;
+width: 100%;
+  
+height: 40px;
+`
 export const BackgroundImage = styled.ImageBackground`
   flex: 1;
   border-bottom-right-radius: 30px;
@@ -21,7 +28,6 @@ export const BackgroundImage = styled.ImageBackground`
 `;
 export const Header = styled.View`
   height: 30%;
-
   background-color: #12486b;
   border-bottom-right-radius: 30px;
   border-bottom-left-radius: 30px;

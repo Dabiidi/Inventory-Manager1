@@ -1,4 +1,4 @@
-import { Alert, Button, ScrollView } from "react-native";
+import { ActivityIndicator, Alert, Button, ScrollView,StyleSheet ,View } from "react-native";
 import React from "react";
 import {
   Container,
@@ -28,6 +28,7 @@ import {
   saveLogs,
 } from "../../services/ItemsAPI";
 import { AntDesign } from "@expo/vector-icons";
+import { max, maxBy } from "lodash";
 
 const AddItemScreen = () => {
   const [name, setName] = React.useState<string>("");
@@ -44,8 +45,10 @@ const AddItemScreen = () => {
     UseCheckItemExistance();
 
   const [count, setCount] = React.useState(0);
+  
+  const [loadingSubmit,setLoadingSubmit] = React.useState(false);
 
-  const { isLoading, mutateAsync } = UseAddItem();
+  const { isLoading, mutateAsync ,data} = UseAddItem();
   const { isLoading: loadingLogs, mutateAsync: mutateLogs } = saveLogs();
 
   const handleSubmit = async () => {
@@ -60,8 +63,10 @@ const AddItemScreen = () => {
       Alert.alert("Error", `Item ${name} is already Exists.`);
       return;
     }
+       setLoadingSubmit(true);
     try {
-      // Call the mutation function when the "Submit" button is pressed
+
+
       await mutateAsync({
         name: capitalizedName,
         quantity,
@@ -76,13 +81,22 @@ const AddItemScreen = () => {
         action: `Added ${name} to the inventory.`,
       });
 
-      Alert.alert(`Inventory Item name ${name} added successfully.`);
-      setName("");
-      setQuantity(0);
-      setPrice(0);
-      setDesc("");
+        if(loadingSubmit== false){
 
-      navigation.goBack();
+          Alert.alert(`Inventory Item name ${name} added successfully.`);
+          setName("");
+          setQuantity(0);
+          setPrice(0);
+          setDesc("");
+    
+          navigation.goBack();
+  
+        
+        }
+
+   
+     
+   
     } catch (error: any) {
       Alert.alert("Error", error.message || "An error occurred");
     }
@@ -107,6 +121,14 @@ const AddItemScreen = () => {
       setQuantity(count - 1);
     }
   };
+  React.useEffect(() => {
+    if (!isLoading) {
+
+
+      
+      setLoadingSubmit(false);
+    }
+  }, [isLoading]);
 
   const classificationOptions = [
     "School Supplies",
@@ -117,6 +139,28 @@ const AddItemScreen = () => {
 
   return (
     <Container>
+           {loadingSubmit && (
+           
+                  <View
+                    style={{
+              
+                      ...StyleSheet.absoluteFillObject,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      backgroundColor: "rgba(0, 0, 0, 0.4)",
+                      zIndex:1,
+                   
+                    }}
+                  >
+                    <ActivityIndicator
+                    style={{ marginTop: 100, opacity: 9 }}
+                      size="large"
+                      color="#000000"
+                    />
+                  </View>
+         
+              )}
+
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <Header>
           <Texts>ADD INVENTORY ITEM </Texts>
@@ -126,6 +170,7 @@ const AddItemScreen = () => {
         <BoxShadowView>
           <Textbody>Item Details </Textbody>
           <Body>
+     
             <Input
               placeholder="Item Name"
               placeholderTextColor={"white"}
@@ -183,7 +228,7 @@ const AddItemScreen = () => {
               ))}
             </Picker>
           </PickerContainer>
-
+         
           <ButtonContainer>
             <SubmitButton onPress={handleSubmit}>
               <ButtonText>Submit</ButtonText>

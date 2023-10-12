@@ -9,7 +9,7 @@ export const useGetItems = () => {
     queryKey: ["Items"],
     queryFn: async () => {
       const response = await axios.get(
-        "http://192.168.1.30:4000/inventoryapp/itemlist"
+        "http://192.168.110.110:4000/inventoryapp/itemlist"
       );
       return response.data;
     },
@@ -23,7 +23,7 @@ export const useGetLogs = () => {
     queryKey: ["itemLogs"],
     queryFn: async () => {
       const response = await axios.get(
-        "http://192.168.1.30:4000/inventoryapp/itemlogs"
+        "http://192.168.110.110:4000/inventoryapp/itemlogs"
       );
       return response.data;
     },
@@ -37,7 +37,7 @@ export const useDeleteInventory = (id: string, name: string) => {
   return useMutation({
     mutationFn: async () => {
       const res = await axios.delete(
-        `http://192.168.1.30:4000/inventoryapp/itemlist/${id}`
+        `http://192.168.110.110:4000/inventoryapp/itemlist/${id}`
       );
 
       return res.data;
@@ -54,7 +54,7 @@ export const useDeleteInventory = (id: string, name: string) => {
 export const useUpdateInventory = () => {
   const updateItem = async (data: any) => {
     const response = await axios.put(
-      `http://192.168.1.30:4000/inventoryapp/itemlist/${data.id}`,
+      `http://192.168.110.110:4000/inventoryapp/itemlist/${data.id}`,
       data.data
     );
 
@@ -68,7 +68,7 @@ export const useUpdateInventory = () => {
 export const UseAddItem = () => {
   const addItem = async (data: any) => {
     const response = await axios.post(
-      "http://192.168.1.30:4000/inventoryapp/itemlist",
+      "http://192.168.110.110:4000/inventoryapp/itemlist",
       data
     );
 
@@ -81,7 +81,7 @@ export const UseAddItem = () => {
 export const saveLogs = () => {
   const res = async (logData: any) => {
     const response = await axios.post(
-      "http://192.168.1.30:4000/inventoryapp/itemlogs",
+      "http://192.168.110.110:4000/inventoryapp/itemlogs",
       logData
     );
 
@@ -97,7 +97,7 @@ export const useDeleteItemsLogs = () => {
   return useMutation({
     mutationFn: async () => {
       const res = await axios.delete(
-        "http://192.168.1.30:4000/inventoryapp/itemlogs"
+        "http://192.168.110.110:4000/inventoryapp/itemlogs"
       );
       return res.data;
     },
@@ -114,7 +114,7 @@ export const UseCheckItemExistance = () => {
 
   const res = async (itemName: string) => {
     const response = await axios.get(
-      `http://192.168.1.30:4000/inventoryapp/itemlist/${itemName}`
+      `http://192.168.110.110:4000/inventoryapp/itemlist/${itemName}`
     );
 
     console.log("Exist Item Inventory", response.data);

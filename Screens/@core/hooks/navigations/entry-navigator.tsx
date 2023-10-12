@@ -1,12 +1,12 @@
 import LandingPage from "../../../LandingPage/LandingPage";
 import LoginScreen from "../../../Login/LoginScreen";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+  import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { MainNavigator, TabNavigator } from "./main-navigator";
+  import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+  import { MainNavigator, TabNavigator } from "./main-navigator";
 
-const Tab = createBottomTabNavigator();
-const Stack = createNativeStackNavigator();
+  const Tab = createBottomTabNavigator();
+  const Stack = createNativeStackNavigator();
 
 export function StackNav() {
   return (

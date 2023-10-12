@@ -6,6 +6,7 @@ import {
   TouchableHighlight,
   View,
   BackHandler,
+ 
 } from "react-native";
 import {
   useRoute,
@@ -33,13 +34,14 @@ import {
   ReportContainer,
   ShipContaier,
   BackgroundImage,
+  HeaderContainer,
 } from "./HomeStyle";
 
 import { useInventory } from "../Context/InventoryContent";
-import { AntDesign, MaterialIcons, Octicons } from "@expo/vector-icons";
-
+import { AntDesign, Ionicons, MaterialIcons, Octicons } from "@expo/vector-icons";
+import { StatusBar } from 'expo-status-bar';
 import { useGetShipping } from "../../services/shippingAPI";
-
+import { Badge } from "react-native-elements";
 type DashboardScreenRouteParams = {
   email: string;
 };
@@ -50,6 +52,8 @@ interface ShipItem {
 }
 
 const HomeScreen: React.FC = () => {
+  const [notificationCount, setNotificationCount] = React.useState(0);
+
   const navigation = useNavigation();
   const [noStock, useNoStock] = React.useState(0);
   const [haveStock, useHaveStock] = React.useState(0);
@@ -90,11 +94,13 @@ const HomeScreen: React.FC = () => {
       (inv) => inv.quantity === 0
     );
     useNoStock(filteredInventoryNoStock.length);
-
+    setNotificationCount(filteredInventoryNoStock.length);
     const filteredInventoryhaveStock = inventoryCount.filter(
       (inv) => inv.quantity > 0
     );
     useHaveStock(filteredInventoryhaveStock.length);
+
+
   }, [inventoryCount]);
 
   const navigateToAdd = () => {
@@ -180,9 +186,18 @@ const HomeScreen: React.FC = () => {
   };
   return (
     <Container>
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+
+      <StatusBar style="dark" />
+
         <Header>
           <BackgroundImage source={require("../../Images/HomeBackground.png")}>
+          <HeaderContainer>
+            <Text>
+    
+            </Text>
+          </HeaderContainer>
+          
             <BoxShadowView>
               <SalesText>Total Sales: ₱{totalSales.toFixed(2)}</SalesText>
               <AntDesign
@@ -205,6 +220,7 @@ const HomeScreen: React.FC = () => {
             </BoxShadowView>
           </BackgroundImage>
         </Header>
+        
         <Body>
           <AddContainer>
             <AddButton onPress={navigateToAdd}>
@@ -242,6 +258,7 @@ const HomeScreen: React.FC = () => {
             <ButtonShip>Ship Item</ButtonShip>
           </ShipContaier>
         </Body>
+
         <Greetings>Summary</Greetings>
         <InfoContainer>
           <TextWrapper1 onPress={NavigateToLogs}>
@@ -258,6 +275,7 @@ const HomeScreen: React.FC = () => {
             <TextBody>Shipped Item/s</TextBody>
             <TextCount>{data.length}</TextCount>
           </TextWrapper1>
+       
         </InfoContainer>
       </ScrollView>
       <Modal

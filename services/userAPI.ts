@@ -7,7 +7,7 @@ export const getUserAcc = () => {
     queryFn: async () => {
       try {
         const response = await axios.get(
-          "http://192.168.1.30:4000/inventoryapp/userlogs"
+          "http://192.168.110.110:4000/inventoryapp/userlogs"
         );
 
         return response.data;
@@ -25,7 +25,7 @@ export const useUploadImage = () => {
     async (formData: any) => {
       try {
         const response = await axios.put(
-          `http://192.168.1.30:4000/inventoryapp/userlogs/${formData.id}`,
+          `http://192.168.110.110:4000/inventoryapp/userlogs/${formData.id}`,
           {
             ...formData,
           }
