@@ -15,12 +15,12 @@ import {
   AntDesign,
   MaterialIcons,
   MaterialCommunityIcons,
+
 } from "@expo/vector-icons";
 import HomeScreen from "../../../Home/HomeScreen";
 import InventoryList from "../../../Inventory/InventoryList";
 import Profile from "../../../Profile/Profile";
-import {} from "react-native";
-import NotificationScreen from "../../../Notifications/Notification.screen";
+import {  } from "react-native";
 const RenderDetaiScreen = (props: any) => <InventoryDetail {...props} />;
 const RenderShipScreen = (props: any) => <ShipItemDetails {...props} />;
 
@@ -117,34 +117,17 @@ export function MainNavigator() {
           },
         }}
       />
-
-<Stack.Screen
-        name="NotificationScreen"
-        component={NotificationScreen}
-        options={{
-          title: "Low Item Stocks",
-          headerBackVisible: true,
-          headerTintColor: "white",
-          headerTitleAlign: "center",
-          headerShown: true,
-          headerTitleStyle: {
-            fontWeight: "bold",
-            color: "white",
-          },
-          headerStyle: {
-            backgroundColor: "#12486B",
-          },
-        }}
-      />
-
-
       <Stack.Screen
         name="ScanToAdd"
+        
         component={ScanToAdd}
         options={{
           title: "Scan to Add Item",
           headerBackVisible: true,
           headerTitleAlign: "center",
+        
+       
+        
           headerTintColor: "white",
           headerShown: true,
           headerTitleStyle: {
@@ -162,8 +145,8 @@ export function MainNavigator() {
         options={{
           title: "Ship Items Dashboard",
           headerBackVisible: true,
-          headerTitleAlign: "center",
           headerTintColor: "white",
+          headerTitleAlign: "center",
           headerShown: true,
           headerTitleStyle: {
             fontWeight: "bold",
@@ -238,6 +221,7 @@ export function TabNavigator() {
       <Tab.Screen
         name="Menu"
         component={HomeScreen}
+        
         options={{
           title: "Dashboard",
           headerShown: false,

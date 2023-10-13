@@ -31,5 +31,4 @@ export type MainStackParamList = {
   ShipItemDetails: {} | undefined;
   OutOfStock: undefined;
   ShipLogs: undefined;
-  NotificationScreen : undefined
 };
