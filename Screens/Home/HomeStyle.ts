@@ -12,11 +12,15 @@ export const Logo = styled.Image`
   height: 100px;
   border-radius: 50px;
 `;
+export const HeaderTapIcon = styled.TouchableOpacity`
+align-items:center;
+left: 5px;
+`
 
 export const HeaderContainer = styled.View`
-background-color: #12486b;
 width: 100%;
-  
+justify-content: center;
+align-items: flex-start;
 height: 40px;
 `
 export const BackgroundImage = styled.ImageBackground`
@@ -27,6 +31,7 @@ export const BackgroundImage = styled.ImageBackground`
   align-items: center;
 `;
 export const Header = styled.View`
+padding-top:30px;
   height: 30%;
   background-color: #12486b;
   border-bottom-right-radius: 30px;
