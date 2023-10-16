@@ -12,11 +12,9 @@ export const Logo = styled.Image`
   height: 100px;
   border-radius: 50px;
 `;
-export const HeaderTapIcon = styled.TouchableOpacity`
-align-items:center;
-left: 5px;
-`
 
+export const HeaderTapIcon = styled.TouchableOpacity`
+`
 export const HeaderContainer = styled.View`
 flex-direction: row;
 justify-content: space-between;

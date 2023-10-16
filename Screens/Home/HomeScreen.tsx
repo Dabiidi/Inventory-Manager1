@@ -5,8 +5,8 @@ import {
   Text,
   TouchableHighlight,
   View,
-  StyleSheet,
   BackHandler,
+ 
 } from "react-native";
 import {
   useRoute,
@@ -35,21 +35,15 @@ import {
   ShipContaier,
   BackgroundImage,
   HeaderContainer,
-  HeaderTapIcon,
+
   TextHeader,
 } from "./HomeStyle";
 
 import { useInventory } from "../Context/InventoryContent";
-import {
-  AntDesign,
-  Ionicons,
-  MaterialIcons,
-  Octicons,
-} from "@expo/vector-icons";
-import { StatusBar } from "expo-status-bar";
+import { AntDesign, Ionicons, MaterialIcons, Octicons } from "@expo/vector-icons";
+import { StatusBar } from 'expo-status-bar';
 import { useGetShipping } from "../../services/shippingAPI";
-import { Badge } from "react-native-paper";
-import Toast from "react-native-toast-message";
+import { Badge } from "react-native-elements";
 type DashboardScreenRouteParams = {
   email: string;
 };
@@ -60,20 +54,25 @@ interface ShipItem {
 }
 
 const HomeScreen: React.FC = () => {
-  const { inventoryCount } = useInventory();
+  const [notificationCount, setNotificationCount] = React.useState(0);
+
   const navigation = useNavigation();
   const [noStock, useNoStock] = React.useState(0);
   const [haveStock, useHaveStock] = React.useState(0);
-  const [notifClick, setNotifClick] = React.useState(false);
+  const [shipItems, shipItemsCount] = React.useState(0);
+  const { inventoryCount } = useInventory();
+
   const [infoModalVisible, setInfoModalVisible] = React.useState(false);
   const [totalInventoryModalVisible, setInventoryModalVisible] =
     React.useState(false);
+  const route =
+    useRoute<RouteProp<Record<string, DashboardScreenRouteParams>, string>>();
+  const { email } = route.params;
 
   const filterInventory = (inventory: any) => {
     return useNoStock(inventory.filter((inv: any) => inv.quantity === 0));
   };
 
-  const [lowStock, useLowStock] = React.useState(0);
   useFocusEffect(
     React.useCallback(() => {
       const onBackPress = () => {
@@ -97,16 +96,13 @@ const HomeScreen: React.FC = () => {
       (inv) => inv.quantity === 0
     );
     useNoStock(filteredInventoryNoStock.length);
-
+    setNotificationCount(filteredInventoryNoStock.length);
     const filteredInventoryhaveStock = inventoryCount.filter(
       (inv) => inv.quantity > 0
     );
     useHaveStock(filteredInventoryhaveStock.length);
 
-    const filteredInventoryLowStock = inventoryCount.filter(
-      (inv) => inv.quantity < 5
-    );
-    useLowStock(filteredInventoryLowStock.length);
+
   }, [inventoryCount]);
 
   const navigateToAdd = () => {
@@ -141,6 +137,21 @@ const HomeScreen: React.FC = () => {
     });
   };
 
+  const countItemsByClassification = () => {
+    const classificationCounts: Record<string, number> = {};
+
+    inventoryCount.forEach((item) => {
+      const { classification } = item;
+      if (classificationCounts[classification]) {
+        classificationCounts[classification]++;
+      } else {
+        classificationCounts[classification] = 1;
+      }
+    });
+
+    return classificationCounts;
+  };
+
   const { data, isLoading, isError } = useGetShipping();
 
   if (isLoading) {
@@ -150,23 +161,6 @@ const HomeScreen: React.FC = () => {
       </View>
     );
   }
-
-  const ToastMessage = () => {
-    console.log("sdfsadf");
-    setNotifClick(true);
-    Toast.show({
-      type: "success",
-      text1: "New Notification",
-
-      text2: `You have ${lowStock} low stock items.`,
-      autoHide: true,
-      visibilityTime: 3000,
-
-      onPress: () => {
-        navigation.navigate("Main", { screen: "NotificationScreen" });
-      },
-    });
-  };
 
   if (isError || data === undefined || data === null) {
     return (
@@ -223,7 +217,7 @@ const HomeScreen: React.FC = () => {
             </BoxShadowView>
           </BackgroundImage>
         </Header>
-
+        
         <Body>
           <AddContainer>
             <AddButton onPress={navigateToAdd}>
@@ -278,6 +272,7 @@ const HomeScreen: React.FC = () => {
             <TextBody>Shipped Item/s</TextBody>
             <TextCount>{data.length}</TextCount>
           </TextWrapper1>
+       
         </InfoContainer>
       </ScrollView>
       <Modal
@@ -344,10 +339,3 @@ const HomeScreen: React.FC = () => {
 };
 
 export default HomeScreen;
-
-const styles = StyleSheet.create({
-  badge: {
-    position: "absolute",
-    top: -6,
-  },
-});

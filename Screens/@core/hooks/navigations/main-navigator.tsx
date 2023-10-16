@@ -15,6 +15,7 @@ import {
   AntDesign,
   MaterialIcons,
   MaterialCommunityIcons,
+
 } from "@expo/vector-icons";
 import styled from "styled-components/native";
 import HomeScreen from "../../../Home/HomeScreen";
@@ -149,12 +150,16 @@ export function MainNavigator() {
 
       <Stack.Screen
         name="ScanToAdd"
+        
         component={ScanToAdd}
         options={{
           title: "Scan to Add Item",
           headerLeft: () => <BackButton/>,
           headerBackVisible: false,
           headerTitleAlign: "center",
+        
+       
+        
           headerTintColor: "white",
           headerShown: true,
           headerTitleStyle: {
@@ -174,7 +179,6 @@ export function MainNavigator() {
           headerBackVisible: false,
           headerLeft: () => <BackButton/>,
           headerTitleAlign: "center",
-          headerTintColor: "white",
           headerShown: true,
           headerTitleStyle: {
             fontWeight: "bold",
@@ -252,6 +256,7 @@ export function TabNavigator() {
       <Tab.Screen
         name="Menu"
         component={HomeScreen}
+        
         options={{
           title:"Dashboard",
           headerRight: () => <AlertMsg/>,

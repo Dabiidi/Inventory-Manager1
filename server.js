@@ -105,6 +105,7 @@ const InventoryItem = mongoose.model("itemlist", inventoryItemSchema);
 app.put("/inventoryapp/itemlist/:id", async (req, res) => {
   const { id } = req.params;
   const { name, quantity, price, desc, classification, itemImage } = req.body;
+  console.log(" ngano mani", itemImage);
   try {
     const updatedItem = await InventoryItem.findByIdAndUpdate(
       new mongoose.Types.ObjectId(id),
@@ -175,7 +176,7 @@ app.get("/inventoryapp/itemlist", async (req, res) => {
     }
 
     const inventoryItems = await InventoryItem.find(query).sort({
-      createdAt: "descending",
+      name: "desc",
     });
 
     inventoryItemSchema.push(inventoryItems);
@@ -378,79 +379,6 @@ app.delete("/inventoryapp/ship-items", async (req, res) => {
   }
 });
 
-
-const notificationSchema = new mongoose.Schema({
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'userlogs', // Reference to the User model
-    required: true,
-  },
-  message: {
-    type: String,
-    required: true,
-  },
-  isRead: {
-    type: Boolean,
-    default: false,
-  },
-  timestamp: {
-    type: Date,
-    default: Date.now,
-  },
-});
-
-const Notification = mongoose.model('notification', notificationSchema);
-app.post('/inventoryapp/notifications', async (req, res) => {
-  const { userId, message } = req.body;
-
-  const newNotification = new Notification({
-    userId,
-    message,
-  });
-
-  try {
-    await newNotification.save();
-    res.status(201).json({ message: 'Notification sent successfully' });
-  } catch (error) {
-    console.error('Error sending notification:', error);
-    res.status(500).json({ message: 'Error sending notification' });
-  }
-});
-
-app.get('/inventoryapp/notifications/:userId', async (req, res) => {
-  const { userId } = req.params;
-
-  try {
-    const notifications = await Notification.find({ userId })
-      .sort({ timestamp: 'descending' })
-      .populate('userId', 'name'); // Populate the userId field with the name from the User model
-
-    res.status(200).json(notifications);
-  } catch (error) {
-    console.error('Error fetching notifications:', error);
-    res.status(500).json({ message: 'Error fetching notifications' });
-  }
-});
-app.put('/inventoryapp/notifications/:id', async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const notification = await Notification.findByIdAndUpdate(
-      id,
-      { isRead: true },
-      { new: true }
-    );
-
-    if (notification) {
-      res.status(200).json({ message: 'Notification marked as read' });
-    } else {
-      res.status(404).json({ message: 'Notification not found' });
-    }
-  } catch (error) {
-    console.error('Error updating notification:', error);
-    res.status(500).json({ message: 'Error updating notification' });
-  }
-});
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
