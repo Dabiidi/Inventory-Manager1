@@ -4,7 +4,6 @@ import styled from "styled-components/native";
 export const Container = styled.SafeAreaView`
   background-color: #fff;
   flex: 1;
-
 `;
 
 export const Logo = styled.Image`
@@ -13,34 +12,31 @@ export const Logo = styled.Image`
   border-radius: 50px;
 `;
 export const HeaderTapIcon = styled.TouchableOpacity`
-align-items:center;
-left: 5px;
-`
+  align-items: center;
+  left: 5px;
+`;
 
 export const HeaderContainer = styled.View`
-flex-direction: row;
-justify-content: space-between;
-padding-left: 10px;
-padding-right: 15px;
-padding-top: 5px;
-
-`
+  flex-direction: row;
+  justify-content: space-between;
+  padding-left: 10px;
+  padding-right: 15px;
+  padding-top: 5px;
+`;
 export const TextHeader = styled.Text`
-font-size:20px;
-font-weight: bold;
-padding: 10px;
-color: #ffffff;
-`
+  font-size: 20px;
+  font-weight: bold;
+  padding: 10px;
+  color: #ffffff;
+`;
 export const BackgroundImage = styled.ImageBackground`
   flex: 1;
   border-bottom-right-radius: 30px;
   border-bottom-left-radius: 30px;
   justify-content: center;
   align-items: center;
-  
 `;
 export const Header = styled.View`
-
   height: 30%;
   background-color: #12486b;
   border-bottom-right-radius: 30px;
@@ -155,7 +151,7 @@ export const ButtonShip = styled.Text`
 export const ReportContainer = styled.View`
   align-items: center;
   border-radius: 10px;
-  width:31%;
+  width: 31%;
   justify-content: center;
   background-color: #fff;
 

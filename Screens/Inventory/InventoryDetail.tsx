@@ -111,6 +111,7 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
   const CancelMode = () => {
     if (originalInventory) {
       setEditedInventory({ ...originalInventory });
+      
       Alert.alert("Cancel", "Cancelled Editing Item.");
     }
 

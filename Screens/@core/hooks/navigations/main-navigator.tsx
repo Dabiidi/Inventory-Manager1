@@ -72,7 +72,7 @@ export function MainNavigator() {
         component={RenderDetaiScreen}
         options={{
           title: "Inventory Details",
-          headerLeft: () => <BackButton/>,
+          headerLeft: () => <BackButton />,
           headerBackVisible: false,
           headerTintColor: "white",
           headerTitleAlign: "center",
@@ -95,15 +95,14 @@ export function MainNavigator() {
           headerTitleAlign: "center",
           headerTintColor: "white",
           headerShown: true,
-          headerLeft: () => <BackButton/>,
-          headerTitleStyle: { 
+          headerLeft: () => <BackButton />,
+          headerTitleStyle: {
             color: "white",
           },
-        
+
           headerStyle: {
             backgroundColor: "#12486B",
           },
-       
         }}
       />
       <Stack.Screen
@@ -111,7 +110,7 @@ export function MainNavigator() {
         component={ScantoSearch}
         options={{
           title: "Scan to Search",
-          headerLeft: () => <BackButton/>,
+          headerLeft: () => <BackButton />,
           headerBackVisible: false,
           headerTintColor: "white",
           headerTitleAlign: "center",
@@ -126,12 +125,12 @@ export function MainNavigator() {
         }}
       />
 
-<Stack.Screen
+      <Stack.Screen
         name="NotificationScreen"
         component={NotificationScreen}
         options={{
           title: "Low Item Stocks",
-          headerLeft: () => <BackButton/>,
+          headerLeft: () => <BackButton />,
           headerBackVisible: false,
           headerTintColor: "white",
           headerTitleAlign: "center",
@@ -145,14 +144,13 @@ export function MainNavigator() {
           },
         }}
       />
-
 
       <Stack.Screen
         name="ScanToAdd"
         component={ScanToAdd}
         options={{
           title: "Scan to Add Item",
-          headerLeft: () => <BackButton/>,
+          headerLeft: () => <BackButton />,
           headerBackVisible: false,
           headerTitleAlign: "center",
           headerTintColor: "white",
@@ -172,7 +170,7 @@ export function MainNavigator() {
         options={{
           title: "Ship Items Dashboard",
           headerBackVisible: false,
-          headerLeft: () => <BackButton/>,
+          headerLeft: () => <BackButton />,
           headerTitleAlign: "center",
           headerTintColor: "white",
           headerShown: true,
@@ -209,7 +207,7 @@ export function MainNavigator() {
         options={{
           title: "Unavailable Items",
           headerBackVisible: false,
-          headerLeft: () => <BackButton/>,
+          headerLeft: () => <BackButton />,
           headerTitleAlign: "center",
           headerTintColor: "white",
           headerShown: true,
@@ -228,7 +226,7 @@ export function MainNavigator() {
         options={{
           title: "Shipping Logs",
           headerBackVisible: false,
-          headerLeft: () => <BackButton/>,
+          headerLeft: () => <BackButton />,
 
           headerTitleAlign: "center",
           headerTintColor: "white",
@@ -253,9 +251,9 @@ export function TabNavigator() {
         name="Menu"
         component={HomeScreen}
         options={{
-          title:"Dashboard",
-          headerRight: () => <AlertMsg/>,
-          headerTitleAlign:"left",
+          title: "Dashboard",
+          headerRight: () => <AlertMsg />,
+          headerTitleAlign: "left",
           headerShown: true,
           headerStyle: {
             backgroundColor: "#12486B",
@@ -274,7 +272,6 @@ export function TabNavigator() {
         name="Inventory List"
         component={InventoryList}
         options={{
-          
           headerStyle: {
             backgroundColor: "#12486B",
           },
@@ -333,7 +330,3 @@ export function TabNavigator() {
     </Tab.Navigator>
   );
 }
-
-
-
-

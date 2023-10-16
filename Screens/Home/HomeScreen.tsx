@@ -35,8 +35,7 @@ import {
   ShipContaier,
   BackgroundImage,
   HeaderContainer,
-  HeaderTapIcon,
-  TextHeader,
+
 } from "./HomeStyle";
 
 import { useInventory } from "../Context/InventoryContent";
