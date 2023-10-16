@@ -36,6 +36,7 @@ import {
   BackgroundImage,
   HeaderContainer,
   HeaderTapIcon,
+  TextHeader,
 } from "./HomeStyle";
 
 import { useInventory } from "../Context/InventoryContent";
@@ -195,20 +196,11 @@ const HomeScreen: React.FC = () => {
     <Container>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <StatusBar style="dark" />
-
         <Header>
-          <BackgroundImage source={require("../../Images/HomeBackground.png")}>
-            <HeaderContainer>
-              <HeaderTapIcon onPress={ToastMessage}>
-                <Ionicons
-                  name="notifications-circle-outline"
-                  size={35}
-                  color="white"
-                />
-                <Badge style={styles.badge}>{notifClick ? 0 : lowStock}</Badge>
-              </HeaderTapIcon>
-            </HeaderContainer>
+       
 
+          <BackgroundImage source={require("../../Images/HomeBackground.png")}>
+     
             <BoxShadowView>
               <SalesText>Total Sales: ₱{totalSales.toFixed(2)}</SalesText>
               <AntDesign

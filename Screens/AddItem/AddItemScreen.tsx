@@ -1,4 +1,13 @@
-import { ActivityIndicator, Alert, Button, ScrollView,StyleSheet ,View } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  Button,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React from "react";
 import {
   Container,
@@ -28,7 +37,6 @@ import {
   saveLogs,
 } from "../../services/ItemsAPI";
 import { AntDesign } from "@expo/vector-icons";
-import { max, maxBy } from "lodash";
 
 const AddItemScreen = () => {
   const [name, setName] = React.useState<string>("");
@@ -45,10 +53,10 @@ const AddItemScreen = () => {
     UseCheckItemExistance();
 
   const [count, setCount] = React.useState(0);
-  
-  const [loadingSubmit,setLoadingSubmit] = React.useState(false);
 
-  const { isLoading, mutateAsync ,data} = UseAddItem();
+  const [loadingSubmit, setLoadingSubmit] = React.useState(false);
+
+  const { isLoading, mutateAsync, data } = UseAddItem();
   const { isLoading: loadingLogs, mutateAsync: mutateLogs } = saveLogs();
 
   const handleSubmit = async () => {
@@ -63,10 +71,8 @@ const AddItemScreen = () => {
       Alert.alert("Error", `Item ${name} is already Exists.`);
       return;
     }
-       setLoadingSubmit(true);
+    setLoadingSubmit(true);
     try {
-
-
       await mutateAsync({
         name: capitalizedName,
         quantity,
@@ -81,22 +87,15 @@ const AddItemScreen = () => {
         action: `Added ${name} to the inventory.`,
       });
 
-        if(loadingSubmit== false){
+      if (loadingSubmit == false) {
+        Alert.alert(`Inventory Item name ${name} added successfully.`);
+        setName("");
+        setQuantity(0);
+        setPrice(0);
+        setDesc("");
 
-          Alert.alert(`Inventory Item name ${name} added successfully.`);
-          setName("");
-          setQuantity(0);
-          setPrice(0);
-          setDesc("");
-    
-          navigation.goBack();
-  
-        
-        }
-
-   
-     
-   
+        navigation.goBack();
+      }
     } catch (error: any) {
       Alert.alert("Error", error.message || "An error occurred");
     }
@@ -123,9 +122,6 @@ const AddItemScreen = () => {
   };
   React.useEffect(() => {
     if (!isLoading) {
-
-
-      
       setLoadingSubmit(false);
     }
   }, [isLoading]);
@@ -139,27 +135,23 @@ const AddItemScreen = () => {
 
   return (
     <Container>
-           {loadingSubmit && (
-           
-                  <View
-                    style={{
-              
-                      ...StyleSheet.absoluteFillObject,
-                      justifyContent: "center",
-                      alignItems: "center",
-                      backgroundColor: "rgba(0, 0, 0, 0.4)",
-                      zIndex:1,
-                   
-                    }}
-                  >
-                    <ActivityIndicator
-                    style={{ marginTop: 100, opacity: 9 }}
-                      size="large"
-                      color="#000000"
-                    />
-                  </View>
-         
-              )}
+      {loadingSubmit && (
+        <View
+          style={{
+            ...StyleSheet.absoluteFillObject,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "rgba(0, 0, 0, 0.4)",
+            zIndex: 1,
+          }}
+        >
+          <ActivityIndicator
+            style={{ marginTop: 100, opacity: 9 }}
+            size="large"
+            color="#000000"
+          />
+        </View>
+      )}
 
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <Header>
@@ -170,7 +162,6 @@ const AddItemScreen = () => {
         <BoxShadowView>
           <Textbody>Item Details </Textbody>
           <Body>
-     
             <Input
               placeholder="Item Name"
               placeholderTextColor={"white"}
@@ -214,21 +205,51 @@ const AddItemScreen = () => {
               value={desc}
             />
           </Body>
-          <PickerContainer>
-            <Picker
-              selectedValue={classification}
-              onValueChange={(itemValue) => setClassification(itemValue)}
-              style={{
-                color: "#fff",
-              }}
-            >
-              <Picker.Item label="Select Classification" value={null} />
-              {classificationOptions.map((option, index) => (
-                <Picker.Item key={index} label={option} value={option} />
-              ))}
-            </Picker>
-          </PickerContainer>
-         
+          {Platform.OS === "ios" ? (
+            <PickerContainer>
+              <Text style={{ color:"#fff" , left:"5%" , fontSize:20}}>Classification</Text>
+              <Picker
+                selectedValue={classification}
+                onValueChange={(itemValue) => setClassification(itemValue)}
+                style={{ color: "#fff",top:"5%"}}
+              >
+                <Picker.Item
+                  label="Select Classification"
+                  color="#fff"
+                  
+                  value={null}
+                  style={{ backgroundColor: "white" }}
+                  
+                />
+
+                {classificationOptions.map((option, index) => (
+                  <Picker.Item
+                  
+                    color="#fff"
+                    key={index}
+                    label={option}
+                    value={option}
+                  />
+                ))}
+              </Picker>
+            </PickerContainer>
+          ) : (
+            <PickerContainer>
+              <Picker
+                selectedValue={classification}
+                onValueChange={(itemValue) => setClassification(itemValue)}
+                style={{
+                  color: "#fff",
+                }}
+              >
+                <Picker.Item label="Select Classification" value={null} />
+                {classificationOptions.map((option, index) => (
+                  <Picker.Item key={index} label={option} value={option} />
+                ))}
+              </Picker>
+            </PickerContainer>
+          )}
+
           <ButtonContainer>
             <SubmitButton onPress={handleSubmit}>
               <ButtonText>Submit</ButtonText>

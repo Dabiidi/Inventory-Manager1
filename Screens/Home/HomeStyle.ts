@@ -18,10 +18,18 @@ left: 5px;
 `
 
 export const HeaderContainer = styled.View`
-width: 100%;
-justify-content: center;
-align-items: flex-start;
-height: 40px;
+flex-direction: row;
+justify-content: space-between;
+padding-left: 10px;
+padding-right: 15px;
+padding-top: 5px;
+
+`
+export const TextHeader = styled.Text`
+font-size:20px;
+font-weight: bold;
+padding: 10px;
+color: #ffffff;
 `
 export const BackgroundImage = styled.ImageBackground`
   flex: 1;
@@ -29,9 +37,10 @@ export const BackgroundImage = styled.ImageBackground`
   border-bottom-left-radius: 30px;
   justify-content: center;
   align-items: center;
+  
 `;
 export const Header = styled.View`
-padding-top:30px;
+
   height: 30%;
   background-color: #12486b;
   border-bottom-right-radius: 30px;

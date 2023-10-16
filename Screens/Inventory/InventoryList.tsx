@@ -1,4 +1,4 @@
-import { View, Text, FlatList, Alert } from "react-native";
+import { View, Text, FlatList, Alert, Platform } from "react-native";
 import React, { useEffect } from "react";
 import styled from "styled-components/native";
 import InventoryComponent from "../Inventory/Inventory";
@@ -103,23 +103,56 @@ const InventoryList = ({}) => {
         />
         <EvilIcons name="search" size={50} color="black" />
       </SearchContainer>
+      {Platform.OS === "ios" ? (
+        <PickerContainer>
+          <Picker
+            selectedValue={selectedClassification}
+            onValueChange={(itemValue) => {
+              setSelectedClassification(itemValue);
+              setInventories(masterDataSource);
+              applyClassificationFilter(itemValue);
+            }}
+            style={{
+              color: "#fff",
+            }}
+          >
+            <Picker.Item
+              label="Select Classification Filter"
+              color="#fff"
+              value={null}      
+            />
+            {classificationOptions.map((option) => (
+              <Picker.Item
+                key={option}
+                label={option}
+                color="#fff"
+        
+                value={option}
+              />
+            ))}
+          </Picker>
+        </PickerContainer>
+      ) : (
+        <PickerContainer>
+          <Picker
+            selectedValue={selectedClassification}
+            onValueChange={(itemValue) => {
+              setSelectedClassification(itemValue);
+              setInventories(masterDataSource);
+              applyClassificationFilter(itemValue);
+            }}
+            style={{
+              color: "#fff",
+            }}
+          >
+            <Picker.Item label="Select Classification Filter" value={null} />
+            {classificationOptions.map((option) => (
+              <Picker.Item key={option} label={option} value={option} />
+            ))}
+          </Picker>
+        </PickerContainer>
+      )}
 
-      <PickerContainer>
-        <Picker
-          selectedValue={selectedClassification}
-          onValueChange={(itemValue) => {
-            setSelectedClassification(itemValue);
-            setInventories(masterDataSource);
-            applyClassificationFilter(itemValue);
-          }}
-          style={{ color: "#fff" }}
-        >
-          <Picker.Item label="Select Classification Filter" value={null} />
-          {classificationOptions.map((option) => (
-            <Picker.Item key={option} label={option} value={option} />
-          ))}
-        </Picker>
-      </PickerContainer>
       {GetItemData.isLoading ? (
         <Text>Loading ....</Text>
       ) : GetItemData.isError ? (

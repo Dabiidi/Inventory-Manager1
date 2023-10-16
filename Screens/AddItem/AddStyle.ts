@@ -113,7 +113,8 @@ export const BoxShadowView = styled.View`
   align-items: center;
   flex-direction: column;
   background-color: #12486B;
-  height: 70%;
+  height: 75%;
+  padding-bottom: 10px;
   align-self: center;
   ${Platform.select({
     ios: `

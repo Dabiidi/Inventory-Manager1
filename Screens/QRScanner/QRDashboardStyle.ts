@@ -19,7 +19,7 @@ export const ShadowContainer = styled.View`
     ios: `
       shadow-color: black;
       shadow-offset: 0px 2px; /* Adjust the offset as needed */
-      shadow-opacity: 1px; /* Adjust the opacity as needed */
+      shadow-opacity: 1.0; /* Adjust the opacity as needed */
       shadow-radius: 4px; /* Adjust the radius as needed */
     `,
     android: `

@@ -103,7 +103,7 @@ export const Desc = styled.Text`
 
 export const Classification = styled.Text`
   font-size: 16px;
-
+  margin-top: 5px;
   color: #fff;
 `;
 

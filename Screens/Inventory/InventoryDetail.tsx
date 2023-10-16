@@ -7,6 +7,7 @@ import {
   Alert,
   ImageBackground,
   ActivityIndicator,
+  Platform,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { RouteProp, useNavigation } from "@react-navigation/native";
@@ -41,6 +42,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import * as ImagePicker from "expo-image-picker";
 
 import { Picker } from "@react-native-picker/picker";
+import RNPickerSelect from "react-native-picker-select";
 
 import {
   useDeleteInventory,
@@ -109,7 +111,7 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
   const CancelMode = () => {
     if (originalInventory) {
       setEditedInventory({ ...originalInventory });
-      Alert.alert("Cancel","Cancelled Editing Item.");
+      Alert.alert("Cancel", "Cancelled Editing Item.");
     }
 
     setEditMode(false);
@@ -448,36 +450,81 @@ const InventoryDetail: React.FC<Props> = ({ route }: Props) => {
               </Desc>
             )}
           </DescContainer>
-          <ClassificationContainer>
-            <Classification>Classification: </Classification>
+          {Platform.OS === "ios" ? (
+            <ClassificationContainer>
+              <Classification >Classification: </Classification>
 
-            {editMode ? (
-              <PickerContainer>
-                <Picker
-                  selectedValue={editedInventory.classification}
-                  onValueChange={(value) =>
-                    handleInputChange("classification", value)
-                  }
-                  style={{
-                    color: "#fff",
+              {editMode ? (
+                <PickerContainer>
+                  <Picker
+                    selectedValue={editedInventory.classification}
+                    mode={Picker.MODE_DROPDOWN}
+                    onValueChange={(value) =>
+                      handleInputChange("classification", value)
+                    }
+                    style={{
+                      color: "#fff",
+                    }}
+                  >
+                    <Picker.Item
+                    
+                      label="Select Classification"
+                      value={null}
+                      color="#fff"
+                    />
+                    {classificationOptions.map((option, index) => (
+                      <Picker.Item
+                        color="#fff"
+                   
+                        key={index}
+                        label={option}
+                        value={option}
+                      />
+                    ))}
+                  </Picker>
+                </PickerContainer>
+              ) : (
+                <Classification
+                  onPress={() => {
+                    if (editMode) setEditableField("classification");
                   }}
                 >
-                  <Picker.Item label="Select Classification" value={null} />
-                  {classificationOptions.map((option, index) => (
-                    <Picker.Item key={index} label={option} value={option} />
-                  ))}
-                </Picker>
-              </PickerContainer>
-            ) : (
-              <Classification
-                onPress={() => {
-                  if (editMode) setEditableField("classification");
-                }}
-              >
-                {editedInventory.classification}
-              </Classification>
-            )}
-          </ClassificationContainer>
+                  {editedInventory.classification}
+                </Classification>
+              )}
+            </ClassificationContainer>
+          ) : (
+            <ClassificationContainer>
+              <Classification>Classification: </Classification>
+
+              {editMode ? (
+                <PickerContainer>
+                  <Picker
+                    selectedValue={editedInventory.classification}
+                    onValueChange={(value) =>
+                      handleInputChange("classification", value)
+                    }
+                    style={{
+                      color: "#fff",
+                    }}
+                  >
+                    <Picker.Item label="Select Classification" value={null} />
+                    {classificationOptions.map((option, index) => (
+                      <Picker.Item key={index} label={option} value={option} />
+                    ))}
+                  </Picker>
+                </PickerContainer>
+              ) : (
+                <Classification
+                  onPress={() => {
+                    if (editMode) setEditableField("classification");
+                  }}
+                >
+                  {editedInventory.classification}
+                </Classification>
+              )}
+            </ClassificationContainer>
+          )}
 
           <ButtonContainer>
             {!editMode ? (
